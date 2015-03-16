@@ -67,14 +67,14 @@
 /* Begin PBXFileReference section */
 		721E44B11AB78CC5006E57D1 /* ColorIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorIndicator.swift; sourceTree = "<group>"; };
 		721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorProcessManager.swift; sourceTree = "<group>"; };
-		72492A9B1AB73A32001EAE02 /* Hue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hue.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		72492A9B1AB73A32001EAE02 /* HUE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72492A9F1AB73A32001EAE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72492AA01AB73A32001EAE02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72492AA21AB73A32001EAE02 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		72492AA51AB73A32001EAE02 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		72492AA71AB73A32001EAE02 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		72492AAA1AB73A32001EAE02 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		72492AB01AB73A32001EAE02 /* HueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HueTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		72492AB01AB73A32001EAE02 /* HUETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HUETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		72492AB51AB73A32001EAE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72492AB61AB73A32001EAE02 /* HueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HueTests.swift; sourceTree = "<group>"; };
 		72492AC01AB73A59001EAE02 /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = ../../src/GPUImage/framework/GPUImage.xcodeproj; sourceTree = "<group>"; };
@@ -104,7 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				72492AC01AB73A59001EAE02 /* GPUImage.xcodeproj */,
-				72492A9D1AB73A32001EAE02 /* Hue */,
+				72492A9D1AB73A32001EAE02 /* HUE */,
 				72492AB31AB73A32001EAE02 /* HueTests */,
 				72492A9C1AB73A32001EAE02 /* Products */,
 			);
@@ -113,13 +113,13 @@
 		72492A9C1AB73A32001EAE02 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				72492A9B1AB73A32001EAE02 /* Hue.app */,
-				72492AB01AB73A32001EAE02 /* HueTests.xctest */,
+				72492A9B1AB73A32001EAE02 /* HUE.app */,
+				72492AB01AB73A32001EAE02 /* HUETests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		72492A9D1AB73A32001EAE02 /* Hue */ = {
+		72492A9D1AB73A32001EAE02 /* HUE */ = {
 			isa = PBXGroup;
 			children = (
 				72492AA01AB73A32001EAE02 /* AppDelegate.swift */,
@@ -131,6 +131,7 @@
 				72492AD41AB774AA001EAE02 /* Controllers */,
 				72492A9E1AB73A32001EAE02 /* Supporting Files */,
 			);
+			name = HUE;
 			path = Hue;
 			sourceTree = "<group>";
 		};
@@ -196,9 +197,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		72492A9A1AB73A32001EAE02 /* Hue */ = {
+		72492A9A1AB73A32001EAE02 /* HUE */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 72492ABA1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "Hue" */;
+			buildConfigurationList = 72492ABA1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUE" */;
 			buildPhases = (
 				72492A971AB73A32001EAE02 /* Sources */,
 				72492A981AB73A32001EAE02 /* Frameworks */,
@@ -210,14 +211,14 @@
 			dependencies = (
 				72492ACB1AB73A6B001EAE02 /* PBXTargetDependency */,
 			);
-			name = Hue;
+			name = HUE;
 			productName = Hue;
-			productReference = 72492A9B1AB73A32001EAE02 /* Hue.app */;
+			productReference = 72492A9B1AB73A32001EAE02 /* HUE.app */;
 			productType = "com.apple.product-type.application";
 		};
-		72492AAF1AB73A32001EAE02 /* HueTests */ = {
+		72492AAF1AB73A32001EAE02 /* HUETests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 72492ABD1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HueTests" */;
+			buildConfigurationList = 72492ABD1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUETests" */;
 			buildPhases = (
 				72492AAC1AB73A32001EAE02 /* Sources */,
 				72492AAD1AB73A32001EAE02 /* Frameworks */,
@@ -228,9 +229,9 @@
 			dependencies = (
 				72492AB21AB73A32001EAE02 /* PBXTargetDependency */,
 			);
-			name = HueTests;
+			name = HUETests;
 			productName = HueTests;
-			productReference = 72492AB01AB73A32001EAE02 /* HueTests.xctest */;
+			productReference = 72492AB01AB73A32001EAE02 /* HUETests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -251,7 +252,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 72492A961AB73A32001EAE02 /* Build configuration list for PBXProject "Hue" */;
+			buildConfigurationList = 72492A961AB73A32001EAE02 /* Build configuration list for PBXProject "HUE" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -270,8 +271,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				72492A9A1AB73A32001EAE02 /* Hue */,
-				72492AAF1AB73A32001EAE02 /* HueTests */,
+				72492A9A1AB73A32001EAE02 /* HUE */,
+				72492AAF1AB73A32001EAE02 /* HUETests */,
 			);
 		};
 /* End PBXProject section */
@@ -339,7 +340,7 @@
 /* Begin PBXTargetDependency section */
 		72492AB21AB73A32001EAE02 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 72492A9A1AB73A32001EAE02 /* Hue */;
+			target = 72492A9A1AB73A32001EAE02 /* HUE */;
 			targetProxy = 72492AB11AB73A32001EAE02 /* PBXContainerItemProxy */;
 		};
 		72492ACB1AB73A6B001EAE02 /* PBXTargetDependency */ = {
@@ -452,7 +453,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Hue/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HUE;
 			};
 			name = Debug;
 		};
@@ -462,7 +463,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Hue/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HUE;
 			};
 			name = Release;
 		};
@@ -480,7 +481,7 @@
 				);
 				INFOPLIST_FILE = HueTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HUETests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hue.app/Hue";
 			};
 			name = Debug;
@@ -495,7 +496,7 @@
 				);
 				INFOPLIST_FILE = HueTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HUETests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hue.app/Hue";
 			};
 			name = Release;
@@ -503,7 +504,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		72492A961AB73A32001EAE02 /* Build configuration list for PBXProject "Hue" */ = {
+		72492A961AB73A32001EAE02 /* Build configuration list for PBXProject "HUE" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72492AB81AB73A32001EAE02 /* Debug */,
@@ -512,7 +513,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		72492ABA1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "Hue" */ = {
+		72492ABA1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUE" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72492ABB1AB73A32001EAE02 /* Debug */,
@@ -521,7 +522,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		72492ABD1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HueTests" */ = {
+		72492ABD1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUETests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72492ABE1AB73A32001EAE02 /* Debug */,

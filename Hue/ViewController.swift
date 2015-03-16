@@ -115,8 +115,9 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
         // color indicator
         self.colorIndicator?.shouldRemoveAnimated(false)
         self.colorIndicator = ColorIndicator()
-        self.colorIndicator?.center = point
+        self.colorIndicator!.center = point
         self.view.addSubview(self.colorIndicator!)
+        self.colorIndicator!.expand()
         
         let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
         let normalizedRegion = CGRect(x: normalizedPoint.x - 0.01, y: normalizedPoint.y - 0.01, width: 0.02, height: 0.02)
@@ -200,6 +201,7 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
         if CGRectContainsPoint(colorIndicatorRect, touchLocation) {
             
             self.movingColorTarget = true
+            self.colorIndicator?.shrink()
             
         }
         
@@ -220,13 +222,23 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
     
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
         
-        self.movingColorTarget = false
+        if self.movingColorTarget == true {
+            
+            self.movingColorTarget = false
+            self.colorIndicator?.expand()
+            
+        }
         
     }
     
     override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
         
-        self.movingColorTarget = false
+        if self.movingColorTarget == true {
+            
+            self.movingColorTarget = false
+            self.colorIndicator?.expand()
+            
+        }
         
     }
     

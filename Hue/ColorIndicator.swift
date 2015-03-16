@@ -10,12 +10,27 @@ import UIKit
 
 class ColorIndicator: UIView {
 
+    var colorView: UIView!
+    var targetLayer: CAShapeLayer!
+    
     override init() {
         
         super.init(frame: CGRect(origin: CGPointZero, size: CGSize(width: 80, height: 80)))
         
-        self.layer.cornerRadius = 40
-        self.backgroundColor = UIColor.clearColor()
+        self.colorView = UIView(frame: CGRectInset(self.bounds, 10, 10))
+        self.colorView.layer.cornerRadius = 30
+        self.colorView.layer.borderWidth = 1
+        self.colorView.layer.borderColor = UIColor.whiteColor().CGColor
+        
+        self.targetLayer = CAShapeLayer()
+        self.targetLayer.frame = self.frame
+        self.targetLayer.path = UIBezierPath(ovalInRect: CGRectInset(self.bounds, 34, 34)).CGPath
+        self.targetLayer.fillColor = nil
+        self.targetLayer.strokeColor = UIColor.whiteColor().CGColor
+        self.targetLayer.lineWidth = 1
+        
+        self.layer.addSublayer(self.targetLayer)
+        self.addSubview(self.colorView)
         
     }
     
@@ -35,7 +50,35 @@ class ColorIndicator: UIView {
     
     func setColor(color: UIColor?) {
         
-        self.backgroundColor = color
+        self.colorView.backgroundColor = color
+        
+    }
+    
+    func expand() {
+        
+        UIView.animateWithDuration(0.1, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+            
+            self.colorView.center.y = -40
+            
+        }, completion: { (finished) -> Void in
+        
+            
+            
+        })
+        
+    }
+    
+    func shrink() {
+        
+        UIView.animateWithDuration(0.1, delay: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+            
+            self.colorView.center.y = self.bounds.height/2
+            
+        }, completion: { (finished) -> Void in
+                
+                
+                
+        })
         
     }
     
