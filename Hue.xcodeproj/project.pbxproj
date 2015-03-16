@@ -15,6 +15,7 @@
 		72492AB71AB73A32001EAE02 /* HueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AB61AB73A32001EAE02 /* HueTests.swift */; };
 		72492ACC1AB73A71001EAE02 /* GPUImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72492AC91AB73A59001EAE02 /* GPUImage.framework */; };
 		72492ACE1AB73A7C001EAE02 /* GPUImage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 72492AC91AB73A59001EAE02 /* GPUImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		72492AD81AB77AF8001EAE02 /* FocusingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AD71AB77AF8001EAE02 /* FocusingIndicator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		72492AB51AB73A32001EAE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72492AB61AB73A32001EAE02 /* HueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HueTests.swift; sourceTree = "<group>"; };
 		72492AC01AB73A59001EAE02 /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = ../../src/GPUImage/framework/GPUImage.xcodeproj; sourceTree = "<group>"; };
+		72492AD71AB77AF8001EAE02 /* FocusingIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusingIndicator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,10 +119,12 @@
 			isa = PBXGroup;
 			children = (
 				72492AA01AB73A32001EAE02 /* AppDelegate.swift */,
-				72492AA21AB73A32001EAE02 /* ViewController.swift */,
 				72492AA41AB73A32001EAE02 /* Main.storyboard */,
 				72492AA71AB73A32001EAE02 /* Images.xcassets */,
 				72492AA91AB73A32001EAE02 /* LaunchScreen.xib */,
+				72492AD21AB77494001EAE02 /* Model */,
+				72492AD31AB774A1001EAE02 /* Views */,
+				72492AD41AB774AA001EAE02 /* Controllers */,
 				72492A9E1AB73A32001EAE02 /* Supporting Files */,
 			);
 			path = Hue;
@@ -158,6 +162,29 @@
 				72492AC91AB73A59001EAE02 /* GPUImage.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		72492AD21AB77494001EAE02 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		72492AD31AB774A1001EAE02 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				72492AD71AB77AF8001EAE02 /* FocusingIndicator.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		72492AD41AB774AA001EAE02 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				72492AA21AB73A32001EAE02 /* ViewController.swift */,
+			);
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,6 +312,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72492AD81AB77AF8001EAE02 /* FocusingIndicator.swift in Sources */,
 				72492AA31AB73A32001EAE02 /* ViewController.swift in Sources */,
 				72492AA11AB73A32001EAE02 /* AppDelegate.swift in Sources */,
 			);
@@ -483,6 +511,7 @@
 				72492ABC1AB73A32001EAE02 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		72492ABD1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HueTests" */ = {
 			isa = XCConfigurationList;
@@ -491,6 +520,7 @@
 				72492ABF1AB73A32001EAE02 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

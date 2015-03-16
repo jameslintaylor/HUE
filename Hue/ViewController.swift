@@ -14,9 +14,10 @@ class ViewController: UIViewController {
 
     var camera: GPUImageStillCamera!
     var cropFilter: GPUImageCropFilter!
+    var focusingChangedContext: UnsafeMutablePointer<()>!
+    
     var cameraView: GPUImageView!
-
-    var imageView: UIImageView!
+    var focusingIndicator: FocusingIndicator?
     
     override func viewDidLoad() {
         
@@ -25,13 +26,25 @@ class ViewController: UIViewController {
         self.camera = GPUImageStillCamera(sessionPreset: AVCaptureSessionPreset1920x1080, cameraPosition: AVCaptureDevicePosition.Back)
         self.camera.outputImageOrientation = UIInterfaceOrientation.Portrait
         
+        var error: NSError?
+        if (self.camera.inputCamera.lockForConfiguration(&error)) {
+            
+            self.camera.inputCamera.subjectAreaChangeMonitoringEnabled = true
+            self.camera.inputCamera.unlockForConfiguration()
+            
+        } else {
+            
+            NSLog("Camera configuration error: \(error?.localizedDescription)")
+            
+        }
+        
         self.cropFilter = GPUImageCropFilter()
         
+        self.focusingChangedContext = UnsafeMutablePointer<()>()
+        
         self.cameraView = GPUImageView(frame: self.view.bounds)
-        self.imageView = UIImageView(frame: CGRect(origin: CGPointZero, size: CGSize(width: 80, height: 80)))
         
         self.view.addSubview(self.cameraView)
-        self.view.addSubview(self.imageView)
         
         self.camera.addTarget(self.cameraView)
         self.camera.addTarget(self.cropFilter)
@@ -44,11 +57,16 @@ class ViewController: UIViewController {
         self.view.addGestureRecognizer(tapGR)
         self.view.addGestureRecognizer(pressGR)
         
+        // Notifications
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleSubjectAreaChangedNotification:"), name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: nil)
+        self.camera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: NSKeyValueObservingOptions.New, context: self.focusingChangedContext)
+        
     }
     
     deinit {
         
-        //
+        NSNotificationCenter.defaultCenter().removeObserver(self, forKeyPath: AVCaptureDeviceSubjectAreaDidChangeNotification)
+        self.camera.removeObserver(self, forKeyPath: "adjustingFocus", context: self.focusingChangedContext)
         
     }
     
@@ -56,21 +74,27 @@ class ViewController: UIViewController {
     
     func focusAtPoint(point: CGPoint) {
         
-        var captureDevice = self.camera.inputCamera
+        // focusing indicator
+        self.focusingIndicator?.shouldRemoveAnimated(false)
+        self.focusingIndicator = FocusingIndicator()
+        self.focusingIndicator!.center = point
+        self.view.addSubview(self.focusingIndicator!)
         
+        var captureDevice = self.camera.inputCamera
         if captureDevice.focusPointOfInterestSupported & captureDevice.isFocusModeSupported(AVCaptureFocusMode.AutoFocus) {
             
             var error: NSError?
             
             if captureDevice.lockForConfiguration(&error) {
                 
-                captureDevice.focusPointOfInterest = point
+                let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
+                captureDevice.focusPointOfInterest = normalizedPoint
                 captureDevice.focusMode = AVCaptureFocusMode.AutoFocus
                 captureDevice.unlockForConfiguration()
                 
             } else {
                 
-                NSLog("Focus Error: \(error?.localizedDescription)")
+                NSLog("Camera configuration error: \(error?.localizedDescription)")
                 
             }
             
@@ -78,25 +102,11 @@ class ViewController: UIViewController {
         
     }
     
-    func getAverageColorAtPoint(point: CGPoint) {
+    func beginAverageColorCaptureAtPoint(point: CGPoint) {
         
-        let subImage = self.getImageAtRegion(CGRect(origin: CGPoint(x: point.x - 0.01, y: point.y - 0.01), size: CGSize(width: 0.02, height: 0.02)))
-        self.imageView.image = subImage
-        self.getAverageColorOfImage(subImage)
-        
-    }
-    
-    func getImageAtRegion(region: CGRect) -> UIImage {
-        
-        self.cropFilter.cropRegion = region
-        self.cropFilter.useNextFrameForImageCapture()
-        return self.cropFilter.imageFromCurrentFramebuffer()
-        
-    }
-    
-    func getAverageColorOfImage(image: UIImage) {
-        
-        var stillImageSource = GPUImagePicture(image: image)
+        let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
+        let normalizedRegion = CGRect(x: normalizedPoint.x - 0.01, y: normalizedPoint.y - 0.01, width: 0.02, height: 0.02)
+        self.cropFilter.cropRegion = normalizedRegion
         
         var averageColorOperation = GPUImageAverageColor()
         averageColorOperation.colorAverageProcessingFinishedBlock = { (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, time: CMTime) -> Void in
@@ -109,8 +119,36 @@ class ViewController: UIViewController {
             
         }
         
-        stillImageSource.addTarget(averageColorOperation)
-        stillImageSource.processImage()
+        self.cropFilter.addTarget(averageColorOperation)
+        
+    }
+    
+    // MARK: Notification Handling
+    
+    func handleSubjectAreaChangedNotification(notification: NSNotification) {
+        
+        // remove focusing indicator
+        self.focusingIndicator?.shouldRemoveAnimated(true)
+        
+    }
+    
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        
+        if context == self.focusingChangedContext {
+            
+            if self.camera.inputCamera.adjustingFocus {
+                
+                // queue focusing animation
+                self.focusingIndicator?.startFocusingAnimation()
+                
+            } else {
+                
+                // queue focused animation
+                self.focusingIndicator?.startFocusedAnimation()
+                
+            }
+            
+        }
         
     }
     
@@ -119,8 +157,10 @@ class ViewController: UIViewController {
     func handleSingleTap(sender: UITapGestureRecognizer) {
         
         var tapLocation = sender.locationInView(self.view)
-        var normalizedLocation = CGPoint(x: tapLocation.x/self.view.bounds.width, y: tapLocation.y/self.view.bounds.height)
-        self.focusAtPoint(normalizedLocation)
+        self.focusAtPoint(tapLocation)
+        
+        // stop average color operations
+        self.cropFilter.removeAllTargets()
         
     }
     
@@ -129,8 +169,7 @@ class ViewController: UIViewController {
         if sender.state == .Began {
             
             var pressLocation = sender.locationInView(self.view)
-            var normalizedLocation = CGPoint(x: pressLocation.x/self.view.bounds.width, y: pressLocation.y/self.view.bounds.height)
-            self.getAverageColorAtPoint(normalizedLocation)
+            self.beginAverageColorCaptureAtPoint(pressLocation)
             
         }
         

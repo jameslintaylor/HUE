@@ -8,6 +8,9 @@
 
 import UIKit
 
+let SCR_WIDTH = UIScreen.mainScreen().bounds.width
+let SCR_HEIGHT = UIScreen.mainScreen().bounds.height
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

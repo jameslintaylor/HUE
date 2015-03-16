@@ -6,22 +6,30 @@
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>322547F6-F414-4F9B-AB83-BC4FD2438263</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Hue</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>9310009FB732DC20A92B213DEC34EB15A12AACF5</key>
+		<string>https://github.com/jameslintaylor/Hue.git</string>
 		<key>E609DD15689CC93D8F4D219EB393F30F9F726178</key>
 		<string>https://github.com/BradLarson/GPUImage</string>
 	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Hue.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>9310009FB732DC20A92B213DEC34EB15A12AACF5</key>
+		<string>../..</string>
 		<key>E609DD15689CC93D8F4D219EB393F30F9F726178</key>
-		<string>GPUImage/</string>
+		<string>../../../../src/GPUImage</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/BradLarson/GPUImage</string>
+	<string>https://github.com/jameslintaylor/Hue.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>E609DD15689CC93D8F4D219EB393F30F9F726178</string>
+	<string>9310009FB732DC20A92B213DEC34EB15A12AACF5</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -31,6 +39,14 @@
 			<string>E609DD15689CC93D8F4D219EB393F30F9F726178</string>
 			<key>IDESourceControlWCCName</key>
 			<string>GPUImage</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9310009FB732DC20A92B213DEC34EB15A12AACF5</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Hue</string>
 		</dict>
 	</array>
 </dict>
