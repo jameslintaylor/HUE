@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		721E44B21AB78CC5006E57D1 /* ColorIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721E44B11AB78CC5006E57D1 /* ColorIndicator.swift */; };
+		721E44B41AB78CCB006E57D1 /* ColorProcessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */; };
 		72492AA11AB73A32001EAE02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AA01AB73A32001EAE02 /* AppDelegate.swift */; };
 		72492AA31AB73A32001EAE02 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AA21AB73A32001EAE02 /* ViewController.swift */; };
 		72492AA61AB73A32001EAE02 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72492AA41AB73A32001EAE02 /* Main.storyboard */; };
@@ -63,6 +65,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		721E44B11AB78CC5006E57D1 /* ColorIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorIndicator.swift; sourceTree = "<group>"; };
+		721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorProcessManager.swift; sourceTree = "<group>"; };
 		72492A9B1AB73A32001EAE02 /* Hue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72492A9F1AB73A32001EAE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72492AA01AB73A32001EAE02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -174,6 +178,7 @@
 		72492AD31AB774A1001EAE02 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				721E44B11AB78CC5006E57D1 /* ColorIndicator.swift */,
 				72492AD71AB77AF8001EAE02 /* FocusingIndicator.swift */,
 			);
 			name = Views;
@@ -182,6 +187,7 @@
 		72492AD41AB774AA001EAE02 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */,
 				72492AA21AB73A32001EAE02 /* ViewController.swift */,
 			);
 			name = Controllers;
@@ -313,8 +319,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				72492AD81AB77AF8001EAE02 /* FocusingIndicator.swift in Sources */,
+				721E44B41AB78CCB006E57D1 /* ColorProcessManager.swift in Sources */,
 				72492AA31AB73A32001EAE02 /* ViewController.swift in Sources */,
 				72492AA11AB73A32001EAE02 /* AppDelegate.swift in Sources */,
+				721E44B21AB78CC5006E57D1 /* ColorIndicator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

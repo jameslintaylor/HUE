@@ -10,18 +10,25 @@ import UIKit
 
 import GPUImage
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, ColorProcessManagerDelegate {
 
+    var processMGR: ColorProcessManager!
+    
     var camera: GPUImageStillCamera!
     var cropFilter: GPUImageCropFilter!
     var focusingChangedContext: UnsafeMutablePointer<()>!
+    var movingColorTarget: Bool!
     
     var cameraView: GPUImageView!
     var focusingIndicator: FocusingIndicator?
+    var colorIndicator: ColorIndicator?
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        self.processMGR = ColorProcessManager()
+        self.processMGR.delegate = self
         
         self.camera = GPUImageStillCamera(sessionPreset: AVCaptureSessionPreset1920x1080, cameraPosition: AVCaptureDevicePosition.Back)
         self.camera.outputImageOrientation = UIInterfaceOrientation.Portrait
@@ -41,6 +48,7 @@ class ViewController: UIViewController {
         self.cropFilter = GPUImageCropFilter()
         
         self.focusingChangedContext = UnsafeMutablePointer<()>()
+        self.movingColorTarget = false
         
         self.cameraView = GPUImageView(frame: self.view.bounds)
         
@@ -104,22 +112,29 @@ class ViewController: UIViewController {
     
     func beginAverageColorCaptureAtPoint(point: CGPoint) {
         
+        // color indicator
+        self.colorIndicator?.shouldRemoveAnimated(false)
+        self.colorIndicator = ColorIndicator()
+        self.colorIndicator?.center = point
+        self.view.addSubview(self.colorIndicator!)
+        
         let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
         let normalizedRegion = CGRect(x: normalizedPoint.x - 0.01, y: normalizedPoint.y - 0.01, width: 0.02, height: 0.02)
         self.cropFilter.cropRegion = normalizedRegion
         
-        var averageColorOperation = GPUImageAverageColor()
-        averageColorOperation.colorAverageProcessingFinishedBlock = { (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, time: CMTime) -> Void in
-            
-            let color = UIColor(red: red, green: green, blue: blue, alpha: alpha)
-            var hsba = [CGFloat](count: 4, repeatedValue: 0.0)
-            color.getHue(&hsba[0], saturation: &hsba[1], brightness: &hsba[2], alpha: &hsba[3])
-            
-            NSLog("hue: \(hsba[0]*360.0), saturation: \(hsba[1]), brightness: \(hsba[2])")
-            
-        }
-        
+        var averageColorOperation = self.processMGR.averageColorProcess()
         self.cropFilter.addTarget(averageColorOperation)
+        
+    }
+    
+    func moveAverageColorCaptureToPoint(point: CGPoint) {
+        
+        // color indicator
+        self.colorIndicator?.center = point
+        
+        let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
+        let normalizedRegion = CGRect(x: normalizedPoint.x - 0.01, y: normalizedPoint.y - 0.01, width: 0.02, height: 0.02)
+        self.cropFilter.cropRegion = normalizedRegion
         
     }
     
@@ -161,6 +176,7 @@ class ViewController: UIViewController {
         
         // stop average color operations
         self.cropFilter.removeAllTargets()
+        self.colorIndicator?.shouldRemoveAnimated(true)
         
     }
     
@@ -170,6 +186,62 @@ class ViewController: UIViewController {
             
             var pressLocation = sender.locationInView(self.view)
             self.beginAverageColorCaptureAtPoint(pressLocation)
+            
+        }
+        
+    }
+    
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        
+        let touch = touches.anyObject() as UITouch
+        let touchLocation = touch.locationInView(self.view)
+        
+        var colorIndicatorRect = self.colorIndicator == nil ? CGRectZero : self.colorIndicator!.frame
+        if CGRectContainsPoint(colorIndicatorRect, touchLocation) {
+            
+            self.movingColorTarget = true
+            
+        }
+        
+    }
+    
+    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+        
+        let touch = touches.anyObject() as UITouch
+        let touchLocation = touch.locationInView(self.view)
+        
+        if self.movingColorTarget == true {
+            
+            self.moveAverageColorCaptureToPoint(touchLocation)
+            
+        }
+        
+    }
+    
+    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+        
+        self.movingColorTarget = false
+        
+    }
+    
+    override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
+        
+        self.movingColorTarget = false
+        
+    }
+    
+   
+    // MARK: ColorProcessManager Delegate
+    
+    func colorProcessManager(manager: ColorProcessManager, computedAverageColor color: UIColor?) {
+        
+        if let colorIndicator = self.colorIndicator {
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                
+                colorIndicator.setColor(color)
+                
+            })
             
         }
         

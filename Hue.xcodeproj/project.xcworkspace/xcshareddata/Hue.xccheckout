@@ -22,7 +22,7 @@
 		<key>9310009FB732DC20A92B213DEC34EB15A12AACF5</key>
 		<string>../..</string>
 		<key>E609DD15689CC93D8F4D219EB393F30F9F726178</key>
-		<string>../../../../src/GPUImage</string>
+		<string>../../../src/GPUImage</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/jameslintaylor/Hue.git</string>
