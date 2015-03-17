@@ -61,6 +61,7 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
         // Gestures
         var tapGR = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
         var pressGR = UILongPressGestureRecognizer(target: self, action: Selector("handleLongPress:"))
+        pressGR.cancelsTouchesInView = false
         
         self.view.addGestureRecognizer(tapGR)
         self.view.addGestureRecognizer(pressGR)
@@ -134,7 +135,7 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
         self.colorIndicator?.center = point
         
         let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
-        let normalizedRegion = CGRect(x: normalizedPoint.x - 0.01, y: normalizedPoint.y - 0.01, width: 0.02, height: 0.02)
+        let normalizedRegion = CGRect(x: normalizedPoint.x - 0.02, y: normalizedPoint.y - 0.02, width: 0.04, height: 0.04)
         self.cropFilter.cropRegion = normalizedRegion
         
     }
@@ -192,29 +193,21 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
         
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        
-        let touch = touches.anyObject() as UITouch
-        let touchLocation = touch.locationInView(self.view)
-        
-        var colorIndicatorRect = self.colorIndicator == nil ? CGRectZero : self.colorIndicator!.frame
-        if CGRectContainsPoint(colorIndicatorRect, touchLocation) {
-            
-            self.movingColorTarget = true
-            self.colorIndicator?.shrink()
-            
-        }
-        
-    }
-    
     override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
         
         let touch = touches.anyObject() as UITouch
         let touchLocation = touch.locationInView(self.view)
         
+        var colorIndicatorRect = self.colorIndicator == nil ? CGRectZero : self.colorIndicator!.frame
+        
         if self.movingColorTarget == true {
             
             self.moveAverageColorCaptureToPoint(touchLocation)
+            
+        } else if CGRectContainsPoint(colorIndicatorRect, touchLocation) {
+            
+            self.movingColorTarget = true
+            self.colorIndicator?.shrink()
             
         }
         
@@ -245,7 +238,7 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
    
     // MARK: ColorProcessManager Delegate
     
-    func colorProcessManager(manager: ColorProcessManager, computedAverageColor color: UIColor?) {
+    func colorProcessManager(manager: ColorProcessManager, updatedColor color: UIColor?) {
         
         if let colorIndicator = self.colorIndicator {
             
