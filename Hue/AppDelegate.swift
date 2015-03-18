@@ -16,12 +16,16 @@ let SCR_HEIGHT = UIScreen.mainScreen().bounds.height
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var cameraViewController: CameraViewController!
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
         
-        var rootViewController = self.window?.rootViewController as CameraViewController
-        rootViewController.managedObjectContext = self.managedObjectContext
+        self.cameraViewController = CameraViewController()
+        self.cameraViewController.managedObjectContext = self.managedObjectContext
+        
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        self.window!.rootViewController = self.cameraViewController
+        self.window!.makeKeyAndVisible()
         
         return true
     }

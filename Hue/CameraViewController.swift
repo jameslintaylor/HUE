@@ -24,7 +24,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     var cameraView: GPUImageView!
     var focusingIndicator: FocusingIndicator?
     var colorIndicator: ColorIndicator?
-    
+        
     override func viewDidLoad() {
         
         super.viewDidLoad()

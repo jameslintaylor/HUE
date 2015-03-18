@@ -13,7 +13,6 @@
 		721E44B41AB78CCB006E57D1 /* ColorProcessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */; };
 		72492AA11AB73A32001EAE02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AA01AB73A32001EAE02 /* AppDelegate.swift */; };
 		72492AA31AB73A32001EAE02 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AA21AB73A32001EAE02 /* CameraViewController.swift */; };
-		72492AA61AB73A32001EAE02 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72492AA41AB73A32001EAE02 /* Main.storyboard */; };
 		72492AA81AB73A32001EAE02 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72492AA71AB73A32001EAE02 /* Images.xcassets */; };
 		72492AAB1AB73A32001EAE02 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72492AA91AB73A32001EAE02 /* LaunchScreen.xib */; };
 		72492AB71AB73A32001EAE02 /* HueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AB61AB73A32001EAE02 /* HueTests.swift */; };
@@ -75,7 +74,6 @@
 		72492A9F1AB73A32001EAE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72492AA01AB73A32001EAE02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72492AA21AB73A32001EAE02 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
-		72492AA51AB73A32001EAE02 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		72492AA71AB73A32001EAE02 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		72492AAA1AB73A32001EAE02 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		72492AB01AB73A32001EAE02 /* HUETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HUETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +102,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		523FB14A1AB9D6C500AD2F7B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				72492AA71AB73A32001EAE02 /* Images.xcassets */,
+				72492AA91AB73A32001EAE02 /* LaunchScreen.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		52AF52411AB870E50039C21A /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,9 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				72492AA01AB73A32001EAE02 /* AppDelegate.swift */,
-				72492AA41AB73A32001EAE02 /* Main.storyboard */,
-				72492AA71AB73A32001EAE02 /* Images.xcassets */,
-				72492AA91AB73A32001EAE02 /* LaunchScreen.xib */,
+				523FB14A1AB9D6C500AD2F7B /* Resources */,
 				52AF52411AB870E50039C21A /* Managers */,
 				72492AD21AB77494001EAE02 /* Model */,
 				72492AD31AB774A1001EAE02 /* Views */,
@@ -313,7 +318,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				72492AA61AB73A32001EAE02 /* Main.storyboard in Resources */,
 				72492AAB1AB73A32001EAE02 /* LaunchScreen.xib in Resources */,
 				72492AA81AB73A32001EAE02 /* Images.xcassets in Resources */,
 			);
@@ -367,14 +371,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		72492AA41AB73A32001EAE02 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				72492AA51AB73A32001EAE02 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		72492AA91AB73A32001EAE02 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
