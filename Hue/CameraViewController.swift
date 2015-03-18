@@ -9,26 +9,24 @@
 import UIKit
 
 import GPUImage
-import CoreData
 
 class CameraViewController: UIViewController, ColorProcessManagerDelegate {
 
     var processMGR: ColorProcessManager!
-    var managedObjectContext: NSManagedObjectContext!
     
     var camera: GPUImageStillCamera!
     var cropFilter: GPUImageCropFilter!
     var focusingChangedContext: UnsafeMutablePointer<()>!
     var movingColorTarget: Bool!
-    
+        
     var cameraView: GPUImageView!
     var focusingIndicator: FocusingIndicator?
     var colorIndicator: ColorIndicator?
-        
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
+                
         self.processMGR = ColorProcessManager()
         self.processMGR.delegate = self
         
@@ -74,22 +72,20 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         
     }
     
+    override func viewWillAppear(animated: Bool) {
+        
+//        self.addChildViewController(self.samplesVC)
+//        self.view.addSubview(self.samplesVC.view)
+//        self.samplesVC.willMoveToParentViewController(self)
+        
+    }
+    
     deinit {
         
         NSNotificationCenter.defaultCenter().removeObserver(self, forKeyPath: AVCaptureDeviceSubjectAreaDidChangeNotification)
         self.camera.removeObserver(self, forKeyPath: "adjustingFocus", context: self.focusingChangedContext)
         
     }
-    
-    /*
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
-    }
-    */
     
     // MARK: - Private Methods
     
