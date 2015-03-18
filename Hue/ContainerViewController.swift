@@ -65,17 +65,15 @@ class ContainerViewController: UIViewController {
         rootView.addSubview(self.switchButton)
         
         // container view constraints
-        let widthConstraint = NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1, constant: 0)
-        let heightConstraint = NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Height, multiplier: 1, constant: 0)
-        let leftConstraint = NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 0)
-        let rightConstraint = NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Right, multiplier: 1, constant: 0)
-        rootView.addConstraints([widthConstraint, heightConstraint, leftConstraint, rightConstraint])
+        rootView.addConstraint(NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Height, multiplier: 1, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Right, multiplier: 1, constant: 0))
         
         // button constraints
         switchButton.frame.size = CGSize(width: 40, height: 40)
-        let verticalConstraint = NSLayoutConstraint(item: self.switchButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
-        let horizontalConstraint = NSLayoutConstraint(item: self.switchButton, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
-        rootView.addConstraints([verticalConstraint, horizontalConstraint])
+        rootView.addConstraint(NSLayoutConstraint(item: self.switchButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.switchButton, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0))
         
         self.view = rootView
         
@@ -112,7 +110,7 @@ class ContainerViewController: UIViewController {
         var animator: UIViewControllerAnimatedTransitioning = AnimatedTransition()
         //let animator = self.delegate?.containerViewController(self, animationControllerForTransitioningFromViewController: fromViewController!, toViewController: toViewController)
         
-        let context = TransitioningContext(fromViewController: fromViewController!, toViewController: toViewController)
+        let context = TransitioningContext(fromViewController: fromViewController!, toViewController: toViewController, goingUp: toViewController == self.samplesViewController)
         context.completionBlock = { (didComplete: Bool) -> Void in
             
             fromViewController!.view.removeFromSuperview()
@@ -151,16 +149,17 @@ private class TransitioningContext: NSObject, UIViewControllerContextTransitioni
     private var disappearingToRect: CGRect
     private var appearingToRect: CGRect
 
-    init(fromViewController: UIViewController, toViewController: UIViewController) {
+    init(fromViewController: UIViewController, toViewController: UIViewController, goingUp: Bool) {
         
         self.viewControllers = [UITransitionContextFromViewControllerKey: fromViewController, UITransitionContextToViewControllerKey: toViewController]
         self.views = [UITransitionContextFromViewKey: fromViewController.view, UITransitionContextToViewKey: toViewController.view]
         
         // frame setup
         let containerBounds = fromViewController.view.superview!.bounds
+        let offset = goingUp ? containerBounds.height : -containerBounds.height
         self.disappearingFromRect = containerBounds
-        self.appearingFromRect = CGRectOffset(containerBounds, 0, containerBounds.height)
-        self.disappearingToRect = CGRectOffset(containerBounds, 0, -containerBounds.height)
+        self.appearingFromRect = CGRectOffset(containerBounds, 0, -offset)
+        self.disappearingToRect = CGRectOffset(containerBounds, 0, offset)
         self.appearingToRect = containerBounds
         
         super.init()

@@ -23,6 +23,32 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     var focusingIndicator: FocusingIndicator?
     var colorIndicator: ColorIndicator?
     
+    override func loadView() {
+        
+        let rootView = UIView()
+        
+        self.cameraView = GPUImageView()
+        self.cameraView.backgroundColor = UIColor.blackColor()
+        self.cameraView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        rootView.addSubview(self.cameraView)
+        
+        // camera view constraints
+        rootView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: 0))
+        
+        // gestures
+        var tapGR = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
+        var pressGR = UILongPressGestureRecognizer(target: self, action: Selector("handleLongPress:"))
+        pressGR.cancelsTouchesInView = false
+        
+        rootView.addGestureRecognizer(tapGR)
+        rootView.addGestureRecognizer(pressGR)
+        
+        self.view = rootView
+        
+    }
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -50,22 +76,6 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.focusingChangedContext = UnsafeMutablePointer<()>()
         self.movingColorTarget = false
         
-        self.cameraView = GPUImageView(frame: self.view.bounds)
-        
-        self.view.addSubview(self.cameraView)
-        
-        self.camera.addTarget(self.cameraView)
-        self.camera.addTarget(self.cropFilter)
-        self.camera.startCameraCapture()
-        
-        // Gestures
-        var tapGR = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
-        var pressGR = UILongPressGestureRecognizer(target: self, action: Selector("handleLongPress:"))
-        pressGR.cancelsTouchesInView = false
-        
-        self.view.addGestureRecognizer(tapGR)
-        self.view.addGestureRecognizer(pressGR)
-        
         // Notifications
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleSubjectAreaChangedNotification:"), name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: nil)
         self.camera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: NSKeyValueObservingOptions.New, context: self.focusingChangedContext)
@@ -74,9 +84,20 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     
     override func viewWillAppear(animated: Bool) {
         
-//        self.addChildViewController(self.samplesVC)
-//        self.view.addSubview(self.samplesVC.view)
-//        self.samplesVC.willMoveToParentViewController(self)
+        super.viewWillAppear(animated)
+        
+        self.camera.addTarget(self.cameraView)
+        self.camera.addTarget(self.cropFilter)
+        self.camera.startCameraCapture()
+        
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        
+        super.viewDidDisappear(animated)
+        
+        self.camera.removeAllTargets()
+        self.camera.stopCameraCapture()
         
     }
     
