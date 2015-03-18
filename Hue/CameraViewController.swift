@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  CameraViewController.swift
 //  Hue
 //
 //  Created by James Lin Taylor on 2015-03-16.
@@ -9,10 +9,12 @@
 import UIKit
 
 import GPUImage
+import CoreData
 
-class ViewController: UIViewController, ColorProcessManagerDelegate {
+class CameraViewController: UIViewController, ColorProcessManagerDelegate {
 
     var processMGR: ColorProcessManager!
+    var managedObjectContext: NSManagedObjectContext!
     
     var camera: GPUImageStillCamera!
     var cropFilter: GPUImageCropFilter!
@@ -79,7 +81,17 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
         
     }
     
-    // MARK: Private Methods
+    /*
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    // Get the new view controller using segue.destinationViewController.
+    // Pass the selected object to the new view controller.
+    }
+    */
+    
+    // MARK: - Private Methods
     
     func focusAtPoint(point: CGPoint) {
         
@@ -125,6 +137,7 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
         self.cropFilter.cropRegion = normalizedRegion
         
         var averageColorOperation = self.processMGR.averageColorProcess()
+        self.cropFilter.removeAllTargets()
         self.cropFilter.addTarget(averageColorOperation)
         
     }
@@ -140,7 +153,7 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
         
     }
     
-    // MARK: Notification Handling
+    // MARK: - Notification Handling
     
     func handleSubjectAreaChangedNotification(notification: NSNotification) {
         
@@ -169,16 +182,25 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
         
     }
     
-    // MARK: Gesture Handling
+    // MARK: - Gesture Handling
     
     func handleSingleTap(sender: UITapGestureRecognizer) {
         
         var tapLocation = sender.locationInView(self.view)
-        self.focusAtPoint(tapLocation)
         
-        // stop average color operations
-        self.cropFilter.removeAllTargets()
-        self.colorIndicator?.shouldRemoveAnimated(true)
+        var colorIndicatorRect = self.colorIndicator == nil ? CGRectZero : self.colorIndicator!.frame
+        if CGRectContainsPoint(colorIndicatorRect, tapLocation) {
+            
+            // stop average color operations
+            self.cropFilter.removeAllTargets()
+            self.colorIndicator?.shrink()
+            self.colorIndicator?.shouldRemoveAnimated(true)
+            
+        } else {
+            
+            self.focusAtPoint(tapLocation)
+
+        }
         
     }
     
@@ -199,7 +221,6 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
         let touchLocation = touch.locationInView(self.view)
         
         var colorIndicatorRect = self.colorIndicator == nil ? CGRectZero : self.colorIndicator!.frame
-        
         if self.movingColorTarget == true {
             
             self.moveAverageColorCaptureToPoint(touchLocation)
@@ -236,7 +257,7 @@ class ViewController: UIViewController, ColorProcessManagerDelegate {
     }
     
    
-    // MARK: ColorProcessManager Delegate
+    // MARK: - ColorProcessManager Delegate
     
     func colorProcessManager(manager: ColorProcessManager, updatedColor color: UIColor?) {
         
