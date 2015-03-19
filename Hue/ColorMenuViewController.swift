@@ -38,7 +38,7 @@ class ColorMenuViewController: UIViewController {
         // color label constraints
         rootView.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
         rootView.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Right, multiplier: 1, constant: -10))
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Right, multiplier: 0.98, constant: 0))
         rootView.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: 0))
 
         // color swatch constraints

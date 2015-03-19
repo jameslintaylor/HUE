@@ -74,13 +74,13 @@
 		52D08A071AB8B82800A3929F /* SamplesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesViewController.swift; sourceTree = "<group>"; };
 		721E44B11AB78CC5006E57D1 /* ColorTarget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorTarget.swift; sourceTree = "<group>"; };
 		721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorProcessManager.swift; sourceTree = "<group>"; };
-		72492A9B1AB73A32001EAE02 /* HUE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUE.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		72492A9B1AB73A32001EAE02 /* H•UE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "H•UE.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72492A9F1AB73A32001EAE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72492AA01AB73A32001EAE02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72492AA21AB73A32001EAE02 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		72492AA71AB73A32001EAE02 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		72492AAA1AB73A32001EAE02 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		72492AB01AB73A32001EAE02 /* HUETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HUETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		72492AB01AB73A32001EAE02 /* H•UETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "H•UETests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72492AB51AB73A32001EAE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72492AB61AB73A32001EAE02 /* HueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HueTests.swift; sourceTree = "<group>"; };
 		72492AC01AB73A59001EAE02 /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = ../../src/GPUImage/framework/GPUImage.xcodeproj; sourceTree = "<group>"; };
@@ -143,8 +143,8 @@
 		72492A9C1AB73A32001EAE02 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				72492A9B1AB73A32001EAE02 /* HUE.app */,
-				72492AB01AB73A32001EAE02 /* HUETests.xctest */,
+				72492A9B1AB73A32001EAE02 /* H•UE.app */,
+				72492AB01AB73A32001EAE02 /* H•UETests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -230,9 +230,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		72492A9A1AB73A32001EAE02 /* HUE */ = {
+		72492A9A1AB73A32001EAE02 /* H•UE */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 72492ABA1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUE" */;
+			buildConfigurationList = 72492ABA1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "H•UE" */;
 			buildPhases = (
 				72492A971AB73A32001EAE02 /* Sources */,
 				72492A981AB73A32001EAE02 /* Frameworks */,
@@ -244,14 +244,14 @@
 			dependencies = (
 				72492ACB1AB73A6B001EAE02 /* PBXTargetDependency */,
 			);
-			name = HUE;
+			name = "H•UE";
 			productName = Hue;
-			productReference = 72492A9B1AB73A32001EAE02 /* HUE.app */;
+			productReference = 72492A9B1AB73A32001EAE02 /* H•UE.app */;
 			productType = "com.apple.product-type.application";
 		};
-		72492AAF1AB73A32001EAE02 /* HUETests */ = {
+		72492AAF1AB73A32001EAE02 /* H•UETests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 72492ABD1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUETests" */;
+			buildConfigurationList = 72492ABD1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "H•UETests" */;
 			buildPhases = (
 				72492AAC1AB73A32001EAE02 /* Sources */,
 				72492AAD1AB73A32001EAE02 /* Frameworks */,
@@ -262,9 +262,9 @@
 			dependencies = (
 				72492AB21AB73A32001EAE02 /* PBXTargetDependency */,
 			);
-			name = HUETests;
+			name = "H•UETests";
 			productName = HueTests;
-			productReference = 72492AB01AB73A32001EAE02 /* HUETests.xctest */;
+			productReference = 72492AB01AB73A32001EAE02 /* H•UETests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -285,7 +285,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 72492A961AB73A32001EAE02 /* Build configuration list for PBXProject "Hue" */;
+			buildConfigurationList = 72492A961AB73A32001EAE02 /* Build configuration list for PBXProject "H•UE" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -304,8 +304,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				72492A9A1AB73A32001EAE02 /* HUE */,
-				72492AAF1AB73A32001EAE02 /* HUETests */,
+				72492A9A1AB73A32001EAE02 /* H•UE */,
+				72492AAF1AB73A32001EAE02 /* H•UETests */,
 			);
 		};
 /* End PBXProject section */
@@ -376,7 +376,7 @@
 /* Begin PBXTargetDependency section */
 		72492AB21AB73A32001EAE02 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 72492A9A1AB73A32001EAE02 /* HUE */;
+			target = 72492A9A1AB73A32001EAE02 /* H•UE */;
 			targetProxy = 72492AB11AB73A32001EAE02 /* PBXContainerItemProxy */;
 		};
 		72492ACB1AB73A6B001EAE02 /* PBXTargetDependency */ = {
@@ -481,7 +481,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Hue/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = HUE;
+				PRODUCT_NAME = "H•UE";
 			};
 			name = Debug;
 		};
@@ -491,7 +491,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Hue/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = HUE;
+				PRODUCT_NAME = "H•UE";
 			};
 			name = Release;
 		};
@@ -509,7 +509,7 @@
 				);
 				INFOPLIST_FILE = HueTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = HUETests;
+				PRODUCT_NAME = "H•UETests";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hue.app/Hue";
 			};
 			name = Debug;
@@ -524,7 +524,7 @@
 				);
 				INFOPLIST_FILE = HueTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = HUETests;
+				PRODUCT_NAME = "H•UETests";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hue.app/Hue";
 			};
 			name = Release;
@@ -532,7 +532,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		72492A961AB73A32001EAE02 /* Build configuration list for PBXProject "Hue" */ = {
+		72492A961AB73A32001EAE02 /* Build configuration list for PBXProject "H•UE" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72492AB81AB73A32001EAE02 /* Debug */,
@@ -541,7 +541,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		72492ABA1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUE" */ = {
+		72492ABA1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "H•UE" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72492ABB1AB73A32001EAE02 /* Debug */,
@@ -550,7 +550,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		72492ABD1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUETests" */ = {
+		72492ABD1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "H•UETests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72492ABE1AB73A32001EAE02 /* Debug */,
