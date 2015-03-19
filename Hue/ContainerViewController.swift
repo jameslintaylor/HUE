@@ -95,6 +95,8 @@ class ContainerViewController: UIViewController {
         }
         
         let toView = toViewController.view
+        toView.setTranslatesAutoresizingMaskIntoConstraints(true)
+        toView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
         toView.frame = self.containerView.bounds
         
         fromViewController?.willMoveToParentViewController(nil)
