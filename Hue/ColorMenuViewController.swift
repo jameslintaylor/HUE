@@ -17,7 +17,11 @@ class ColorMenuViewController: UIViewController {
     }
     
     let colorLabel = UILabel()
-    let colorSwatch = UIView()
+    let colorSwatch = UIButton()
+    
+    // mutating constraints
+    var colorLabelLeftConstraint: NSLayoutConstraint!
+    var colorLabelWidthConstraint: NSLayoutConstraint!
     
     override func loadView() {
         
@@ -30,16 +34,19 @@ class ColorMenuViewController: UIViewController {
         self.colorLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.colorSwatch.layer.cornerRadius = 30
+        self.colorSwatch.addTarget(self, action: Selector("swatchPressed:"), forControlEvents: UIControlEvents.TouchDown)
         self.colorSwatch.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         rootView.addSubview(self.colorLabel)
         rootView.addSubview(self.colorSwatch)
         
         // color label constraints
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Right, multiplier: 0.98, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: 0))
+        self.colorLabelLeftConstraint = NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
+        rootView.addConstraint(self.colorLabelLeftConstraint)
+        self.colorLabelWidthConstraint = NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 0)
+        rootView.addConstraint(self.colorLabelWidthConstraint)
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 0.5, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Height, multiplier: 1, constant: 0))
 
         // color swatch constraints
         rootView.addConstraint(NSLayoutConstraint(item: self.colorSwatch, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 60))
@@ -60,13 +67,24 @@ class ColorMenuViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // MARK: - Public Methods
     
     func updateWithColor(color: UIColor?) {
         
         self.colorSwatch.backgroundColor = color
         self.colorLabel.text = "hsv(12,102,25)"
+        
+    }
+    
+    // MARK: - Private Methods
+    
+    func swatchPressed(swatch: UIButton) {
+     
+        self.colorLabelLeftConstraint.constant -= self.view.bounds.width/2
+        UIView.animateWithDuration(0.2) {
+            self.view.layoutIfNeeded()
+        }
         
     }
     
