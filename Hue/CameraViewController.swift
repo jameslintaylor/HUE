@@ -17,33 +17,48 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     var camera: GPUImageStillCamera!
     var cropFilter: GPUImageCropFilter!
     var focusingChangedContext: UnsafeMutablePointer<()>!
-    var movingColorTarget: Bool!
-        
-    var cameraView: GPUImageView!
+    
+    let colorMenuViewContainer = UIView()
+    let colorMenuViewController = ColorMenuViewController()
+    
+    let cameraView = GPUImageView()
+    let colorTarget = ColorTarget()
+    
     var focusingIndicator: FocusingIndicator?
-    var colorIndicator: ColorIndicator?
     
     override func loadView() {
         
         let rootView = UIView()
         
-        self.cameraView = GPUImageView()
-        self.cameraView.backgroundColor = UIColor.blackColor()
         self.cameraView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.colorTarget.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.colorMenuViewContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         rootView.addSubview(self.cameraView)
+        rootView.addSubview(self.colorTarget)
+        rootView.addSubview(self.colorMenuViewContainer)
         
         // camera view constraints
         rootView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0))
         rootView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 0))
+        
+        // color target constraints
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 20))
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 20))
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0))
+        
+        // color save button constraints
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorMenuViewContainer, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorMenuViewContainer, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 80))
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorMenuViewContainer, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorMenuViewContainer, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 0))
         
         // gestures
         var tapGR = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
-        var pressGR = UILongPressGestureRecognizer(target: self, action: Selector("handleLongPress:"))
-        pressGR.cancelsTouchesInView = false
-        
         rootView.addGestureRecognizer(tapGR)
-        rootView.addGestureRecognizer(pressGR)
         
         self.view = rootView
         
@@ -72,24 +87,31 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         }
         
         self.cropFilter = GPUImageCropFilter()
-        
         self.focusingChangedContext = UnsafeMutablePointer<()>()
-        self.movingColorTarget = false
+        
+        // Color menu bar view controller
+        self.colorMenuViewController.view.setTranslatesAutoresizingMaskIntoConstraints(true)
+        self.colorMenuViewController.view.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        self.colorMenuViewController.view.frame = self.colorMenuViewContainer.bounds
+        self.colorMenuViewContainer.addSubview(self.colorMenuViewController.view)
+        self.addChildViewController(self.colorMenuViewController)
+        self.colorMenuViewController.didMoveToParentViewController(self)
         
         // Notifications
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleSubjectAreaChangedNotification:"), name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: nil)
         self.camera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: NSKeyValueObservingOptions.New, context: self.focusingChangedContext)
-        
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewDidAppear(animated: Bool) {
         
-        super.viewWillAppear(animated)
+        super.viewDidAppear(animated)
         
         self.camera.addTarget(self.cameraView)
         self.camera.addTarget(self.cropFilter)
         self.camera.startCameraCapture()
         
+        // start average color operations
+        self.beginAverageColorCaptureAtPoint(CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height/2))
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -98,14 +120,12 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         
         self.camera.removeAllTargets()
         self.camera.stopCameraCapture()
-        
     }
     
     deinit {
         
         NSNotificationCenter.defaultCenter().removeObserver(self, forKeyPath: AVCaptureDeviceSubjectAreaDidChangeNotification)
         self.camera.removeObserver(self, forKeyPath: "adjustingFocus", context: self.focusingChangedContext)
-        
     }
     
     // MARK: - Private Methods
@@ -142,31 +162,12 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     
     func beginAverageColorCaptureAtPoint(point: CGPoint) {
         
-        // color indicator
-        self.colorIndicator?.shouldRemoveAnimated(false)
-        self.colorIndicator = ColorIndicator()
-        self.colorIndicator!.center = point
-        self.view.addSubview(self.colorIndicator!)
-        self.colorIndicator!.expand()
-        
         let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
         let normalizedRegion = CGRect(x: normalizedPoint.x - 0.01, y: normalizedPoint.y - 0.01, width: 0.02, height: 0.02)
         self.cropFilter.cropRegion = normalizedRegion
         
-        var averageColorOperation = self.processMGR.averageColorProcess()
         self.cropFilter.removeAllTargets()
-        self.cropFilter.addTarget(averageColorOperation)
-        
-    }
-    
-    func moveAverageColorCaptureToPoint(point: CGPoint) {
-        
-        // color indicator
-        self.colorIndicator?.center = point
-        
-        let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
-        let normalizedRegion = CGRect(x: normalizedPoint.x - 0.02, y: normalizedPoint.y - 0.02, width: 0.04, height: 0.04)
-        self.cropFilter.cropRegion = normalizedRegion
+        self.cropFilter.addTarget(self.processMGR.averageColorProcess)
         
     }
     
@@ -204,90 +205,16 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     func handleSingleTap(sender: UITapGestureRecognizer) {
         
         var tapLocation = sender.locationInView(self.view)
-        
-        var colorIndicatorRect = self.colorIndicator == nil ? CGRectZero : self.colorIndicator!.frame
-        if CGRectContainsPoint(colorIndicatorRect, tapLocation) {
-            
-            // stop average color operations
-            self.cropFilter.removeAllTargets()
-            self.colorIndicator?.shrink()
-            self.colorIndicator?.shouldRemoveAnimated(true)
-            
-        } else {
-            
-            self.focusAtPoint(tapLocation)
-
-        }
-        
+        self.focusAtPoint(tapLocation)
     }
-    
-    func handleLongPress(sender: UILongPressGestureRecognizer) {
-        
-        if sender.state == .Began {
-            
-            var pressLocation = sender.locationInView(self.view)
-            self.beginAverageColorCaptureAtPoint(pressLocation)
-            
-        }
-        
-    }
-    
-    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
-        
-        let touch = touches.anyObject() as UITouch
-        let touchLocation = touch.locationInView(self.view)
-        
-        var colorIndicatorRect = self.colorIndicator == nil ? CGRectZero : self.colorIndicator!.frame
-        if self.movingColorTarget == true {
-            
-            self.moveAverageColorCaptureToPoint(touchLocation)
-            
-        } else if CGRectContainsPoint(colorIndicatorRect, touchLocation) {
-            
-            self.movingColorTarget = true
-            self.colorIndicator?.shrink()
-            
-        }
-        
-    }
-    
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-        
-        if self.movingColorTarget == true {
-            
-            self.movingColorTarget = false
-            self.colorIndicator?.expand()
-            
-        }
-        
-    }
-    
-    override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
-        
-        if self.movingColorTarget == true {
-            
-            self.movingColorTarget = false
-            self.colorIndicator?.expand()
-            
-        }
-        
-    }
-    
    
     // MARK: - ColorProcessManager Delegate
     
     func colorProcessManager(manager: ColorProcessManager, updatedColor color: UIColor?) {
         
-        if let colorIndicator = self.colorIndicator {
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                
-                colorIndicator.setColor(color)
-                
-            })
-            
-        }
-        
+        dispatch_async(dispatch_get_main_queue(), {
+            self.colorMenuViewController.updateWithColor(color)
+        })
     }
     
 }

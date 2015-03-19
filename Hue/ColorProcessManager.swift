@@ -19,30 +19,21 @@ class ColorProcessManager: NSObject {
    
     weak var delegate: ColorProcessManagerDelegate?
     
-    var color: UIColor?
-    
-    override init() {
-
-        super.init()
-
-    }
-    
-    // MARK: Public methods
-    
-    func averageColorProcess() -> GPUImageAverageColor {
+    lazy var averageColorProcess: GPUImageAverageColor = {
         
-        var averageColorOperation = GPUImageAverageColor()
-        averageColorOperation.colorAverageProcessingFinishedBlock = { (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, time: CMTime) -> Void in
+        var process = GPUImageAverageColor()
+        process.colorAverageProcessingFinishedBlock = { (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, time: CMTime) -> Void in
             
             let averageColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
             self.color = self.color == nil ? averageColor : self.color!.blendWithColor(averageColor, weight: 0.2)
             self.delegate?.colorProcessManager(self, updatedColor: self.color)
-            
         }
         
-        return averageColorOperation
+        return process
         
-    }
+    }()
+    
+    var color: UIColor?
     
 }
 

@@ -8,9 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		523FB14D1AB9F3E100AD2F7B /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523FB14C1AB9F3E100AD2F7B /* ContainerViewController.swift */; };
+		523FB1551ABB40EA00AD2F7B /* ColorMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523FB1541ABB40EA00AD2F7B /* ColorMenuViewController.swift */; };
 		52AF523C1AB86CE30039C21A /* HUE.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 52AF523A1AB86CE30039C21A /* HUE.xcdatamodeld */; };
 		52D08A081AB8B82800A3929F /* SamplesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D08A071AB8B82800A3929F /* SamplesViewController.swift */; };
-		721E44B21AB78CC5006E57D1 /* ColorIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721E44B11AB78CC5006E57D1 /* ColorIndicator.swift */; };
+		721E44B21AB78CC5006E57D1 /* ColorTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721E44B11AB78CC5006E57D1 /* ColorTarget.swift */; };
 		721E44B41AB78CCB006E57D1 /* ColorProcessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */; };
 		72492AA11AB73A32001EAE02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AA01AB73A32001EAE02 /* AppDelegate.swift */; };
 		72492AA31AB73A32001EAE02 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AA21AB73A32001EAE02 /* CameraViewController.swift */; };
@@ -68,9 +69,10 @@
 
 /* Begin PBXFileReference section */
 		523FB14C1AB9F3E100AD2F7B /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
+		523FB1541ABB40EA00AD2F7B /* ColorMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorMenuViewController.swift; sourceTree = "<group>"; };
 		52AF523B1AB86CE30039C21A /* HUE.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = HUE.xcdatamodel; sourceTree = "<group>"; };
 		52D08A071AB8B82800A3929F /* SamplesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesViewController.swift; sourceTree = "<group>"; };
-		721E44B11AB78CC5006E57D1 /* ColorIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorIndicator.swift; sourceTree = "<group>"; };
+		721E44B11AB78CC5006E57D1 /* ColorTarget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorTarget.swift; sourceTree = "<group>"; };
 		721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorProcessManager.swift; sourceTree = "<group>"; };
 		72492A9B1AB73A32001EAE02 /* HUE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72492A9F1AB73A32001EAE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -207,7 +209,7 @@
 		72492AD31AB774A1001EAE02 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				721E44B11AB78CC5006E57D1 /* ColorIndicator.swift */,
+				721E44B11AB78CC5006E57D1 /* ColorTarget.swift */,
 				72492AD71AB77AF8001EAE02 /* FocusingIndicator.swift */,
 			);
 			name = Views;
@@ -218,6 +220,7 @@
 			children = (
 				523FB14C1AB9F3E100AD2F7B /* ContainerViewController.swift */,
 				72492AA21AB73A32001EAE02 /* CameraViewController.swift */,
+				523FB1541ABB40EA00AD2F7B /* ColorMenuViewController.swift */,
 				52D08A071AB8B82800A3929F /* SamplesViewController.swift */,
 				523FB14B1AB9E0DF00AD2F7B /* Transitions */,
 			);
@@ -348,6 +351,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				523FB1551ABB40EA00AD2F7B /* ColorMenuViewController.swift in Sources */,
 				72492AD81AB77AF8001EAE02 /* FocusingIndicator.swift in Sources */,
 				721E44B41AB78CCB006E57D1 /* ColorProcessManager.swift in Sources */,
 				523FB14D1AB9F3E100AD2F7B /* ContainerViewController.swift in Sources */,
@@ -355,7 +359,7 @@
 				52D08A081AB8B82800A3929F /* SamplesViewController.swift in Sources */,
 				72492AA11AB73A32001EAE02 /* AppDelegate.swift in Sources */,
 				52AF523C1AB86CE30039C21A /* HUE.xcdatamodeld in Sources */,
-				721E44B21AB78CC5006E57D1 /* ColorIndicator.swift in Sources */,
+				721E44B21AB78CC5006E57D1 /* ColorTarget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

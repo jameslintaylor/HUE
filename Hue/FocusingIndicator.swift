@@ -52,12 +52,6 @@ class FocusingIndicator: UIView {
         
     }
     
-    deinit {
-        
-        NSLog("Focusing Indicator deinitialized")
-        
-    }
-    
     // Mark: Public methods
     
     func startFocusingAnimation() {

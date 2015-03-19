@@ -35,12 +35,9 @@ class ContainerViewController: UIViewController {
     }
     
     override init () {
-     
         self.cameraViewController = CameraViewController()
         self.samplesViewController = SamplesViewController()
-        
         super.init(nibName: nil, bundle: nil)
-        
     }
    
     required init(coder aDecoder: NSCoder) {
@@ -53,16 +50,9 @@ class ContainerViewController: UIViewController {
         let rootView = UIView()
         
         self.containerView = UIView()
-        self.containerView.backgroundColor = UIColor.redColor()
         self.containerView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
-        self.switchButton = UIButton()
-        self.switchButton.backgroundColor = UIColor.blackColor()
-        self.switchButton.addTarget(self, action: Selector("buttonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-        self.switchButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
+
         rootView.addSubview(self.containerView)
-        rootView.addSubview(self.switchButton)
         
         // container view constraints
         rootView.addConstraint(NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1, constant: 0))
@@ -70,20 +60,12 @@ class ContainerViewController: UIViewController {
         rootView.addConstraint(NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 0))
         rootView.addConstraint(NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Right, multiplier: 1, constant: 0))
         
-        // button constraints
-        switchButton.frame.size = CGSize(width: 40, height: 40)
-        rootView.addConstraint(NSLayoutConstraint(item: self.switchButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.switchButton, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0))
-        
         self.view = rootView
-        
     }
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         self.selectedViewController = self.cameraViewController
-        
     }
     
     // MARK: - Private Methods
@@ -121,20 +103,16 @@ class ContainerViewController: UIViewController {
             
             animator.animationEnded?(didComplete)
             self.switchButton.userInteractionEnabled = true
-        
         }
         
         self.switchButton.userInteractionEnabled = false
         animator.animateTransition(context)
-        
     }
     
     func buttonTapped(button: UIButton) {
         
         self.selectedViewController = self.selectedViewController == self.cameraViewController ? self.samplesViewController : self.cameraViewController
-        
     }
-    
 }
 
 // MARK: - Private Transitioning Context
@@ -165,13 +143,11 @@ private class TransitioningContext: NSObject, UIViewControllerContextTransitioni
         self.appearingToRect = containerBounds
         
         super.init()
-        
     }
     
     private func containerView() -> UIView {
         
         return self.viewForKey(UITransitionContextFromViewKey)!.superview!
-    
     }
     
     private func initialFrameForViewController(viewController: UIViewController) -> CGRect {
@@ -196,33 +172,24 @@ private class TransitioningContext: NSObject, UIViewControllerContextTransitioni
         }
         
         return frame
-        
     }
     
     private func viewControllerForKey(key: String) -> UIViewController? {
-        
         return self.viewControllers[key] as? UIViewController
-        
     }
     
     private func viewForKey(key: String) -> UIView? {
-        
         return self.views[key] as? UIView
-        
     }
     
     private func completeTransition(didComplete: Bool) {
-        
         if let completionBlock = self.completionBlock {
             completionBlock(didComplete)
         }
-        
     }
     
     private func transitionWasCancelled() -> Bool {
-        
         return false // non interactive transition can't be cancelled
-        
     }
     
     // trivial implementations
@@ -243,9 +210,7 @@ private class TransitioningContext: NSObject, UIViewControllerContextTransitioni
 private class AnimatedTransition: NSObject, UIViewControllerAnimatedTransitioning {
     
     private func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
-        
         return 0.2
-        
     }
     
     private func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
@@ -268,7 +233,6 @@ private class AnimatedTransition: NSObject, UIViewControllerAnimatedTransitionin
             transitionContext.completeTransition(finished)
             
         })
-        
     }
     
 }
