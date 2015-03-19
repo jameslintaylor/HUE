@@ -510,7 +510,7 @@
 				INFOPLIST_FILE = HueTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "H•UETests";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hue.app/Hue";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/H•UE.app/H•UE";
 			};
 			name = Debug;
 		};
@@ -525,7 +525,7 @@
 				INFOPLIST_FILE = HueTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "H•UETests";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hue.app/Hue";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/H•UE.app/H•UE";
 			};
 			name = Release;
 		};
