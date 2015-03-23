@@ -27,6 +27,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     
     let cameraView = GPUImageView()
     let colorTarget = ColorTarget()
+    let overlay = UIView()
     
     var focusingIndicator: FocusingIndicator?
         
@@ -34,17 +35,18 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         
         let rootView = UIView()
         
-        self.cameraView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.cameraView.setTranslatesAutoresizingMaskIntoConstraints(true)
+        self.cameraView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        
         self.colorTarget.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        self.overlay.setTranslatesAutoresizingMaskIntoConstraints(true)
+        self.overlay.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        self.overlay.backgroundColor = UIColor(white: 0.8, alpha: 1)
         
         rootView.addSubview(self.cameraView)
         rootView.addSubview(self.colorTarget)
-        
-        // camera view constraints
-        rootView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 0))
+        rootView.addSubview(self.overlay)
         
         // color target constraints
         rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 20))
@@ -100,14 +102,21 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         
         // start average color operations
         self.beginAverageColorCaptureAtPoint(CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height/2))
+    
+        // hide overlay
+        self.hideOverlay()
+        
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewWillDisappear(animated: Bool) {
         
-        super.viewDidDisappear(animated)
+        super.viewWillDisappear(animated)
         
         self.camera.removeAllTargets()
         self.camera.stopCameraCapture()
+    
+        // show overlay
+        self.showOverlay()
     }
     
     deinit {
@@ -162,6 +171,18 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.cropFilter.removeAllTargets()
         self.cropFilter.addTarget(self.processMGR.averageColorProcess)
         
+    }
+    
+    func showOverlay() {
+        
+        UIView.animateWithDuration(0.2) { self.overlay.alpha = 1.0 }
+        
+    }
+    
+    func hideOverlay() {
+        
+        UIView.animateWithDuration(0.2) { self.overlay.alpha = 0.0 }
+
     }
     
     // MARK: - Notification Handling

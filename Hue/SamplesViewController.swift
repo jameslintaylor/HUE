@@ -19,6 +19,7 @@ class SamplesViewController: UITableViewController, NSFetchedResultsControllerDe
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        self.tableView.contentInset = UIEdgeInsets(top: SWATCH_HEIGHT, left: 0, bottom: 0, right: 0)
         
     }
 

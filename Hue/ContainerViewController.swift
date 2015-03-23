@@ -16,7 +16,9 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
     
     var containerView: UIView!
     var menuContainerView: UIView!
-    var switchButton: UIButton!
+    
+    var menuContainerBottomConstraint: NSLayoutConstraint!
+    var menuContainerTopConstraint: NSLayoutConstraint!
     
     var selectedViewController: UIViewController? {
         didSet {
@@ -61,7 +63,9 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
         rootView.addConstraint(NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0))
         rootView.addConstraint(NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: SWATCH_HEIGHT))
         rootView.addConstraint(NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 0))
+        
+        self.menuContainerBottomConstraint = NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 0)
+        self.menuContainerTopConstraint = NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 0)
         
         self.view = rootView
     }
@@ -97,6 +101,14 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
         fromViewController?.willMoveToParentViewController(nil)
         self.addChildViewController(toViewController)
         
+        if toViewController == self.cameraViewController {
+            self.view.removeConstraint(self.menuContainerTopConstraint)
+            self.view.addConstraint(self.menuContainerBottomConstraint)
+        } else {
+            self.view.removeConstraint(self.menuContainerBottomConstraint)
+            self.view.addConstraint(self.menuContainerTopConstraint)
+        }
+        
         // if this is the initial presentation, add the new child view controller with no animation
         if (fromViewController == nil) {
             self.containerView.addSubview(toView)
@@ -104,9 +116,12 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
             return
         }
         
+        // animate menu container constraint change
+        UIView.animateWithDuration(0.2) { self.view.layoutIfNeeded() }
+        
         var animator: UIViewControllerAnimatedTransitioning = AnimatedTransition()
         
-        let context = TransitioningContext(fromViewController: fromViewController!, toViewController: toViewController, goingUp: toViewController == self.samplesViewController)
+        let context = TransitioningContext(fromViewController: fromViewController!, toViewController: toViewController, goingUp: toViewController == self.cameraViewController)
         context.completionBlock = { (didComplete: Bool) -> Void in
             
             fromViewController!.view.removeFromSuperview()
@@ -114,10 +129,8 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
             toViewController.didMoveToParentViewController(self)
             
             animator.animationEnded?(didComplete)
-            self.switchButton.userInteractionEnabled = true
         }
         
-        self.switchButton.userInteractionEnabled = false
         animator.animateTransition(context)
     }
     
@@ -138,9 +151,21 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
     
     // MARK: - Menu View Controller Delegate
     
-    func menuViewController(viewController: MenuViewController, requestedChangeMenuToState: MenuState) -> Bool {
+    func menuViewController(viewController: MenuViewController, requestedChangeMenuToState state: MenuState) -> Bool {
         
-        return true
+        if (state == .Camera) & (self.selectedViewController == self.samplesViewController) {
+            
+            self.selectedViewController = self.cameraViewController
+            return true
+            
+        } else if (state == .Samples) & (self.selectedViewController == self.cameraViewController) {
+            
+            self.selectedViewController = self.samplesViewController
+            return true
+            
+        }
+        
+        return false
         
     }
     
@@ -168,10 +193,11 @@ private class TransitioningContext: NSObject, UIViewControllerContextTransitioni
         // frame setup
         let containerBounds = fromViewController.view.superview!.bounds
         let offset = goingUp ? containerBounds.height : -containerBounds.height
-        self.disappearingFromRect = containerBounds
+        
+        self.disappearingFromRect = CGRectOffset(containerBounds, 0, 0)
         self.appearingFromRect = CGRectOffset(containerBounds, 0, -offset)
         self.disappearingToRect = CGRectOffset(containerBounds, 0, offset)
-        self.appearingToRect = containerBounds
+        self.appearingToRect = CGRectOffset(containerBounds, 0, 0)
         
         super.init()
     }
@@ -254,7 +280,7 @@ private class AnimatedTransition: NSObject, UIViewControllerAnimatedTransitionin
         toViewController!.view.frame = transitionContext.initialFrameForViewController(toViewController!)
         fromViewController!.view.frame = transitionContext.initialFrameForViewController(fromViewController!)
         
-        UIView.animateWithDuration(self.transitionDuration(transitionContext), animations: {
+        UIView.animateWithDuration(self.transitionDuration(transitionContext), delay: 0.0, options: .CurveEaseOut, animations: {
             
             toViewController!.view.frame = transitionContext.finalFrameForViewController(toViewController!)
             fromViewController!.view.frame = transitionContext.finalFrameForViewController(fromViewController!)
