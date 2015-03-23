@@ -10,33 +10,35 @@ import UIKit
 
 import GPUImage
 
+protocol CameraViewControllerDelegate: class {
+    
+    func cameraViewController(viewController: CameraViewController, didUpdateWithColor color: UIColor?)
+    
+}
+
 class CameraViewController: UIViewController, ColorProcessManagerDelegate {
 
+    weak var delegate: CameraViewControllerDelegate?
     var processMGR: ColorProcessManager!
     
     var camera: GPUImageStillCamera!
     var cropFilter: GPUImageCropFilter!
     var focusingChangedContext: UnsafeMutablePointer<()>!
     
-    let colorMenuViewContainer = UIView()
-    let colorMenuViewController = ColorMenuViewController()
-    
     let cameraView = GPUImageView()
     let colorTarget = ColorTarget()
     
     var focusingIndicator: FocusingIndicator?
-    
+        
     override func loadView() {
         
         let rootView = UIView()
         
         self.cameraView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.colorTarget.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.colorMenuViewContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         rootView.addSubview(self.cameraView)
         rootView.addSubview(self.colorTarget)
-        rootView.addSubview(self.colorMenuViewContainer)
         
         // camera view constraints
         rootView.addConstraint(NSLayoutConstraint(item: self.cameraView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0))
@@ -49,12 +51,6 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 20))
         rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
         rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0))
-        
-        // color save button constraints
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorMenuViewContainer, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorMenuViewContainer, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 80))
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorMenuViewContainer, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorMenuViewContainer, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 0))
         
         // gestures
         var tapGR = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
@@ -88,14 +84,6 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         
         self.cropFilter = GPUImageCropFilter()
         self.focusingChangedContext = UnsafeMutablePointer<()>()
-        
-        // Color menu bar view controller
-        self.colorMenuViewController.view.setTranslatesAutoresizingMaskIntoConstraints(true)
-        self.colorMenuViewController.view.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-        self.colorMenuViewController.view.frame = self.colorMenuViewContainer.bounds
-        self.colorMenuViewContainer.addSubview(self.colorMenuViewController.view)
-        self.addChildViewController(self.colorMenuViewController)
-        self.colorMenuViewController.didMoveToParentViewController(self)
         
         // Notifications
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleSubjectAreaChangedNotification:"), name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: nil)
@@ -163,7 +151,12 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     func beginAverageColorCaptureAtPoint(point: CGPoint) {
         
         let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
-        let normalizedRegion = CGRect(x: normalizedPoint.x - 0.01, y: normalizedPoint.y - 0.01, width: 0.02, height: 0.02)
+        
+        var aspectRatio = self.cameraView.frame.width / self.cameraView.frame.height
+        var dx: CGFloat = 0.01
+        var dy: CGFloat = dx * aspectRatio
+        
+        let normalizedRegion = CGRect(x: normalizedPoint.x - dx/2, y: normalizedPoint.y - dy/2, width: dx, height: dy)
         self.cropFilter.cropRegion = normalizedRegion
         
         self.cropFilter.removeAllTargets()
@@ -212,9 +205,8 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     
     func colorProcessManager(manager: ColorProcessManager, updatedColor color: UIColor?) {
         
-        dispatch_async(dispatch_get_main_queue(), {
-            self.colorMenuViewController.updateWithColor(color)
-        })
+        self.delegate?.cameraViewController(self, didUpdateWithColor: color)
+    
     }
     
 }

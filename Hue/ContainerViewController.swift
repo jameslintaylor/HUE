@@ -8,24 +8,14 @@
 
 import UIKit
 
-@objc protocol ContainerViewControllerDelegate: class {
-    
-    optional
-    
-    func containerViewController(containerViewController: ContainerViewController, didSelectViewController viewController: UIViewController)
-
-    func containerViewController(containerViewController: ContainerViewController, animationControllerForTransitioningFromViewController fromViewController: UIViewController, toViewController: UIViewController) -> UIViewControllerAnimatedTransitioning
-    
-}
-
-class ContainerViewController: UIViewController {
-
-    weak var delegate: ContainerViewControllerDelegate?
+class ContainerViewController: UIViewController, CameraViewControllerDelegate, MenuViewControllerDelegate {
     
     var cameraViewController: CameraViewController
     var samplesViewController: SamplesViewController
+    var menuViewController: MenuViewController
     
     var containerView: UIView!
+    var menuContainerView: UIView!
     var switchButton: UIButton!
     
     var selectedViewController: UIViewController? {
@@ -37,7 +27,10 @@ class ContainerViewController: UIViewController {
     override init () {
         self.cameraViewController = CameraViewController()
         self.samplesViewController = SamplesViewController()
+        self.menuViewController = MenuViewController()
         super.init(nibName: nil, bundle: nil)
+        self.cameraViewController.delegate = self
+        self.menuViewController.delegate = self
     }
    
     required init(coder aDecoder: NSCoder) {
@@ -52,7 +45,11 @@ class ContainerViewController: UIViewController {
         self.containerView = UIView()
         self.containerView.setTranslatesAutoresizingMaskIntoConstraints(false)
 
+        self.menuContainerView = UIView()
+        self.menuContainerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
         rootView.addSubview(self.containerView)
+        rootView.addSubview(self.menuContainerView)
         
         // container view constraints
         rootView.addConstraint(NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1, constant: 0))
@@ -60,12 +57,28 @@ class ContainerViewController: UIViewController {
         rootView.addConstraint(NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 0))
         rootView.addConstraint(NSLayoutConstraint(item: self.containerView, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Right, multiplier: 1, constant: 0))
         
+        // color menu container constraints
+        rootView.addConstraint(NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: SWATCH_HEIGHT))
+        rootView.addConstraint(NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 0))
+        
         self.view = rootView
     }
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
+        
         self.selectedViewController = self.cameraViewController
+        
+        // menu view controller
+        self.menuViewController.view.setTranslatesAutoresizingMaskIntoConstraints(true)
+        self.menuViewController.view.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        self.menuViewController.view.frame = self.menuContainerView.bounds
+        self.menuContainerView.addSubview(self.menuViewController.view)
+        self.addChildViewController(self.menuViewController)
+        self.menuViewController.didMoveToParentViewController(self)
     }
     
     // MARK: - Private Methods
@@ -92,7 +105,6 @@ class ContainerViewController: UIViewController {
         }
         
         var animator: UIViewControllerAnimatedTransitioning = AnimatedTransition()
-        //let animator = self.delegate?.containerViewController(self, animationControllerForTransitioningFromViewController: fromViewController!, toViewController: toViewController)
         
         let context = TransitioningContext(fromViewController: fromViewController!, toViewController: toViewController, goingUp: toViewController == self.samplesViewController)
         context.completionBlock = { (didComplete: Bool) -> Void in
@@ -113,6 +125,25 @@ class ContainerViewController: UIViewController {
         
         self.selectedViewController = self.selectedViewController == self.cameraViewController ? self.samplesViewController : self.cameraViewController
     }
+    
+    // MARK: - Camera View Controller Delegate
+    
+    func cameraViewController(viewController: CameraViewController, didUpdateWithColor color: UIColor?) {
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            self.menuViewController.updateWithColor(color)
+        })
+        
+    }
+    
+    // MARK: - Menu View Controller Delegate
+    
+    func menuViewController(viewController: MenuViewController, requestedChangeMenuToState: MenuState) -> Bool {
+        
+        return true
+        
+    }
+    
 }
 
 // MARK: - Private Transitioning Context

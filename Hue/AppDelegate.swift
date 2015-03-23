@@ -9,8 +9,9 @@
 import UIKit
 import CoreData
 
-let SCR_WIDTH = UIScreen.mainScreen().bounds.width
-let SCR_HEIGHT = UIScreen.mainScreen().bounds.height
+let SCR_WIDTH: CGFloat = UIScreen.mainScreen().bounds.width
+let SCR_HEIGHT: CGFloat = UIScreen.mainScreen().bounds.height
+let SWATCH_HEIGHT: CGFloat = 100
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
