@@ -61,7 +61,7 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
         
         // color menu container constraints
         rootView.addConstraint(NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Width, multiplier: 1.0, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: SWATCH_HEIGHT))
+        rootView.addConstraint(NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: SAMPLE_HEIGHT))
         rootView.addConstraint(NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 0))
         
         self.menuContainerBottomConstraint = NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 0)
@@ -170,7 +170,7 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
     }
     
     func menuViewController(viewController: MenuViewController, didConfirmSampleCaptureWithColor color: UIColor?) {
-        self.samplesViewController.tableViewDataSource.addSample(color)
+        Sample.insertSampleWithColor(color, inManagedObjectContext: self.samplesViewController.tableViewManager.managedObjectContext)
     }
     
 }

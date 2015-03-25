@@ -10,11 +10,50 @@ import Foundation
 import CoreData
 
 class Sample: NSManagedObject {
-    
+
     @NSManaged var blue: NSNumber
     @NSManaged var green: NSNumber
     @NSManaged var order: NSNumber
     @NSManaged var red: NSNumber
+    @NSManaged var timestamp: NSDate
     @NSManaged var thumbnail: NSManagedObject
+
+    var ddMMyyyy: String {
+        
+        var dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "dd:MM:yyyy"
+        return dateFormatter.stringFromDate(self.timestamp)
+        
+    }
+    
+    // MARK: Public Methods
+    
+    class func insertSampleWithColor(color: UIColor?, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> Sample {
+        
+        var error: NSError?
+        var count = managedObjectContext.countForFetchRequest(NSFetchRequest(entityName: self.entityName()), error: &error)
+        
+        var sample = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext) as Sample
+        sample.order = count + 1
+        sample.timestamp = NSDate()
+        
+        var rgba = [CGFloat](count: 4, repeatedValue: 0.0)
+        color?.getRed(&rgba[0], green: &rgba[1], blue: &rgba[2], alpha: &rgba[3])
+        sample.red = rgba[0]
+        sample.green = rgba[1]
+        sample.blue = rgba[2]
+        
+        var saveError: NSError?
+        managedObjectContext.save(&saveError)
+        if error != nil {
+            println("Sample save error: \(error!.localizedDescription)")
+        }
+        
+        return sample
+    }
+    
+    class func entityName() -> String {
+        return "Sample"
+    }
     
 }

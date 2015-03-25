@@ -11,7 +11,8 @@ import CoreData
 
 let SCR_WIDTH: CGFloat = UIScreen.mainScreen().bounds.width
 let SCR_HEIGHT: CGFloat = UIScreen.mainScreen().bounds.height
-let SWATCH_HEIGHT: CGFloat = 100
+let SAMPLE_HEIGHT: CGFloat = 100
+let HEADER_HEIGHT: CGFloat = 40
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         self.containerViewController = ContainerViewController()
-        self.containerViewController.samplesViewController.tableViewDataSource.managedObjectContext = self.managedObjectContext
+        self.containerViewController.samplesViewController.tableViewManager.managedObjectContext = self.managedObjectContext
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.rootViewController = self.containerViewController

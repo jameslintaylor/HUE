@@ -1,5 +1,5 @@
 //
-//  SamplesTableViewControllerDataSource.swift
+//  SamplesTableViewManager.swift
 //  HUE
 //
 //  Created by James Taylor on 2015-03-24.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class SamplesTableViewControllerDataSource: NSObject, UITableViewDataSource, NSFetchedResultsControllerDelegate {
+class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
    
     var tableView: UITableView!
     var managedObjectContext: NSManagedObjectContext!
@@ -24,7 +24,7 @@ class SamplesTableViewControllerDataSource: NSObject, UITableViewDataSource, NSF
         var sortDescriptor = NSSortDescriptor(key: "order", ascending: false)
         request.sortDescriptors = [sortDescriptor]
         
-        var fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        var fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "ddMMyyyy", cacheName: nil)
         fetchedResultsController.delegate = self
         
         //initial fetch
@@ -34,34 +34,10 @@ class SamplesTableViewControllerDataSource: NSObject, UITableViewDataSource, NSF
         return fetchedResultsController
         
     }()
-    
-    // MARK: - Public Methods
-    
-    func addSample(color: UIColor?) {
-        
-        var error: NSError?
-        var count = self.managedObjectContext.countForFetchRequest(self.fetchedResultsController.fetchRequest, error: &error)
-        
-        var newSample = NSEntityDescription.insertNewObjectForEntityForName("Sample", inManagedObjectContext: self.managedObjectContext) as Sample
-        newSample.order = count + 1
-        
-        var rgba = [CGFloat](count: 4, repeatedValue: 0.0)
-        color?.getRed(&rgba[0], green: &rgba[1], blue: &rgba[2], alpha: &rgba[3])
-        newSample.red = rgba[0]
-        newSample.green = rgba[1]
-        newSample.blue = rgba[2]
-        
-        var saveError: NSError?
-        self.managedObjectContext.save(&saveError)
-        if error != nil {
-            println("Sample save error: \(error!.localizedDescription)")
-        }
-        
-    }
 
     // MARK: - Private Methods
     
-    func configureCell(cell: UITableViewCell, withSample sample: Sample?) {
+    func configureCell(cell: SampleTableViewCell, withSample sample: Sample?) {
         
         if sample == nil {
             return
@@ -70,7 +46,7 @@ class SamplesTableViewControllerDataSource: NSObject, UITableViewDataSource, NSF
         var r = CGFloat(sample!.red)
         var g = CGFloat(sample!.green)
         var b = CGFloat(sample!.blue)
-        cell.backgroundColor = UIColor(red: r, green: g, blue: b, alpha: 1)
+        cell.sampleView.color = UIColor(red: r, green: g, blue: b, alpha: 1)
         
     }
     
@@ -78,11 +54,11 @@ class SamplesTableViewControllerDataSource: NSObject, UITableViewDataSource, NSF
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell: UITableViewCell
-        if let reusableCell = self.tableView.dequeueReusableCellWithIdentifier("cell") as? UITableViewCell {
+        var cell: SampleTableViewCell
+        if let reusableCell = self.tableView.dequeueReusableCellWithIdentifier("cell") as? SampleTableViewCell {
             cell = reusableCell
         } else {
-            cell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
+            cell = SampleTableViewCell(reuseIdentifier: "cell")
         }
         
         var sample: Sample?
@@ -116,6 +92,30 @@ class SamplesTableViewControllerDataSource: NSObject, UITableViewDataSource, NSF
         
         return numSections
         
+    }
+    
+    // MARK: - UITableViewDelegate
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return SAMPLE_HEIGHT
+    }
+        
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        var headerView = DayHeaderView()
+        
+        if let ddMMyyyy = self.fetchedResultsController.sections?[section].name {
+            
+            headerView.ddMMyyyy = ddMMyyyy
+            
+        }
+        
+        return headerView
+        
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return HEADER_HEIGHT
     }
     
     // MARK: - NSFetchedResultsControllerDelegate

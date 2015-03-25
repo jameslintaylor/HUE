@@ -10,8 +10,7 @@ import UIKit
 
 class SamplesViewController: UIViewController {
     
-    let tableViewDataSource = SamplesTableViewControllerDataSource()
-    let tableViewDelegate = SamplesTableViewControllerDelegate()
+    let tableViewManager = SamplesTableViewManager()
     
     var tableView: UITableView!
     
@@ -20,7 +19,7 @@ class SamplesViewController: UIViewController {
         var rootView = UIView()
         
         self.tableView = UITableView()
-        self.tableView.contentInset = UIEdgeInsets(top: SWATCH_HEIGHT, left: 0, bottom: 0, right: 0)
+        self.tableView.contentInset = UIEdgeInsets(top: SAMPLE_HEIGHT, left: 0, bottom: 0, right: 0)
         self.tableView.backgroundColor = UIColor.blackColor()
         self.tableView.separatorColor = UIColor.clearColor()
         self.tableView.setTranslatesAutoresizingMaskIntoConstraints(true)
@@ -36,9 +35,9 @@ class SamplesViewController: UIViewController {
         
         super.viewDidLoad()
         
-        self.tableViewDataSource.tableView = self.tableView
-        self.tableView.dataSource = self.tableViewDataSource
-        self.tableView.delegate = self.tableViewDelegate
+        self.tableViewManager.tableView = self.tableView
+        self.tableView.dataSource = self.tableViewManager
+        self.tableView.delegate = self.tableViewManager
         
     }
     
