@@ -60,6 +60,8 @@ enum MenuState {
 protocol MenuViewControllerDelegate: class {
     
     func menuViewController(viewController: MenuViewController, requestedChangeMenuToState state: MenuState) -> Bool
+    func menuViewControllerStartedSampleCapture(viewController: MenuViewController)
+    func menuViewController(viewController: MenuViewController, didConfirmSampleCaptureWithColor color: UIColor?)
     
 }
 
@@ -104,50 +106,49 @@ class MenuViewController: UIViewController {
     var locked: Bool = false
     var state: MenuState! {
         didSet {
-            self.animateLayout()
             self.animateUpdate()
         }
     }
     var supportedModes: [ColorMode] = [.HSB, .RGB, .HEX]
     var modeIdx: Int = 1
     
-    var colorOverlay: UIView!
-    var colorLabel: UILabel!
-    var menuButton: UIView!
-    var menuButtonLeftConstraint, menuButtonCenterXConstraint: NSLayoutConstraint!
+    var colorOverlay = UIView()
+    var coloredBorder = UIView()
+    var colorLabel = UILabel()
+    var cameraIcon = UIImageView()
     
     override func loadView() {
         let rootView = UIView()
-        rootView.backgroundColor = UIColor(white: 0.8, alpha: 1)
+        rootView.backgroundColor = UIColor(white: 0.1, alpha: 1)
         
-        self.colorOverlay = UIView()
         self.colorOverlay.setTranslatesAutoresizingMaskIntoConstraints(true)
         self.colorOverlay.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
         
-        self.colorLabel = UILabel()
+        self.coloredBorder.frame.size = CGSize(width: 0, height: 1)
+        self.coloredBorder.setTranslatesAutoresizingMaskIntoConstraints(true)
+        self.coloredBorder.autoresizingMask = UIViewAutoresizing.FlexibleWidth
+        
         self.colorLabel.setTranslatesAutoresizingMaskIntoConstraints(true)
         self.colorLabel.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-
-        self.menuButton = UIButton()
-        self.menuButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.menuButton.backgroundColor = UIColor(white: 0.4, alpha: 0.5)
-        self.menuButton.layer.cornerRadius = 2
-        self.menuButton.userInteractionEnabled = false
+        
+        self.cameraIcon.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.cameraIcon.backgroundColor = UIColor.whiteColor()
+        self.cameraIcon.layer.cornerRadius = 20
         
         rootView.addSubview(self.colorOverlay)
+        rootView.addSubview(self.coloredBorder)
         rootView.addSubview(self.colorLabel)
-        rootView.addSubview(self.menuButton)
+        rootView.addSubview(self.cameraIcon)
         rootView.clipsToBounds = true
         
-        // menu button constraints
-        rootView.addConstraint(NSLayoutConstraint(item: self.menuButton, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 40))
-        rootView.addConstraint(NSLayoutConstraint(item: self.menuButton, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 40))
-        rootView.addConstraint(NSLayoutConstraint(item: self.menuButton, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0))
-        
-        self.menuButtonLeftConstraint = NSLayoutConstraint(item: self.menuButton, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: 20)
-        self.menuButtonCenterXConstraint = NSLayoutConstraint(item: self.menuButton, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
+        // camera icon constraints
+        rootView.addConstraint(NSLayoutConstraint(item: self.cameraIcon, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 40))
+        rootView.addConstraint(NSLayoutConstraint(item: self.cameraIcon, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 40))
+        rootView.addConstraint(NSLayoutConstraint(item: self.cameraIcon, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.cameraIcon, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0))
         
         // gestures
+        var captureGestureRecognizer = CaptureGestureRecognizer(target: self, action: Selector("handleCaptureGesture:"))
         var swipeUpGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
         swipeUpGestureRecognizer.direction = .Up
         var swipeDownGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
@@ -156,13 +157,12 @@ class MenuViewController: UIViewController {
         swipeLeftGestureRecognizer.direction = .Left
         var swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
         swipeRightGestureRecognizer.direction = .Right
-        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
         
+        rootView.addGestureRecognizer(captureGestureRecognizer)
         rootView.addGestureRecognizer(swipeUpGestureRecognizer)
         rootView.addGestureRecognizer(swipeDownGestureRecognizer)
         rootView.addGestureRecognizer(swipeLeftGestureRecognizer)
         rootView.addGestureRecognizer(swipeRightGestureRecognizer)
-        rootView.addGestureRecognizer(tapGestureRecognizer)
         
         self.view = rootView
     }
@@ -172,7 +172,7 @@ class MenuViewController: UIViewController {
         
         self.state = .Camera
         
-        self.colorLabel.font = UIFont(name: "GillSans-Italic", size: 24)
+        self.colorLabel.font = UIFont(name: "GillSans-Italic", size: 26)
         self.colorLabel.textAlignment = .Center
         
     }
@@ -186,6 +186,7 @@ class MenuViewController: UIViewController {
         }
         
         self.colorOverlay.backgroundColor = color
+        self.coloredBorder.backgroundColor = color?.complimentaryColor()
         var currentMode = self.supportedModes[self.modeIdx]
         self.colorLabel.text = currentMode.descriptionForColor(color)
         self.colorLabel.textColor = color?.complimentaryColor()
@@ -193,43 +194,36 @@ class MenuViewController: UIViewController {
     
     // MARK: - Private Methods
     
-    func layoutCameraInterface() {
-        self.view.removeConstraint(self.menuButtonCenterXConstraint)
-        self.view.addConstraint(self.menuButtonLeftConstraint)
-    }
-    
-    func updateCameraInterface() {
-        self.colorLabel.alpha = 1
+    func updateForCameraInterface() {
+        self.colorLabel.transform = CGAffineTransformIdentity
+        self.cameraIcon.transform = CGAffineTransformMakeTranslation(0, SWATCH_HEIGHT)
         self.colorOverlay.alpha = 1
+        self.coloredBorder.alpha = 1
+        self.colorLabel.alpha = 1
     }
-    
-    func layoutSamplesInterface() {
-        self.view.removeConstraint(self.menuButtonLeftConstraint)
-        self.view.addConstraint(self.menuButtonCenterXConstraint)
-    }
-    
-    func updateSamplesInterface() {
-        self.colorLabel.alpha = 0
+   
+    func updateForSamplesInterface() {
+        self.colorLabel.transform = CGAffineTransformMakeTranslation(0, -SWATCH_HEIGHT)
+        self.cameraIcon.transform = CGAffineTransformIdentity
         self.colorOverlay.alpha = 0
-    }
-    
-    func animateLayout() {
-        UIView.animateWithDuration(0.2, delay: 0.0, options: .CurveEaseInOut, animations: {
-            if self.state == .Camera { self.layoutCameraInterface() } else { self.layoutSamplesInterface() }
-            self.view.layoutIfNeeded()
-        }, completion: nil)
+        self.coloredBorder.alpha = 0
+        self.colorLabel.alpha = 0
     }
     
     func animateUpdate() {
-        UIView.transitionWithView(self.menuButton, duration: 0.2, options: .TransitionCrossDissolve, animations: {
-            if self.state == .Camera { self.updateCameraInterface() } else { self.updateSamplesInterface() }
-        }, completion: nil)
+        UIView.animateWithDuration(0.2) {
+            if self.state == .Camera {
+                self.updateForCameraInterface()
+            } else {
+                self.updateForSamplesInterface()
+            }
+        }
     }
     
     func animateLabelChange(direction: UISwipeGestureRecognizerDirection) {
         var tempLabel = self.colorLabel.copy() as UILabel
         self.view.addSubview(tempLabel)
-        var dx: CGFloat = direction == .Left ? 100.0 : -100.0
+        var dx: CGFloat = direction == .Left ? 60.0 : -60.0
         self.colorLabel.transform = CGAffineTransformMakeTranslation(dx, 0)
         self.colorLabel.alpha = 0.0
         
@@ -249,19 +243,38 @@ class MenuViewController: UIViewController {
     
     // MARK: - Handlers
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        self.locked = true
-        UIView.transitionWithView(self.colorLabel, duration: 0.2, options: .TransitionCrossDissolve, animations: {
+    func handleCaptureGesture(sender: CaptureGestureRecognizer) {
+        
+        switch sender.state {
             
-        }, completion: nil)
-    }
-    
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-        self.locked = false
-    }
-
-    override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
-        self.locked = false
+        case .Began:
+            self.locked = true
+            UIView.animateWithDuration(0.2) {
+                self.colorLabel.alpha = 0.0
+                self.colorLabel.transform = CGAffineTransformMakeScale(0.95, 0.95)
+            }
+            self.delegate?.menuViewControllerStartedSampleCapture(self)
+            
+        case .Changed:
+            break
+            
+        case .Ended:
+            self.locked = false
+            UIView.animateWithDuration(0.2) {
+                self.colorLabel.alpha = 1.0
+                self.colorLabel.transform = CGAffineTransformIdentity
+            }
+            self.delegate?.menuViewController(self, didConfirmSampleCaptureWithColor: self.colorOverlay.backgroundColor)
+            
+        default:
+            self.locked = false
+            UIView.animateWithDuration(0.2) {
+                self.colorLabel.alpha = 1.0
+                self.colorLabel.transform = CGAffineTransformIdentity
+            }
+            
+        }
+        
     }
     
     func handleSwipe(sender: UISwipeGestureRecognizer) {
@@ -284,19 +297,6 @@ class MenuViewController: UIViewController {
             self.animateLabelChange(sender.direction)
             self.modeIdx = self.modeIdx - 1 < 0 ? self.supportedModes.count - 1 : self.modeIdx - 1
         }
-    }
-    
-    func handleSingleTap(sender: UITapGestureRecognizer) {
-        var tapLocation = sender.locationInView(sender.view)
-        if CGRectContainsPoint(self.menuButton.frame, tapLocation) {
-            var newState = (self.state == MenuState.Camera) ? MenuState.Samples : MenuState.Camera
-            if self.delegate?.menuViewController(self, requestedChangeMenuToState: newState) == true {
-                self.state = newState
-            }
-        } else {
-            // save
-        }
-        
     }
     
 }

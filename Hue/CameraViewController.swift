@@ -21,7 +21,8 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     weak var delegate: CameraViewControllerDelegate?
     var processMGR: ColorProcessManager!
     
-    var camera: GPUImageStillCamera!
+    var capturedImage: UIImage?
+    var camera: GPUImageStillCamera = GPUImageStillCamera(sessionPreset: AVCaptureSessionPreset1920x1080, cameraPosition: AVCaptureDevicePosition.Back)
     var cropFilter: GPUImageCropFilter!
     var focusingChangedContext: UnsafeMutablePointer<()>!
     
@@ -69,9 +70,6 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.processMGR = ColorProcessManager()
         self.processMGR.delegate = self
         
-        self.camera = GPUImageStillCamera(sessionPreset: AVCaptureSessionPreset1920x1080, cameraPosition: AVCaptureDevicePosition.Back)
-        self.camera.outputImageOrientation = UIInterfaceOrientation.Portrait
-        
         var error: NSError?
         if (self.camera.inputCamera.lockForConfiguration(&error)) {
             
@@ -88,6 +86,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.focusingChangedContext = UnsafeMutablePointer<()>()
         
         // Notifications
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleDeviceOrientationChangedNotification:"), name: UIDeviceOrientationDidChangeNotification, object: UIDevice.currentDevice())
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleSubjectAreaChangedNotification:"), name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: nil)
         self.camera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: NSKeyValueObservingOptions.New, context: self.focusingChangedContext)
     }
@@ -120,9 +119,20 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     }
     
     deinit {
-        
-        NSNotificationCenter.defaultCenter().removeObserver(self, forKeyPath: AVCaptureDeviceSubjectAreaDidChangeNotification)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
         self.camera.removeObserver(self, forKeyPath: "adjustingFocus", context: self.focusingChangedContext)
+    }
+    
+    // MARK: - Public Methods 
+    
+    func captureImage() {
+        self.camera.capturePhotoAsImageProcessedUpToFilter(nil, withCompletionHandler: { (image, error) -> Void in
+            if (error != nil) {
+                println("Image capture error: \(error.localizedDescription)")
+            } else {
+                self.capturedImage = image
+            }
+        })
     }
     
     // MARK: - Private Methods
@@ -187,11 +197,28 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     
     // MARK: - Notification Handling
     
+    func handleDeviceOrientationChangedNotification(notification: NSNotification) {
+        var orientation = (notification.object as UIDevice).orientation
+        switch orientation {
+            
+        case .Portrait:
+            self.camera.outputImageOrientation = .Portrait
+            
+        case .LandscapeLeft:
+            self.camera.outputImageOrientation = .LandscapeRight
+            
+        case .LandscapeRight:
+            self.camera.outputImageOrientation = .LandscapeLeft
+            
+        default:
+            break
+            
+        }
+    }
+    
     func handleSubjectAreaChangedNotification(notification: NSNotification) {
-        
         // remove focusing indicator
         self.focusingIndicator?.shouldRemoveAnimated(true)
-        
     }
     
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
@@ -226,6 +253,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     
     func colorProcessManager(manager: ColorProcessManager, updatedColor color: UIColor?) {
         
+        self.colorTarget.updateWithColor(color?.complimentaryColor())
         self.delegate?.cameraViewController(self, didUpdateWithColor: color)
     
     }

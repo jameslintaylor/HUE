@@ -116,9 +116,6 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
             return
         }
         
-        // animate menu container constraint change
-        UIView.animateWithDuration(0.2) { self.view.layoutIfNeeded() }
-        
         var animator: UIViewControllerAnimatedTransitioning = AnimatedTransition()
         
         let context = TransitioningContext(fromViewController: fromViewController!, toViewController: toViewController, goingUp: toViewController == self.cameraViewController)
@@ -132,6 +129,11 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
         }
         
         animator.animateTransition(context)
+        
+        // animate menu container constraint change
+        UIView.animateWithDuration(0.3, delay: 0.0, options: .CurveEaseOut, animations: {
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
     
     func buttonTapped(button: UIButton) {
@@ -154,19 +156,21 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
     func menuViewController(viewController: MenuViewController, requestedChangeMenuToState state: MenuState) -> Bool {
         
         if (state == .Camera) & (self.selectedViewController == self.samplesViewController) {
-            
             self.selectedViewController = self.cameraViewController
             return true
-            
         } else if (state == .Samples) & (self.selectedViewController == self.cameraViewController) {
-            
             self.selectedViewController = self.samplesViewController
             return true
-            
         }
-        
         return false
-        
+    }
+    
+    func menuViewControllerStartedSampleCapture(viewController: MenuViewController) {
+        self.cameraViewController.captureImage()
+    }
+    
+    func menuViewController(viewController: MenuViewController, didConfirmSampleCaptureWithColor color: UIColor?) {
+        self.samplesViewController.tableViewDataSource.addSample(color)
     }
     
 }
@@ -267,7 +271,7 @@ private class TransitioningContext: NSObject, UIViewControllerContextTransitioni
 private class AnimatedTransition: NSObject, UIViewControllerAnimatedTransitioning {
     
     private func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
-        return 0.2
+        return 0.3
     }
     
     private func animateTransition(transitionContext: UIViewControllerContextTransitioning) {

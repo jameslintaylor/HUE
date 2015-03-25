@@ -7,77 +7,38 @@
 //
 
 import UIKit
-import CoreData
 
-class SamplesViewController: UITableViewController, NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate {
-
-    var managedObjectContext: NSManagedObjectContext!
+class SamplesViewController: UIViewController {
+    
+    let tableViewDataSource = SamplesTableViewControllerDataSource()
+    let tableViewDelegate = SamplesTableViewControllerDelegate()
+    
+    var tableView: UITableView!
+    
+    override func loadView() {
+        
+        var rootView = UIView()
+        
+        self.tableView = UITableView()
+        self.tableView.contentInset = UIEdgeInsets(top: SWATCH_HEIGHT, left: 0, bottom: 0, right: 0)
+        self.tableView.backgroundColor = UIColor.blackColor()
+        self.tableView.separatorColor = UIColor.clearColor()
+        self.tableView.setTranslatesAutoresizingMaskIntoConstraints(true)
+        self.tableView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        
+        rootView.addSubview(self.tableView)
+        
+        self.view = rootView
+        
+    }
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.contentInset = UIEdgeInsets(top: SWATCH_HEIGHT, left: 0, bottom: 0, right: 0)
-        
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    // MARK: - Fetched Results Controller
-    lazy var fetchedResultsController: NSFetchedResultsController = {
-        
-        var request = NSFetchRequest()
-        var entity = NSEntityDescription.entityForName("Complate", inManagedObjectContext: self.managedObjectContext)
-        request.entity = entity
-        
-        var sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-        
-        var fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultsController.delegate = self
-        
-        return fetchedResultsController
-        
-    }()
-    
-    // MARK: - Table View Data Source
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        return UITableViewCell()
-        
-    }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        var numRows: Int = 0
-        
-        if let sectionInfo = self.fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo {
-            
-            numRows = sectionInfo.numberOfObjects
-            
-        }
-        
-        return numRows
-        
-    }
-    
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
-        var numSections: Int = 0
-        
-        if let sections = self.fetchedResultsController.sections {
-            
-            numSections = sections.count
-            
-        }
-        
-        return numSections
+        self.tableViewDataSource.tableView = self.tableView
+        self.tableView.dataSource = self.tableViewDataSource
+        self.tableView.delegate = self.tableViewDelegate
         
     }
     
