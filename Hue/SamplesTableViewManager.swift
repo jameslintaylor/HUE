@@ -9,10 +9,25 @@
 import UIKit
 import CoreData
 
-class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
+protocol SamplesTableViewManagerDelegate: class {
+    
+    func tableView(tableView: UITableView, didScrollToYOffset yOffset: CGFloat)
+    
+}
+
+class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate, SampleTableViewCellDelegate, NSFetchedResultsControllerDelegate {
    
+    weak var delegate: SamplesTableViewManagerDelegate?
+    
     var tableView: UITableView!
     var managedObjectContext: NSManagedObjectContext!
+    
+    var selectedRowIndexPath: NSIndexPath? {
+        didSet {
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+        }
+    }
     
     // MARK: - Fetched Results Controller
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -21,7 +36,7 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         var entity = NSEntityDescription.entityForName("Sample", inManagedObjectContext: self.managedObjectContext)
         request.entity = entity
         
-        var sortDescriptor = NSSortDescriptor(key: "order", ascending: false)
+        var sortDescriptor = NSSortDescriptor(key: "timestamp", ascending: false)
         request.sortDescriptors = [sortDescriptor]
         
         var fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "ddMMyyyy", cacheName: nil)
@@ -43,14 +58,12 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
             return
         }
         
-        var r = CGFloat(sample!.red)
-        var g = CGFloat(sample!.green)
-        var b = CGFloat(sample!.blue)
-        cell.sampleView.color = UIColor(red: r, green: g, blue: b, alpha: 1)
+        cell.sample = sample
+        cell.delegate = self
         
     }
     
-    // MARK: - UITableViewDataSource
+    // MARK: - UITableView DataSource
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -94,10 +107,44 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         
     }
     
-    // MARK: - UITableViewDelegate
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    // MARK: - UITableView Delegate
+   
+    func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
+    }
+    
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return .None
+    }
+    
+    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        
+        if indexPath == self.selectedRowIndexPath {
+            self.selectedRowIndexPath = nil
+            self.tableView.deselectRowAtIndexPath(indexPath, animated: false)
+            return nil
+        }
+        
+        return indexPath
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.selectedRowIndexPath = indexPath
+    }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return SAMPLE_HEIGHT
+        
+        var rowHeight = SAMPLE_HEIGHT
+            
+        if indexPath == self.selectedRowIndexPath {
+            rowHeight = SAMPLE_HEIGHT * 2
+        }
+        
+        return rowHeight
     }
         
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -105,9 +152,7 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         var headerView = DayHeaderView()
         
         if let ddMMyyyy = self.fetchedResultsController.sections?[section].name {
-            
             headerView.ddMMyyyy = ddMMyyyy
-            
         }
         
         return headerView
@@ -118,10 +163,72 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         return HEADER_HEIGHT
     }
     
-    // MARK: - NSFetchedResultsControllerDelegate
+    // MARK: - ScrollView Delegate
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        var yOffset = scrollView.contentOffset.y + scrollView.contentInset.top
+        self.delegate?.tableView(self.tableView, didScrollToYOffset: yOffset)
+    }
+    
+    // MARK: - SampleTableView Delegate
+    
+    func sampleTableViewCellRequestedDelete(cell: SampleTableViewCell) {
+        
+        if let sample = cell.sample {
+            self.managedObjectContext.deleteObject(sample)
+            var error: NSError?
+            if !self.managedObjectContext.save(&error) {
+                println("save error: \(error?.localizedDescription)")
+            }
+        }
+        
+    }
+    
+    // MARK: - NSFetchedResultsController Delegate
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        self.tableView.beginUpdates()
+    }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        self.tableView?.reloadData()
+        self.tableView.endUpdates()
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        
+        switch type {
+            
+        case .Insert:
+            if let newIndexPath = newIndexPath {
+                self.tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Left)
+            }
+            
+        case .Delete:
+            if let indexPath = indexPath {
+                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Left)
+            }
+            
+        default:
+            break
+            
+        }
+        
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        
+        switch type {
+            
+        case .Insert:
+            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+            
+        case .Delete:
+            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+            
+        default:
+            break
+            
+        }
+        
     }
     
 }

@@ -22,8 +22,9 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     var processMGR: ColorProcessManager!
     
     var capturedImage: UIImage?
-    var camera: GPUImageStillCamera = GPUImageStillCamera(sessionPreset: AVCaptureSessionPreset1920x1080, cameraPosition: AVCaptureDevicePosition.Back)
-    var cropFilter: GPUImageCropFilter!
+    let camera: GPUImageStillCamera = GPUImageStillCamera(sessionPreset: AVCaptureSessionPreset1920x1080, cameraPosition: AVCaptureDevicePosition.Back)
+    let cropFilter = GPUImageCropFilter()
+    let thumbnailFilter = GPUImageCropFilter()
     var focusingChangedContext: UnsafeMutablePointer<()>!
     
     let cameraView = GPUImageView()
@@ -82,8 +83,9 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
             
         }
         
-        self.cropFilter = GPUImageCropFilter()
         self.focusingChangedContext = UnsafeMutablePointer<()>()
+        
+        self.thumbnailFilter.cropRegion = CGRect(x: 0.0, y: 0.3, width: 1.0, height: 0.4)
         
         // Notifications
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleDeviceOrientationChangedNotification:"), name: UIDeviceOrientationDidChangeNotification, object: UIDevice.currentDevice())
@@ -97,6 +99,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         
         self.camera.addTarget(self.cameraView)
         self.camera.addTarget(self.cropFilter)
+        self.camera.addTarget(self.thumbnailFilter)
         self.camera.startCameraCapture()
         
         // start average color operations
@@ -125,14 +128,12 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     
     // MARK: - Public Methods 
     
-    func captureImage() {
-        self.camera.capturePhotoAsImageProcessedUpToFilter(nil, withCompletionHandler: { (image, error) -> Void in
-            if (error != nil) {
-                println("Image capture error: \(error.localizedDescription)")
-            } else {
-                self.capturedImage = image
-            }
+    func captureImageWithCompletionHandler(completionHandler: (image: UIImage!, error: NSError!) -> Void) {
+        
+        self.camera.capturePhotoAsImageProcessedUpToFilter(self.thumbnailFilter, withCompletionHandler: { (image, error) -> Void in
+            completionHandler(image: image, error: error)
         })
+        
     }
     
     // MARK: - Private Methods

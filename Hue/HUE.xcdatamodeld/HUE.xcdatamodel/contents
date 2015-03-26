@@ -9,12 +9,12 @@
         <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="thumbnail" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Thumbnail" inverseName="sample" inverseEntity="Thumbnail" syncable="YES"/>
     </entity>
-    <entity name="Thumbnail" syncable="YES">
-        <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
+    <entity name="Thumbnail" representedClassName="HUE.Thumbnail" syncable="YES">
+        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="sample" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sample" inverseName="thumbnail" inverseEntity="Sample" syncable="YES"/>
     </entity>
     <elements>
         <element name="Sample" positionX="-63" positionY="-18" width="128" height="150"/>
-        <element name="Thumbnail" positionX="-54" positionY="18" width="128" height="73"/>
+        <element name="Thumbnail" positionX="-54" positionY="18" width="128" height="75"/>
     </elements>
 </model>

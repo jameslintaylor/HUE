@@ -17,8 +17,7 @@ enum MenuState {
 protocol MenuViewControllerDelegate: class {
     
     func menuViewController(viewController: MenuViewController, requestedChangeMenuToState state: MenuState) -> Bool
-    func menuViewControllerStartedSampleCapture(viewController: MenuViewController)
-    func menuViewController(viewController: MenuViewController, didConfirmSampleCaptureWithColor color: UIColor?)
+    func menuViewController(viewController: MenuViewController, capturedSampleWithColor color: UIColor?)
     
 }
 
@@ -125,14 +124,13 @@ class MenuViewController: UIViewController {
             
         case .Began:
             self.locked = true
-            self.delegate?.menuViewControllerStartedSampleCapture(self)
             
         case .Changed:
             break
             
         case .Ended:
             self.locked = false
-            self.delegate?.menuViewController(self, didConfirmSampleCaptureWithColor: self.sampleView.color)
+            self.delegate?.menuViewController(self, capturedSampleWithColor: self.sampleView.color)
             
         default:
             self.locked = false

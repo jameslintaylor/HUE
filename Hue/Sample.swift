@@ -26,14 +26,46 @@ class Sample: NSManagedObject {
         
     }
     
+    var color: UIColor? {
+        
+        var r = CGFloat(self.red)
+        var g = CGFloat(self.green)
+        var b = CGFloat(self.blue)
+        return UIColor(red: r, green: g, blue: b, alpha: 1)
+        
+    }
+    
+    var thumbnailImage: UIImage? {
+        
+        var ret: UIImage?
+        
+        if let thumbnail = self.thumbnail as? Thumbnail {
+            
+            let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+            let imagePath = paths.stringByAppendingPathComponent(thumbnail.fileName)
+            if let imageData = NSData(contentsOfFile: imagePath) {
+                ret = UIImage(data: imageData)
+            }
+            
+        }
+        
+        return ret
+        
+    }
+    
+    deinit {
+        println("Sample deinitialized")
+    }
+    
     // MARK: Public Methods
     
-    class func insertSampleWithColor(color: UIColor?, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> Sample {
+    class func insertSampleWithColor(color: UIColor?, thumbnailFileName: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> Sample {
         
         var error: NSError?
         var count = managedObjectContext.countForFetchRequest(NSFetchRequest(entityName: self.entityName()), error: &error)
         
         var sample = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext) as Sample
+        sample.thumbnail = Thumbnail.insertThumbnailWithFileName(thumbnailFileName, sample: sample, inManagedObjectContext: managedObjectContext)
         sample.order = count + 1
         sample.timestamp = NSDate()
         

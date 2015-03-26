@@ -21,11 +21,33 @@ extension UIColor {
     }
     
     func complimentaryColor() -> UIColor? {
+    
         var hsba = [CGFloat](count: 4, repeatedValue: 0.0)
         self.getHue(&hsba[0], saturation: &hsba[1], brightness: &hsba[2], alpha: &hsba[3])
         var diff = hsba[2] < 0.5 ? 1.0 - hsba[2] : -hsba[2]
         hsba[2] += diff/2
         return UIColor(hue: hsba[0], saturation: hsba[1], brightness: hsba[2], alpha: hsba[3])
+    
+    }
+    
+    func darkerColor() -> UIColor? {
+        
+        var hsba = [CGFloat](count: 4, repeatedValue: 0.0)
+        self.getHue(&hsba[0], saturation: &hsba[1], brightness: &hsba[2], alpha: &hsba[3])
+        hsba[2] = hsba[2]/4
+        hsba[1] = hsba[1]/4
+        return UIColor(hue: hsba[0], saturation: hsba[1], brightness: hsba[2], alpha: hsba[3])
+        
+    }
+    
+    func lighterColor() -> UIColor? {
+        
+        var hsba = [CGFloat](count: 4, repeatedValue: 0.0)
+        self.getHue(&hsba[0], saturation: &hsba[1], brightness: &hsba[2], alpha: &hsba[3])
+        hsba[2] += (1.0 - hsba[2]) * 3/4
+        hsba[1] += hsba[1]/4
+        return UIColor(hue: hsba[0], saturation: hsba[1], brightness: hsba[2], alpha: hsba[3])
+        
     }
     
 }
@@ -88,11 +110,17 @@ enum ColorMode {
 
 // MARK: - SampleView
 
-class SampleView: UIView {
+class SampleView: UIView, UIGestureRecognizerDelegate {
 
     var color: UIColor? {
         didSet {
-            self.update()
+            
+            self.backgroundColor = self.color
+            self.colorBorder.backgroundColor = color?.complimentaryColor()
+            var currentMode = self.supportedModes[self.modeIdx]
+            self.colorLabel.text = currentMode.descriptionForColor(color)
+            self.colorLabel.textColor = color?.complimentaryColor()
+            
         }
     }
     
@@ -104,7 +132,15 @@ class SampleView: UIView {
     
     var modeIdx: Int = 0 {
         didSet {
-            self.update()
+            var currentMode = self.supportedModes[self.modeIdx]
+            self.colorLabel.text = currentMode.descriptionForColor(color)
+        }
+    }
+    
+    var locked: Bool = false {
+        didSet {
+            self.userInteractionEnabled = !self.locked
+            self.colorLabel.alpha = CGFloat(!self.locked)
         }
     }
     
@@ -133,8 +169,10 @@ class SampleView: UIView {
         // gestures
         var swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
         swipeLeftGestureRecognizer.direction = .Left
+        swipeLeftGestureRecognizer.delegate = self
         var swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
         swipeRightGestureRecognizer.direction = .Right
+        swipeRightGestureRecognizer.delegate = self
         
         self.addGestureRecognizer(swipeLeftGestureRecognizer)
         self.addGestureRecognizer(swipeRightGestureRecognizer)
@@ -148,22 +186,7 @@ class SampleView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Public Methods
-    
-    
-    
     // MARK: - Private Methods
-    
-    private func update() {
-        
-        self.backgroundColor = self.color
-        
-        self.colorBorder.backgroundColor = color?.complimentaryColor()
-        var currentMode = self.supportedModes[self.modeIdx]
-        self.colorLabel.text = currentMode.descriptionForColor(color)
-        self.colorLabel.textColor = color?.complimentaryColor()
-        
-    }
     
     func animateLabelChange(direction: UISwipeGestureRecognizerDirection) {
         var tempLabel = self.colorLabel.copy() as UILabel
@@ -200,6 +223,12 @@ class SampleView: UIView {
             self.modeIdx = self.modeIdx - 1 < 0 ? self.supportedModes.count - 1 : self.modeIdx - 1
         }
         
+    }
+    
+    // MARK: - UIGestureRecognizer Delegate
+    
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
 }

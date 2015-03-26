@@ -25,7 +25,7 @@ class DayHeaderView: UIView {
         self.dayLabel = UILabel()
         
         super.init(frame: frame)
-        self.backgroundColor = UIColor(white: 0.0, alpha: 0.6)
+        self.backgroundColor = UIColor(white: 0.1, alpha: 1)
         
         self.dayLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.dayLabel.font = UIFont(name: "GillSans", size: 18)

@@ -165,12 +165,29 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
         return false
     }
     
-    func menuViewControllerStartedSampleCapture(viewController: MenuViewController) {
-        self.cameraViewController.captureImage()
-    }
-    
-    func menuViewController(viewController: MenuViewController, didConfirmSampleCaptureWithColor color: UIColor?) {
-        Sample.insertSampleWithColor(color, inManagedObjectContext: self.samplesViewController.tableViewManager.managedObjectContext)
+    func menuViewController(viewController: MenuViewController, capturedSampleWithColor color: UIColor?) {
+        
+        self.cameraViewController.captureImageWithCompletionHandler() { (image: UIImage!, error: NSError!) -> Void in
+         
+            if error != nil {
+                println(error.localizedDescription)
+            } else {
+                
+                let imageData = UIImagePNGRepresentation(image)
+                let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+                let uuid = NSUUID().UUIDString
+                let fileName = "thumbnail-\(uuid).png"
+                let imagePath = paths.stringByAppendingPathComponent(fileName)
+                
+                if !imageData.writeToFile(imagePath, atomically: false)
+                {
+                    println("not saved")
+                } else {
+                    println("saved")
+                    Sample.insertSampleWithColor(color, thumbnailFileName: fileName, inManagedObjectContext: self.samplesViewController.tableViewManager.managedObjectContext)
+                }
+            }
+        }
     }
     
 }
