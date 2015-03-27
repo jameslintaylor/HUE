@@ -16,7 +16,6 @@ enum MenuState {
 
 protocol MenuViewControllerDelegate: class {
     
-    func menuViewController(viewController: MenuViewController, requestedChangeMenuToState state: MenuState) -> Bool
     func menuViewController(viewController: MenuViewController, capturedSampleWithColor color: UIColor?)
     
 }
@@ -44,29 +43,17 @@ class MenuViewController: UIViewController {
         
         self.cameraIcon = UIImageView()
         self.cameraIcon.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.cameraIcon.backgroundColor = UIColor.whiteColor()
-        self.cameraIcon.layer.cornerRadius = 20
+        self.cameraIcon.image = UIImage(named: "CameraIcon")
         
         rootView.addSubview(self.sampleView)
         rootView.addSubview(self.cameraIcon)
         rootView.clipsToBounds = true
         
         // camera icon constraints
-        rootView.addConstraint(NSLayoutConstraint(item: self.cameraIcon, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 40))
-        rootView.addConstraint(NSLayoutConstraint(item: self.cameraIcon, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 40))
+        rootView.addConstraint(NSLayoutConstraint(item: self.cameraIcon, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 60))
+        rootView.addConstraint(NSLayoutConstraint(item: self.cameraIcon, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 60))
         rootView.addConstraint(NSLayoutConstraint(item: self.cameraIcon, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0))
         rootView.addConstraint(NSLayoutConstraint(item: self.cameraIcon, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0))
-        
-        // gestures
-        var captureGestureRecognizer = CaptureGestureRecognizer(target: self, action: Selector("handleCaptureGesture:"))
-        var swipeUpGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
-        swipeUpGestureRecognizer.direction = .Up
-        var swipeDownGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
-        swipeDownGestureRecognizer.direction = .Down
-        
-        rootView.addGestureRecognizer(captureGestureRecognizer)
-        rootView.addGestureRecognizer(swipeUpGestureRecognizer)
-        rootView.addGestureRecognizer(swipeDownGestureRecognizer)
         
         self.view = rootView
     }
@@ -88,6 +75,12 @@ class MenuViewController: UIViewController {
         
         self.sampleView.color = color
         
+    }
+    
+    func updateForState(state: MenuState) {
+        if self.state != state {
+            self.state = state
+        }
     }
     
     // MARK: - Private Methods
@@ -117,42 +110,5 @@ class MenuViewController: UIViewController {
     }
     
     // MARK: - Handlers
-    
-    func handleCaptureGesture(sender: CaptureGestureRecognizer) {
-        
-        switch sender.state {
-            
-        case .Began:
-            self.locked = true
-            
-        case .Changed:
-            break
-            
-        case .Ended:
-            self.locked = false
-            self.delegate?.menuViewController(self, capturedSampleWithColor: self.sampleView.color)
-            
-        default:
-            self.locked = false
-            
-        }
-        
-    }
-    
-    func handleSwipe(sender: UISwipeGestureRecognizer) {
-        
-        switch sender.direction {
-            
-        case UISwipeGestureRecognizerDirection.Down:
-            if self.delegate?.menuViewController(self, requestedChangeMenuToState: .Camera) == true {
-                self.state = .Camera
-            }
-            
-        default:
-            if self.delegate?.menuViewController(self, requestedChangeMenuToState: .Samples) == true {
-                self.state = .Samples
-            }
-        }
-    }
     
 }

@@ -3,3 +3,4 @@
 //
 
 #import <UIKit/UIGestureRecognizerSubclass.h>
+#import "AWPercentDrivenInteractiveTransition.h"

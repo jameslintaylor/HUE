@@ -66,7 +66,7 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     // MARK: - Handlers
     
     func editingSwitchToggled(editingSwitch: EditingSwitch) {
-        self.tableView.setEditing(editingSwitch.on, animated: true)
+        self.tableViewManager.setEditing(self.editingSwitch.on)
     }
     
     // MARK: - SamplesTableViewManager Delegate 

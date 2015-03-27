@@ -49,6 +49,13 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         return fetchedResultsController
         
     }()
+    
+    // MARK: - Public Methods
+    
+    func setEditing(editing: Bool) {
+        self.selectedRowIndexPath = nil
+        self.tableView.setEditing(editing, animated: true)
+    }
 
     // MARK: - Private Methods
     
@@ -60,6 +67,8 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         
         cell.sample = sample
         cell.delegate = self
+        cell.selectionStyle = .None
+        cell.backgroundColor = UIColor.clearColor()
         
     }
     

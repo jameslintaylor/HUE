@@ -31,7 +31,8 @@ class ColorTarget: UIView {
         
         CATransaction.begin()
         CATransaction.setValue(true, forKey: kCATransactionDisableActions)
-        self.innerRing.strokeColor = color?.CGColor
+        self.innerRing.strokeColor = color?.complimentaryColor()?.CGColor
+        self.outerRing.strokeColor = color?.lighterColor()?.colorWithAlphaComponent(0.4).CGColor
         CATransaction.commit()
         
     }
@@ -42,7 +43,7 @@ class ColorTarget: UIView {
         self.outerRing.frame = self.bounds
         self.outerRing.path = UIBezierPath(ovalInRect: self.outerRing.bounds).CGPath
         self.outerRing.fillColor = nil
-        self.outerRing.strokeColor = UIColor(white: 1, alpha: 0.2).CGColor
+        self.outerRing.strokeColor = UIColor(white: 1, alpha: 0.4).CGColor
         self.outerRing.lineWidth = 8
         
         self.innerRing.frame = CGRectInset(self.bounds, 4, 4)

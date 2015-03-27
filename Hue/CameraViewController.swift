@@ -25,7 +25,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     let camera: GPUImageStillCamera = GPUImageStillCamera(sessionPreset: AVCaptureSessionPreset1920x1080, cameraPosition: AVCaptureDevicePosition.Back)
     let cropFilter = GPUImageCropFilter()
     let thumbnailFilter = GPUImageCropFilter()
-    var focusingChangedContext: UnsafeMutablePointer<()>!
+    var focusingChangedContext = UnsafeMutablePointer<()>()
     
     let cameraView = GPUImageView()
     let colorTarget = ColorTarget()
@@ -73,17 +73,16 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         
         var error: NSError?
         if (self.camera.inputCamera.lockForConfiguration(&error)) {
-            
             self.camera.inputCamera.subjectAreaChangeMonitoringEnabled = true
             self.camera.inputCamera.unlockForConfiguration()
-            
         } else {
-            
             NSLog("Camera configuration error: \(error?.localizedDescription)")
-            
         }
         
-        self.focusingChangedContext = UnsafeMutablePointer<()>()
+        self.camera.addTarget(self.cameraView)
+        self.camera.addTarget(self.cropFilter)
+        self.camera.addTarget(self.thumbnailFilter)
+        self.camera.startCameraCapture()
         
         self.thumbnailFilter.cropRegion = CGRect(x: 0.0, y: 0.3, width: 1.0, height: 0.4)
         
@@ -92,32 +91,16 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleSubjectAreaChangedNotification:"), name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: nil)
         self.camera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: NSKeyValueObservingOptions.New, context: self.focusingChangedContext)
     }
-    
+
     override func viewDidAppear(animated: Bool) {
-        
         super.viewDidAppear(animated)
-        
-        self.camera.addTarget(self.cameraView)
-        self.camera.addTarget(self.cropFilter)
-        self.camera.addTarget(self.thumbnailFilter)
-        self.camera.startCameraCapture()
-        
-        // start average color operations
         self.beginAverageColorCaptureAtPoint(CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height/2))
-    
-        // hide overlay
         self.hideOverlay()
-        
     }
     
     override func viewWillDisappear(animated: Bool) {
-        
         super.viewWillDisappear(animated)
-        
-        self.camera.removeAllTargets()
-        self.camera.stopCameraCapture()
-    
-        // show overlay
+        self.endAverageColorCapture()
         self.showOverlay()
     }
     
@@ -179,9 +162,12 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         let normalizedRegion = CGRect(x: normalizedPoint.x - dx/2, y: normalizedPoint.y - dy/2, width: dx, height: dy)
         self.cropFilter.cropRegion = normalizedRegion
         
-        self.cropFilter.removeAllTargets()
         self.cropFilter.addTarget(self.processMGR.averageColorProcess)
         
+    }
+    
+    func endAverageColorCapture() {
+        self.cropFilter.removeAllTargets()
     }
     
     func showOverlay() {
@@ -254,7 +240,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     
     func colorProcessManager(manager: ColorProcessManager, updatedColor color: UIColor?) {
         
-        self.colorTarget.updateWithColor(color?.complimentaryColor())
+        self.colorTarget.updateWithColor(color)
         self.delegate?.cameraViewController(self, didUpdateWithColor: color)
     
     }

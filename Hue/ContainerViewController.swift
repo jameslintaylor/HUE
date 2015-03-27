@@ -10,6 +10,8 @@ import UIKit
 
 class ContainerViewController: UIViewController, CameraViewControllerDelegate, MenuViewControllerDelegate {
     
+    var interactionController: PanGestureInteractiveTransitionController!
+    
     var cameraViewController: CameraViewController
     var samplesViewController: SamplesViewController
     var menuViewController: MenuViewController
@@ -27,12 +29,16 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
     }
     
     override init () {
+        
         self.cameraViewController = CameraViewController()
         self.samplesViewController = SamplesViewController()
         self.menuViewController = MenuViewController()
+        
         super.init(nibName: nil, bundle: nil)
+        
         self.cameraViewController.delegate = self
         self.menuViewController.delegate = self
+        
     }
    
     required init(coder aDecoder: NSCoder) {
@@ -67,6 +73,25 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
         self.menuContainerBottomConstraint = NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 0)
         self.menuContainerTopConstraint = NSLayoutConstraint(item: self.menuContainerView, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 0)
         
+        rootView.addConstraint(self.menuContainerBottomConstraint)
+        
+        // gestures + interactive transition setup
+        self.interactionController = PanGestureInteractiveTransitionController(gestureRecognizerInView: self.menuContainerView, recognizedBlock: { [weak self] (sender: UIPanGestureRecognizer) -> Void in
+            
+            let topToBottom = sender.velocityInView(sender.view!).y > 0
+            
+            if self?.selectedViewController == self?.cameraViewController {
+                if !topToBottom {
+                    self?.selectedViewController = self?.samplesViewController
+                }
+            } else {
+                if topToBottom {
+                    self?.selectedViewController = self?.cameraViewController
+                }
+            }
+            
+        })
+        
         self.view = rootView
     }
     
@@ -85,6 +110,10 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
         self.menuViewController.didMoveToParentViewController(self)
     }
     
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
+    
     // MARK: - Private Methods
     
     func transitionFromViewController(fromViewController: UIViewController?, toViewController: UIViewController!) {
@@ -101,7 +130,58 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
         fromViewController?.willMoveToParentViewController(nil)
         self.addChildViewController(toViewController)
         
-        if toViewController == self.cameraViewController {
+        // if this is the initial presentation, add the new child view controller with no animation
+        if (fromViewController == nil) {
+            self.containerView.addSubview(toView)
+            toViewController.didMoveToParentViewController(self)
+            //self.finishTransitionToViewController(toViewController)
+            return
+        }
+        
+        // context
+        let context = TransitioningContext(fromViewController: fromViewController!, toViewController: toViewController, goingUp: toViewController == self.cameraViewController)
+        
+        // transition animator
+        let animator: UIViewControllerAnimatedTransitioning = AnimatedTransition()
+        context.animated = true
+        
+        // interaction controller
+        let interactionController = self.interactionController
+        interactionController.animator = animator
+        context.interactive = true
+        
+        context.completionBlock = { [weak self] (didComplete: Bool) -> Void in
+            
+            if (didComplete) {
+                fromViewController!.view.removeFromSuperview()
+                fromViewController!.removeFromParentViewController()
+                toViewController.didMoveToParentViewController(self)
+                //self?.finishTransitionToViewController(toViewController)
+            } else {
+                //toViewController.view.removeFromSuperview()
+            }
+            
+            self?.updateMenuPosition()
+            animator.animationEnded?(didComplete)
+        }
+        
+        // start transition
+        if context.isInteractive() {
+            interactionController.startInteractiveTransition(context)
+        } else {
+            animator.animateTransition(context)
+            //self.finishTransitionToViewController(toViewController)
+        }
+        
+    }
+    
+//    func finishTransitionToViewController(viewController: UIViewController) {
+//        self.selectedViewController = viewController
+//    }
+    
+    func updateMenuPosition() {
+        
+        if self.selectedViewController == self.cameraViewController {
             self.view.removeConstraint(self.menuContainerTopConstraint)
             self.view.addConstraint(self.menuContainerBottomConstraint)
         } else {
@@ -109,36 +189,10 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
             self.view.addConstraint(self.menuContainerTopConstraint)
         }
         
-        // if this is the initial presentation, add the new child view controller with no animation
-        if (fromViewController == nil) {
-            self.containerView.addSubview(toView)
-            toViewController.didMoveToParentViewController(self)
-            return
-        }
-        
-        var animator: UIViewControllerAnimatedTransitioning = AnimatedTransition()
-        
-        let context = TransitioningContext(fromViewController: fromViewController!, toViewController: toViewController, goingUp: toViewController == self.cameraViewController)
-        context.completionBlock = { (didComplete: Bool) -> Void in
-            
-            fromViewController!.view.removeFromSuperview()
-            fromViewController!.removeFromParentViewController()
-            toViewController.didMoveToParentViewController(self)
-            
-            animator.animationEnded?(didComplete)
-        }
-        
-        animator.animateTransition(context)
-        
-        // animate menu container constraint change
         UIView.animateWithDuration(0.3, delay: 0.0, options: .CurveEaseOut, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
-    }
-    
-    func buttonTapped(button: UIButton) {
         
-        self.selectedViewController = self.selectedViewController == self.cameraViewController ? self.samplesViewController : self.cameraViewController
     }
     
     // MARK: - Camera View Controller Delegate
@@ -152,18 +206,6 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
     }
     
     // MARK: - Menu View Controller Delegate
-    
-    func menuViewController(viewController: MenuViewController, requestedChangeMenuToState state: MenuState) -> Bool {
-        
-        if (state == .Camera) & (self.selectedViewController == self.samplesViewController) {
-            self.selectedViewController = self.cameraViewController
-            return true
-        } else if (state == .Samples) & (self.selectedViewController == self.cameraViewController) {
-            self.selectedViewController = self.samplesViewController
-            return true
-        }
-        return false
-    }
     
     func menuViewController(viewController: MenuViewController, capturedSampleWithColor color: UIColor?) {
         
@@ -192,7 +234,7 @@ class ContainerViewController: UIViewController, CameraViewControllerDelegate, M
     
 }
 
-// MARK: - Private Transitioning Context
+// MARK: - Transitioning Context
 
 private class TransitioningContext: NSObject, UIViewControllerContextTransitioning {
     
@@ -205,7 +247,12 @@ private class TransitioningContext: NSObject, UIViewControllerContextTransitioni
     private var appearingFromRect: CGRect
     private var disappearingToRect: CGRect
     private var appearingToRect: CGRect
-
+    
+    // UIViewControllerContextTransitioning getter properties
+    var animated: Bool = true
+    var interactive: Bool = false
+    private var transitionCancelled: Bool = false
+    
     init(fromViewController: UIViewController, toViewController: UIViewController, goingUp: Bool) {
         
         self.viewControllers = [UITransitionContextFromViewControllerKey: fromViewController, UITransitionContextToViewControllerKey: toViewController]
@@ -266,32 +313,29 @@ private class TransitioningContext: NSObject, UIViewControllerContextTransitioni
         }
     }
     
-    private func transitionWasCancelled() -> Bool {
-        return false // non interactive transition can't be cancelled
-    }
+    // interactive transitions
+    private func transitionWasCancelled() -> Bool { return self.transitionCancelled }
+    private func isInteractive() -> Bool { return self.interactive }
+    private func updateInteractiveTransition(percentComplete: CGFloat) {}
+    private func finishInteractiveTransition() { self.transitionCancelled = false }
+    private func cancelInteractiveTransition() { self.transitionCancelled = true }
     
     // trivial implementations
-    private func isAnimated() -> Bool { return true }
-    private func isInteractive() -> Bool { return false }
+    private func isAnimated() -> Bool { return self.animated }
     private func targetTransform() -> CGAffineTransform { return CGAffineTransformIdentity }
     private func presentationStyle() -> UIModalPresentationStyle { return UIModalPresentationStyle.Custom }
     
-    // empty implementations (interactive transitions)
-    private func updateInteractiveTransition(percentComplete: CGFloat) {}
-    private func finishInteractiveTransition() {}
-    private func cancelInteractiveTransition() {}
-    
 }
 
-// MARK: - Private Animated Transition
+// MARK: Private Transition Animator 
 
 private class AnimatedTransition: NSObject, UIViewControllerAnimatedTransitioning {
     
-    private func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
-        return 0.3
+    func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
+        return 0.4
     }
     
-    private func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
+    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
         
         let fromViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)
         let toViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)
@@ -307,9 +351,9 @@ private class AnimatedTransition: NSObject, UIViewControllerAnimatedTransitionin
             fromViewController!.view.frame = transitionContext.finalFrameForViewController(fromViewController!)
             
         }, completion: { (finished) -> Void in
-        
-            transitionContext.completeTransition(finished)
-            
+                
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+                
         })
     }
     

@@ -79,6 +79,33 @@ class SampleTableViewCell: UITableViewCell {
         
         self.contentView.addSubview(self.gestureContainer)
         
+        self.setupConstraints()
+        
+        // gestures
+        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
+        var swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
+        swipeGestureRecognizer.direction = .Left
+        
+        self.gestureContainer.addGestureRecognizer(tapGestureRecognizer)
+        self.gestureContainer.addGestureRecognizer(swipeGestureRecognizer)
+        
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        
+        super.layoutSubviews()
+        
+        self.cancelContainer.frame = CGRect(x: self.frame.width - 70, y: 0, width: 70, height: self.frame.height)
+        self.cancelLayer.position = CGPoint(x: self.cancelContainer.bounds.width/2, y: self.cancelContainer.bounds.height/2)
+        
+    }
+    
+    func setupConstraints() {
+        
         // sampleContainer constraints
         self.sampleContainerWidthConstraint = NSLayoutConstraint(item: self.sampleContainer, attribute: .Width, relatedBy: .Equal, toItem: self.contentView, attribute: .Width, multiplier: 1, constant: 0)
         self.contentView.addConstraint(self.sampleContainerWidthConstraint)
@@ -104,34 +131,19 @@ class SampleTableViewCell: UITableViewCell {
         self.thumbnailView.addConstraint(NSLayoutConstraint(item: self.targetView, attribute: .CenterX, relatedBy: .Equal, toItem: self.thumbnailView, attribute: .CenterX, multiplier: 1, constant: 0))
         self.thumbnailView.addConstraint(NSLayoutConstraint(item: self.targetView, attribute: .CenterY, relatedBy: .Equal, toItem: self.thumbnailView, attribute: .CenterY, multiplier: 1, constant: 0))
         
-        // gestures
-        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
-        var swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
-        swipeGestureRecognizer.direction = .Left
-        
-        self.gestureContainer.addGestureRecognizer(tapGestureRecognizer)
-        self.gestureContainer.addGestureRecognizer(swipeGestureRecognizer)
-        
-    }
-    
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        
-        super.layoutSubviews()
-        
-        self.cancelContainer.frame = CGRect(x: self.frame.width - 70, y: 0, width: 70, height: self.frame.height)
-        self.cancelLayer.position = CGPoint(x: self.cancelContainer.bounds.width/2, y: self.cancelContainer.bounds.height/2)
-        
     }
     
     // MARK: UITableViewCell Methods
     
     override func setSelected(selected: Bool, animated: Bool) {
+        
         super.setSelected(selected, animated: animated)
-        UIView.animateWithDuration(0.2) { self.thumbnailView.alpha = self.selected ? 1.0 : 0.0 }
+        
+        UIView.transitionWithView(self.thumbnailView, duration: 0.2, options: .TransitionCrossDissolve, animations: {
+            self.thumbnailView.image = self.selected ? self.sample?.thumbnailImage : nil
+            self.targetView.updateWithColor( self.selected ? self.sample?.color : nil)
+        }, completion: nil)
+                
     }
     
     override func setHighlighted(highlighted: Bool, animated: Bool) {
@@ -156,14 +168,11 @@ class SampleTableViewCell: UITableViewCell {
     }
     
     // MARK: - Private Methods
-
+    
     func sampleUpdated() {
         
         self.sampleView.color = self.sample?.color
         self.contentView.backgroundColor = sample?.color?.darkerColor()
-        
-        self.thumbnailView.image = self.sample?.thumbnailImage
-        self.targetView.updateWithColor(self.sample?.color?.complimentaryColor())
         
         self.cancelContainer.transform = CATransform3DIdentity
         self.sampleView.transform = CGAffineTransformIdentity
