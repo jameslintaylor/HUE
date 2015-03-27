@@ -1,0 +1,644 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		523FB14D1AB9F3E100AD2F7B /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523FB14C1AB9F3E100AD2F7B /* ContainerViewController.swift */; };
+		523FB1551ABB40EA00AD2F7B /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523FB1541ABB40EA00AD2F7B /* MenuViewController.swift */; };
+		524C8E361AC34CA10011A31B /* EditingSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C8E351AC34CA10011A31B /* EditingSwitch.swift */; };
+		524C8E3A1AC3A3030011A31B /* Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C8E391AC3A3030011A31B /* Thumbnail.swift */; };
+		524C94361AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 524C94351AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.m */; };
+		524C94391AC5118A0011A31B /* PanGestureInteractiveTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C94381AC5118A0011A31B /* PanGestureInteractiveTransitionController.swift */; };
+		5250B6DE1AC22C390031BA6A /* SamplesTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6DD1AC22C390031BA6A /* SamplesTableViewManager.swift */; };
+		5250B6E21AC23DA80031BA6A /* SampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6E11AC23DA80031BA6A /* SampleView.swift */; };
+		5250B6E41AC2438D0031BA6A /* SampleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6E31AC2438D0031BA6A /* SampleTableViewCell.swift */; };
+		529E67DD1AC2513300510319 /* Sample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529E67DC1AC2513300510319 /* Sample.swift */; };
+		529E67E11AC2547B00510319 /* DayHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529E67E01AC2547B00510319 /* DayHeaderView.swift */; };
+		52AF523C1AB86CE30039C21A /* HUE.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 52AF523A1AB86CE30039C21A /* HUE.xcdatamodeld */; };
+		52C679011AC06BCC005EB501 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52C679001AC06BCC005EB501 /* Accelerate.framework */; };
+		52D08A081AB8B82800A3929F /* SamplesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D08A071AB8B82800A3929F /* SamplesViewController.swift */; };
+		721E44B21AB78CC5006E57D1 /* ColorTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721E44B11AB78CC5006E57D1 /* ColorTarget.swift */; };
+		721E44B41AB78CCB006E57D1 /* ColorProcessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */; };
+		72492AA11AB73A32001EAE02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AA01AB73A32001EAE02 /* AppDelegate.swift */; };
+		72492AA31AB73A32001EAE02 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AA21AB73A32001EAE02 /* CameraViewController.swift */; };
+		72492AA81AB73A32001EAE02 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72492AA71AB73A32001EAE02 /* Images.xcassets */; };
+		72492AAB1AB73A32001EAE02 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72492AA91AB73A32001EAE02 /* LaunchScreen.xib */; };
+		72492AB71AB73A32001EAE02 /* HueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AB61AB73A32001EAE02 /* HueTests.swift */; };
+		72492ACC1AB73A71001EAE02 /* GPUImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72492AC91AB73A59001EAE02 /* GPUImage.framework */; };
+		72492ACE1AB73A7C001EAE02 /* GPUImage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 72492AC91AB73A59001EAE02 /* GPUImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		72492AD81AB77AF8001EAE02 /* FocusingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AD71AB77AF8001EAE02 /* FocusingIndicator.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		72492AB11AB73A32001EAE02 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72492A931AB73A32001EAE02 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 72492A9A1AB73A32001EAE02;
+			remoteInfo = Hue;
+		};
+		72492AC61AB73A59001EAE02 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72492AC01AB73A59001EAE02 /* GPUImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BCF1A33414DDB1EC00852800;
+			remoteInfo = GPUImage;
+		};
+		72492AC81AB73A59001EAE02 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72492AC01AB73A59001EAE02 /* GPUImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BCE209E51943F20C002FEED8;
+			remoteInfo = GPUImageFramework;
+		};
+		72492ACA1AB73A6B001EAE02 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72492AC01AB73A59001EAE02 /* GPUImage.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BCE209E41943F20C002FEED8;
+			remoteInfo = GPUImageFramework;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		72492ACD1AB73A74001EAE02 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				72492ACE1AB73A7C001EAE02 /* GPUImage.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		523FB14C1AB9F3E100AD2F7B /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
+		523FB1541ABB40EA00AD2F7B /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		523FB1641AC0653300AD2F7B /* Hue-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hue-Bridging-Header.h"; sourceTree = "<group>"; };
+		524C8E351AC34CA10011A31B /* EditingSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditingSwitch.swift; sourceTree = "<group>"; };
+		524C8E391AC3A3030011A31B /* Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Thumbnail.swift; sourceTree = "<group>"; };
+		524C94341AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWPercentDrivenInteractiveTransition.h; sourceTree = "<group>"; };
+		524C94351AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWPercentDrivenInteractiveTransition.m; sourceTree = "<group>"; };
+		524C94381AC5118A0011A31B /* PanGestureInteractiveTransitionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanGestureInteractiveTransitionController.swift; sourceTree = "<group>"; };
+		5250B6DD1AC22C390031BA6A /* SamplesTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesTableViewManager.swift; sourceTree = "<group>"; };
+		5250B6E11AC23DA80031BA6A /* SampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleView.swift; sourceTree = "<group>"; };
+		5250B6E31AC2438D0031BA6A /* SampleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTableViewCell.swift; sourceTree = "<group>"; };
+		529E67DC1AC2513300510319 /* Sample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sample.swift; sourceTree = "<group>"; };
+		529E67E01AC2547B00510319 /* DayHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayHeaderView.swift; sourceTree = "<group>"; };
+		52AF523B1AB86CE30039C21A /* HUE.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = HUE.xcdatamodel; sourceTree = "<group>"; };
+		52C679001AC06BCC005EB501 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		52D08A071AB8B82800A3929F /* SamplesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesViewController.swift; sourceTree = "<group>"; };
+		721E44B11AB78CC5006E57D1 /* ColorTarget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorTarget.swift; sourceTree = "<group>"; };
+		721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorProcessManager.swift; sourceTree = "<group>"; };
+		72492A9B1AB73A32001EAE02 /* HUE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUE.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		72492A9F1AB73A32001EAE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		72492AA01AB73A32001EAE02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		72492AA21AB73A32001EAE02 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		72492AA71AB73A32001EAE02 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		72492AAA1AB73A32001EAE02 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		72492AB01AB73A32001EAE02 /* HUETests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HUETests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		72492AB51AB73A32001EAE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		72492AB61AB73A32001EAE02 /* HueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HueTests.swift; sourceTree = "<group>"; };
+		72492AC01AB73A59001EAE02 /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = ../../src/GPUImage/framework/GPUImage.xcodeproj; sourceTree = "<group>"; };
+		72492AD71AB77AF8001EAE02 /* FocusingIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusingIndicator.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		72492A981AB73A32001EAE02 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52C679011AC06BCC005EB501 /* Accelerate.framework in Frameworks */,
+				72492ACC1AB73A71001EAE02 /* GPUImage.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		72492AAD1AB73A32001EAE02 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		523FB14A1AB9D6C500AD2F7B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				72492AA71AB73A32001EAE02 /* Images.xcassets */,
+				72492AA91AB73A32001EAE02 /* LaunchScreen.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		524C94371AC511660011A31B /* Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				524C94381AC5118A0011A31B /* PanGestureInteractiveTransitionController.swift */,
+				524C94341AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.h */,
+				524C94351AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.m */,
+			);
+			name = Transitions;
+			sourceTree = "<group>";
+		};
+		529E67DE1AC2545200510319 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				721E44B11AB78CC5006E57D1 /* ColorTarget.swift */,
+				72492AD71AB77AF8001EAE02 /* FocusingIndicator.swift */,
+			);
+			name = Camera;
+			sourceTree = "<group>";
+		};
+		529E67DF1AC2545D00510319 /* Samples */ = {
+			isa = PBXGroup;
+			children = (
+				5250B6E31AC2438D0031BA6A /* SampleTableViewCell.swift */,
+				529E67E01AC2547B00510319 /* DayHeaderView.swift */,
+				524C8E351AC34CA10011A31B /* EditingSwitch.swift */,
+			);
+			name = Samples;
+			sourceTree = "<group>";
+		};
+		52AF52411AB870E50039C21A /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */,
+				5250B6DD1AC22C390031BA6A /* SamplesTableViewManager.swift */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
+		72492A921AB73A32001EAE02 = {
+			isa = PBXGroup;
+			children = (
+				72492AC01AB73A59001EAE02 /* GPUImage.xcodeproj */,
+				52C679001AC06BCC005EB501 /* Accelerate.framework */,
+				72492A9D1AB73A32001EAE02 /* HUE */,
+				72492AB31AB73A32001EAE02 /* HueTests */,
+				72492A9C1AB73A32001EAE02 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		72492A9C1AB73A32001EAE02 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				72492A9B1AB73A32001EAE02 /* HUE.app */,
+				72492AB01AB73A32001EAE02 /* HUETests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		72492A9D1AB73A32001EAE02 /* HUE */ = {
+			isa = PBXGroup;
+			children = (
+				72492AA01AB73A32001EAE02 /* AppDelegate.swift */,
+				523FB1641AC0653300AD2F7B /* Hue-Bridging-Header.h */,
+				523FB14A1AB9D6C500AD2F7B /* Resources */,
+				52AF52411AB870E50039C21A /* Managers */,
+				72492AD21AB77494001EAE02 /* Model */,
+				72492AD31AB774A1001EAE02 /* Views */,
+				72492AD41AB774AA001EAE02 /* Controllers */,
+				72492A9E1AB73A32001EAE02 /* Supporting Files */,
+			);
+			name = HUE;
+			path = Hue;
+			sourceTree = "<group>";
+		};
+		72492A9E1AB73A32001EAE02 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				72492A9F1AB73A32001EAE02 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		72492AB31AB73A32001EAE02 /* HueTests */ = {
+			isa = PBXGroup;
+			children = (
+				72492AB61AB73A32001EAE02 /* HueTests.swift */,
+				72492AB41AB73A32001EAE02 /* Supporting Files */,
+			);
+			path = HueTests;
+			sourceTree = "<group>";
+		};
+		72492AB41AB73A32001EAE02 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				72492AB51AB73A32001EAE02 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		72492AC11AB73A59001EAE02 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				72492AC71AB73A59001EAE02 /* libGPUImage.a */,
+				72492AC91AB73A59001EAE02 /* GPUImage.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		72492AD21AB77494001EAE02 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				52AF523A1AB86CE30039C21A /* HUE.xcdatamodeld */,
+				529E67DC1AC2513300510319 /* Sample.swift */,
+				524C8E391AC3A3030011A31B /* Thumbnail.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		72492AD31AB774A1001EAE02 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5250B6E11AC23DA80031BA6A /* SampleView.swift */,
+				529E67DE1AC2545200510319 /* Camera */,
+				529E67DF1AC2545D00510319 /* Samples */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		72492AD41AB774AA001EAE02 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				524C94371AC511660011A31B /* Transitions */,
+				523FB14C1AB9F3E100AD2F7B /* ContainerViewController.swift */,
+				523FB1541ABB40EA00AD2F7B /* MenuViewController.swift */,
+				72492AA21AB73A32001EAE02 /* CameraViewController.swift */,
+				52D08A071AB8B82800A3929F /* SamplesViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		72492A9A1AB73A32001EAE02 /* HUE */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 72492ABA1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUE" */;
+			buildPhases = (
+				72492A971AB73A32001EAE02 /* Sources */,
+				72492A981AB73A32001EAE02 /* Frameworks */,
+				72492A991AB73A32001EAE02 /* Resources */,
+				72492ACD1AB73A74001EAE02 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				72492ACB1AB73A6B001EAE02 /* PBXTargetDependency */,
+			);
+			name = HUE;
+			productName = Hue;
+			productReference = 72492A9B1AB73A32001EAE02 /* HUE.app */;
+			productType = "com.apple.product-type.application";
+		};
+		72492AAF1AB73A32001EAE02 /* HUETests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 72492ABD1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUETests" */;
+			buildPhases = (
+				72492AAC1AB73A32001EAE02 /* Sources */,
+				72492AAD1AB73A32001EAE02 /* Frameworks */,
+				72492AAE1AB73A32001EAE02 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				72492AB21AB73A32001EAE02 /* PBXTargetDependency */,
+			);
+			name = HUETests;
+			productName = HueTests;
+			productReference = 72492AB01AB73A32001EAE02 /* HUETests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		72492A931AB73A32001EAE02 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+				ORGANIZATIONNAME = "James Lin Taylor";
+				TargetAttributes = {
+					72492A9A1AB73A32001EAE02 = {
+						CreatedOnToolsVersion = 6.2;
+					};
+					72492AAF1AB73A32001EAE02 = {
+						CreatedOnToolsVersion = 6.2;
+						TestTargetID = 72492A9A1AB73A32001EAE02;
+					};
+				};
+			};
+			buildConfigurationList = 72492A961AB73A32001EAE02 /* Build configuration list for PBXProject "HUE" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 72492A921AB73A32001EAE02;
+			productRefGroup = 72492A9C1AB73A32001EAE02 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 72492AC11AB73A59001EAE02 /* Products */;
+					ProjectRef = 72492AC01AB73A59001EAE02 /* GPUImage.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				72492A9A1AB73A32001EAE02 /* HUE */,
+				72492AAF1AB73A32001EAE02 /* HUETests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		72492AC71AB73A59001EAE02 /* libGPUImage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGPUImage.a;
+			remoteRef = 72492AC61AB73A59001EAE02 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		72492AC91AB73A59001EAE02 /* GPUImage.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GPUImage.framework;
+			remoteRef = 72492AC81AB73A59001EAE02 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		72492A991AB73A32001EAE02 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72492AAB1AB73A32001EAE02 /* LaunchScreen.xib in Resources */,
+				72492AA81AB73A32001EAE02 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		72492AAE1AB73A32001EAE02 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		72492A971AB73A32001EAE02 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				524C8E3A1AC3A3030011A31B /* Thumbnail.swift in Sources */,
+				524C94391AC5118A0011A31B /* PanGestureInteractiveTransitionController.swift in Sources */,
+				523FB1551ABB40EA00AD2F7B /* MenuViewController.swift in Sources */,
+				72492AD81AB77AF8001EAE02 /* FocusingIndicator.swift in Sources */,
+				721E44B41AB78CCB006E57D1 /* ColorProcessManager.swift in Sources */,
+				5250B6DE1AC22C390031BA6A /* SamplesTableViewManager.swift in Sources */,
+				524C8E361AC34CA10011A31B /* EditingSwitch.swift in Sources */,
+				523FB14D1AB9F3E100AD2F7B /* ContainerViewController.swift in Sources */,
+				529E67DD1AC2513300510319 /* Sample.swift in Sources */,
+				72492AA31AB73A32001EAE02 /* CameraViewController.swift in Sources */,
+				5250B6E41AC2438D0031BA6A /* SampleTableViewCell.swift in Sources */,
+				524C94361AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.m in Sources */,
+				529E67E11AC2547B00510319 /* DayHeaderView.swift in Sources */,
+				52D08A081AB8B82800A3929F /* SamplesViewController.swift in Sources */,
+				5250B6E21AC23DA80031BA6A /* SampleView.swift in Sources */,
+				72492AA11AB73A32001EAE02 /* AppDelegate.swift in Sources */,
+				52AF523C1AB86CE30039C21A /* HUE.xcdatamodeld in Sources */,
+				721E44B21AB78CC5006E57D1 /* ColorTarget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		72492AAC1AB73A32001EAE02 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72492AB71AB73A32001EAE02 /* HueTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		72492AB21AB73A32001EAE02 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 72492A9A1AB73A32001EAE02 /* HUE */;
+			targetProxy = 72492AB11AB73A32001EAE02 /* PBXContainerItemProxy */;
+		};
+		72492ACB1AB73A6B001EAE02 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GPUImageFramework;
+			targetProxy = 72492ACA1AB73A6B001EAE02 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		72492AA91AB73A32001EAE02 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				72492AAA1AB73A32001EAE02 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		72492AB81AB73A32001EAE02 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		72492AB91AB73A32001EAE02 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		72492ABB1AB73A32001EAE02 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Hue/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = HUE;
+				SWIFT_OBJC_BRIDGING_HEADER = "Hue/Hue-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		72492ABC1AB73A32001EAE02 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Hue/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = HUE;
+				SWIFT_OBJC_BRIDGING_HEADER = "Hue/Hue-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		72492ABE1AB73A32001EAE02 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = HueTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = HUETests;
+				SWIFT_OBJC_BRIDGING_HEADER = "Hue/Hue-Bridging-Header.h";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HUE.app/HUE";
+			};
+			name = Debug;
+		};
+		72492ABF1AB73A32001EAE02 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = HueTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = HUETests;
+				SWIFT_OBJC_BRIDGING_HEADER = "Hue/Hue-Bridging-Header.h";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HUE.app/HUE";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		72492A961AB73A32001EAE02 /* Build configuration list for PBXProject "HUE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				72492AB81AB73A32001EAE02 /* Debug */,
+				72492AB91AB73A32001EAE02 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		72492ABA1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				72492ABB1AB73A32001EAE02 /* Debug */,
+				72492ABC1AB73A32001EAE02 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		72492ABD1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUETests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				72492ABE1AB73A32001EAE02 /* Debug */,
+				72492ABF1AB73A32001EAE02 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		52AF523A1AB86CE30039C21A /* HUE.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				52AF523B1AB86CE30039C21A /* HUE.xcdatamodel */,
+			);
+			currentVersion = 52AF523B1AB86CE30039C21A /* HUE.xcdatamodel */;
+			path = HUE.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 72492A931AB73A32001EAE02 /* Project object */;
+}
