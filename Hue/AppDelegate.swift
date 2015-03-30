@@ -11,22 +11,19 @@ import CoreData
 
 let SCR_WIDTH: CGFloat = UIScreen.mainScreen().bounds.width
 let SCR_HEIGHT: CGFloat = UIScreen.mainScreen().bounds.height
-let SAMPLE_HEIGHT: CGFloat = 100
-let HEADER_HEIGHT: CGFloat = 40
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
-    var containerViewController: ContainerViewController!
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        self.containerViewController = ContainerViewController()
-        self.containerViewController.samplesViewController.tableViewManager.managedObjectContext = self.managedObjectContext
+        var mainViewController = MainViewController()
+        mainViewController.samplesViewController.tableViewManager.managedObjectContext = self.managedObjectContext
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        self.window!.rootViewController = self.containerViewController
+        self.window!.rootViewController = mainViewController
         self.window!.makeKeyAndVisible()
         
         return true

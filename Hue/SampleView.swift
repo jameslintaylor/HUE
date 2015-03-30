@@ -57,9 +57,6 @@ extension UILabel {
     public override func copy() -> AnyObject {
         var copiedLabel = UILabel(frame: self.frame)
         
-        copiedLabel.setTranslatesAutoresizingMaskIntoConstraints(self.translatesAutoresizingMaskIntoConstraints())
-        copiedLabel.autoresizingMask = self.autoresizingMask
-        
         copiedLabel.font = self.font
         copiedLabel.textAlignment = self.textAlignment
         copiedLabel.textColor = self.textColor
@@ -158,13 +155,19 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
         self.colorBorder.setTranslatesAutoresizingMaskIntoConstraints(true)
         self.colorBorder.autoresizingMask = UIViewAutoresizing.FlexibleWidth
         
-        self.colorLabel.setTranslatesAutoresizingMaskIntoConstraints(true)
-        self.colorLabel.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        self.colorLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.colorLabel.font = UIFont(name: "GillSans-Italic", size: 26)
+        self.colorLabel.userInteractionEnabled = true
         self.colorLabel.textAlignment = .Center
         
         self.addSubview(self.colorBorder)
         self.addSubview(self.colorLabel)
+
+        // color label constraints
+        self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .Width, relatedBy: .Equal, toItem: self, attribute: .Width, multiplier: 0.5, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .Height, relatedBy: .Equal, toItem: self, attribute: .Height, multiplier: 1, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1, constant: 0))
         
         // gestures
         var swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
@@ -174,8 +177,8 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
         swipeRightGestureRecognizer.direction = .Right
         swipeRightGestureRecognizer.delegate = self
         
-        self.addGestureRecognizer(swipeLeftGestureRecognizer)
-        self.addGestureRecognizer(swipeRightGestureRecognizer)
+        self.colorLabel.addGestureRecognizer(swipeLeftGestureRecognizer)
+        self.colorLabel.addGestureRecognizer(swipeRightGestureRecognizer)
     }
     
     convenience override init() {

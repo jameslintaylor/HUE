@@ -8,12 +8,19 @@
 
 import UIKit
 
+let HEADER_HEIGHT: CGFloat = 40
+let SAMPLE_HEIGHT: CGFloat = 100
+
+protocol SamplesViewControllerDelegate: class {  }
+
 class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     
+    weak var delegate: SamplesViewControllerDelegate?
     let tableViewManager = SamplesTableViewManager()
     
     var tableView: UITableView!
     var editingSwitch: EditingSwitch!
+    var sampleView: SampleView!
     
     // mutable constraints
     var editingSwitchTopConstraint: NSLayoutConstraint!
@@ -21,19 +28,28 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     override func loadView() {
         
         var rootView = UIView()
+        rootView.backgroundColor = UIColor.blackColor()
         
         self.tableView = UITableView()
-        self.tableView.contentInset = UIEdgeInsets(top: SAMPLE_HEIGHT, left: 0, bottom: 0, right: 0)
         self.tableView.backgroundColor = UIColor(white: 0.1, alpha: 1)
         self.tableView.separatorStyle = .None
-        self.tableView.setTranslatesAutoresizingMaskIntoConstraints(true)
-        self.tableView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        self.tableView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.editingSwitch = EditingSwitch()
         self.editingSwitch.setTranslatesAutoresizingMaskIntoConstraints(false)
         
+        self.sampleView = SampleView()
+        self.sampleView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
         rootView.addSubview(self.tableView)
         rootView.addSubview(self.editingSwitch)
+        rootView.addSubview(self.sampleView)
+        
+        // table view constraints
+        rootView.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Width, relatedBy: .Equal, toItem: rootView, attribute: .Width, multiplier: 1, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Top, relatedBy: .Equal, toItem: rootView, attribute: .Top, multiplier: 1, constant: TAB_HEIGHT))
+        rootView.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Left, relatedBy: .Equal, toItem: rootView, attribute: .Left, multiplier: 1, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Bottom, relatedBy: .Equal, toItem: rootView, attribute: .Bottom, multiplier: 1, constant: 0))
         
         // editing switch constraints
         rootView.addConstraint(NSLayoutConstraint(item: self.editingSwitch, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 80))
@@ -41,6 +57,12 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
         self.editingSwitchTopConstraint = NSLayoutConstraint(item: self.editingSwitch, attribute: .Top, relatedBy: .Equal, toItem: rootView, attribute: .Top, multiplier: 1, constant: SAMPLE_HEIGHT)
         rootView.addConstraint(self.editingSwitchTopConstraint)
         rootView.addConstraint(NSLayoutConstraint(item: self.editingSwitch, attribute: .Right, relatedBy: .Equal, toItem: rootView, attribute: .Right, multiplier: 1, constant: -10))
+        
+        // sample view constraints
+        rootView.addConstraint(NSLayoutConstraint(item: self.sampleView, attribute: .Width, relatedBy: .Equal, toItem: rootView, attribute: .Width, multiplier: 1, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.sampleView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: TAB_HEIGHT))
+        rootView.addConstraint(NSLayoutConstraint(item: self.sampleView, attribute: .Left, relatedBy: .Equal, toItem: rootView, attribute: .Left, multiplier: 1, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.sampleView, attribute: .Top, relatedBy: .Equal, toItem: rootView, attribute: .Top, multiplier: 1, constant: 0))
         
         self.view = rootView
         
@@ -61,6 +83,12 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     
     override func viewWillAppear(animated: Bool) {
         self.editingSwitch.on = false
+    }
+    
+    // MARK: - Public Methods
+    
+    func setSampleColor(color: UIColor?) {
+        self.sampleView.color = color
     }
     
     // MARK: - Handlers

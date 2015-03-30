@@ -12,7 +12,8 @@ import GPUImage
 
 protocol CameraViewControllerDelegate: class {
     
-    func cameraViewController(viewController: CameraViewController, didUpdateWithColor color: UIColor?)
+    func cameraViewController(viewController: CameraViewController, targetUpdatedWithColor color: UIColor?)
+    func cameraViewController(viewController: CameraViewController, capturedSampleWithColor color: UIColor?, thumbnail: UIImage?)
     
 }
 
@@ -29,10 +30,9 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     
     let cameraView = GPUImageView()
     let colorTarget = ColorTarget()
-    let overlay = UIView()
-    
     var focusingIndicator: FocusingIndicator?
-        
+    let captureButton = UIButton()
+    
     override func loadView() {
         
         let rootView = UIView()
@@ -42,19 +42,25 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         
         self.colorTarget.setTranslatesAutoresizingMaskIntoConstraints(false)
         
-        self.overlay.setTranslatesAutoresizingMaskIntoConstraints(true)
-        self.overlay.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
-        self.overlay.backgroundColor = UIColor(white: 0.8, alpha: 1)
+        self.captureButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.captureButton.backgroundColor = UIColor.redColor()
+        self.captureButton.layer.cornerRadius = 40
         
         rootView.addSubview(self.cameraView)
         rootView.addSubview(self.colorTarget)
-        rootView.addSubview(self.overlay)
+        rootView.addSubview(self.captureButton)
         
         // color target constraints
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 20))
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 20))
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: rootView, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 20))
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 20))
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: .CenterX, relatedBy: .Equal, toItem: rootView, attribute: .CenterX, multiplier: 1.0, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: .CenterY, relatedBy: .Equal, toItem: rootView, attribute: .CenterY, multiplier: 1.0, constant: 0))
+        
+        // capture button constraints
+        rootView.addConstraint(NSLayoutConstraint(item: self.captureButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 80))
+        rootView.addConstraint(NSLayoutConstraint(item: self.captureButton, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 80))
+        rootView.addConstraint(NSLayoutConstraint(item: self.captureButton, attribute: .CenterX, relatedBy: .Equal, toItem: rootView, attribute: .CenterX, multiplier: 1.0, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.captureButton, attribute: .CenterY, relatedBy: .Equal, toItem: rootView, attribute: .Bottom, multiplier: 1.0, constant: -TAB_HEIGHT - 60))
         
         // gestures
         var tapGR = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
@@ -71,6 +77,8 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.processMGR = ColorProcessManager()
         self.processMGR.delegate = self
         
+        self.camera.outputImageOrientation = .Portrait
+        
         var error: NSError?
         if (self.camera.inputCamera.lockForConfiguration(&error)) {
             self.camera.inputCamera.subjectAreaChangeMonitoringEnabled = true
@@ -84,24 +92,19 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.camera.addTarget(self.thumbnailFilter)
         self.camera.startCameraCapture()
         
+        self.captureButton.addTarget(self, action: Selector("captureSample"), forControlEvents: .TouchUpInside)
+        
         self.thumbnailFilter.cropRegion = CGRect(x: 0.0, y: 0.3, width: 1.0, height: 0.4)
         
         // Notifications
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleDeviceOrientationChangedNotification:"), name: UIDeviceOrientationDidChangeNotification, object: UIDevice.currentDevice())
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleSubjectAreaChangedNotification:"), name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: nil)
         self.camera.inputCamera.addObserver(self, forKeyPath: "adjustingFocus", options: NSKeyValueObservingOptions.New, context: self.focusingChangedContext)
+        
     }
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.beginAverageColorCaptureAtPoint(CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height/2))
-        self.hideOverlay()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.endAverageColorCapture()
-        self.showOverlay()
     }
     
     deinit {
@@ -109,17 +112,30 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.camera.removeObserver(self, forKeyPath: "adjustingFocus", context: self.focusingChangedContext)
     }
     
-    // MARK: - Public Methods 
+    // MARK: - Public Methods
     
-    func captureImageWithCompletionHandler(completionHandler: (image: UIImage!, error: NSError!) -> Void) {
+    
+    
+    // MARK: - Private Methods
+    
+    func captureSample() {
         
-        self.camera.capturePhotoAsImageProcessedUpToFilter(self.thumbnailFilter, withCompletionHandler: { (image, error) -> Void in
-            completionHandler(image: image, error: error)
+        let color = self.processMGR.color
+        self.camera.capturePhotoAsImageProcessedUpToFilter(self.thumbnailFilter, withCompletionHandler: { [unowned self] (image, error) -> Void in
+            
+            if error != nil {
+                
+                println("sample capture error: \(error.localizedDescription)")
+            
+            } else {
+            
+                self.delegate?.cameraViewController(self, capturedSampleWithColor: color, thumbnail: image)
+            
+            }
+            
         })
         
     }
-    
-    // MARK: - Private Methods
     
     func focusAtPoint(point: CGPoint) {
         
@@ -170,41 +186,9 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.cropFilter.removeAllTargets()
     }
     
-    func showOverlay() {
-        
-        UIView.animateWithDuration(0.2) { self.overlay.alpha = 1.0 }
-        
-    }
-    
-    func hideOverlay() {
-        
-        UIView.animateWithDuration(0.2) { self.overlay.alpha = 0.0 }
-
-    }
-    
     // MARK: - Notification Handling
     
-    func handleDeviceOrientationChangedNotification(notification: NSNotification) {
-        var orientation = (notification.object as UIDevice).orientation
-        switch orientation {
-            
-        case .Portrait:
-            self.camera.outputImageOrientation = .Portrait
-            
-        case .LandscapeLeft:
-            self.camera.outputImageOrientation = .LandscapeRight
-            
-        case .LandscapeRight:
-            self.camera.outputImageOrientation = .LandscapeLeft
-            
-        default:
-            break
-            
-        }
-    }
-    
     func handleSubjectAreaChangedNotification(notification: NSNotification) {
-        // remove focusing indicator
         self.focusingIndicator?.shouldRemoveAnimated(true)
     }
     
@@ -231,7 +215,6 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     // MARK: - Gesture Handling
     
     func handleSingleTap(sender: UITapGestureRecognizer) {
-        
         var tapLocation = sender.locationInView(self.view)
         self.focusAtPoint(tapLocation)
     }
@@ -240,9 +223,15 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     
     func colorProcessManager(manager: ColorProcessManager, updatedColor color: UIColor?) {
         
-        self.colorTarget.updateWithColor(color)
-        self.delegate?.cameraViewController(self, didUpdateWithColor: color)
-    
+        dispatch_async(dispatch_get_main_queue()) {
+            
+            self.colorTarget.updateWithColor(color)
+            self.captureButton.backgroundColor = color
+            
+            self.delegate?.cameraViewController(self, targetUpdatedWithColor: color)
+            
+        }
+        
     }
     
 }

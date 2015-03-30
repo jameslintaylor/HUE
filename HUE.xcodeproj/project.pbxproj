@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		523FB14D1AB9F3E100AD2F7B /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523FB14C1AB9F3E100AD2F7B /* ContainerViewController.swift */; };
-		523FB1551ABB40EA00AD2F7B /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523FB1541ABB40EA00AD2F7B /* MenuViewController.swift */; };
+		523FB14D1AB9F3E100AD2F7B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523FB14C1AB9F3E100AD2F7B /* MainViewController.swift */; };
 		524C8E361AC34CA10011A31B /* EditingSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C8E351AC34CA10011A31B /* EditingSwitch.swift */; };
 		524C8E3A1AC3A3030011A31B /* Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C8E391AC3A3030011A31B /* Thumbnail.swift */; };
-		524C94361AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 524C94351AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.m */; };
-		524C94391AC5118A0011A31B /* PanGestureInteractiveTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C94381AC5118A0011A31B /* PanGestureInteractiveTransitionController.swift */; };
 		5250B6DE1AC22C390031BA6A /* SamplesTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6DD1AC22C390031BA6A /* SamplesTableViewManager.swift */; };
 		5250B6E21AC23DA80031BA6A /* SampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6E11AC23DA80031BA6A /* SampleView.swift */; };
 		5250B6E41AC2438D0031BA6A /* SampleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6E31AC2438D0031BA6A /* SampleTableViewCell.swift */; };
+		52813CB71AC87FEC0092A923 /* DraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52813CB61AC87FEC0092A923 /* DraggableView.swift */; };
+		52813CBA1AC8D3440092A923 /* SamplesTabBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52813CB91AC8D3440092A923 /* SamplesTabBehaviour.swift */; };
+		52813CBC1AC8DFD60092A923 /* SamplesViewBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52813CBB1AC8DFD60092A923 /* SamplesViewBehaviour.swift */; };
 		529E67DD1AC2513300510319 /* Sample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529E67DC1AC2513300510319 /* Sample.swift */; };
 		529E67E11AC2547B00510319 /* DayHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529E67E01AC2547B00510319 /* DayHeaderView.swift */; };
 		52AF523C1AB86CE30039C21A /* HUE.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 52AF523A1AB86CE30039C21A /* HUE.xcdatamodeld */; };
@@ -78,17 +78,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		523FB14C1AB9F3E100AD2F7B /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
-		523FB1541ABB40EA00AD2F7B /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		523FB14C1AB9F3E100AD2F7B /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		523FB1641AC0653300AD2F7B /* Hue-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hue-Bridging-Header.h"; sourceTree = "<group>"; };
 		524C8E351AC34CA10011A31B /* EditingSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditingSwitch.swift; sourceTree = "<group>"; };
 		524C8E391AC3A3030011A31B /* Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Thumbnail.swift; sourceTree = "<group>"; };
-		524C94341AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWPercentDrivenInteractiveTransition.h; sourceTree = "<group>"; };
-		524C94351AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWPercentDrivenInteractiveTransition.m; sourceTree = "<group>"; };
-		524C94381AC5118A0011A31B /* PanGestureInteractiveTransitionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanGestureInteractiveTransitionController.swift; sourceTree = "<group>"; };
 		5250B6DD1AC22C390031BA6A /* SamplesTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesTableViewManager.swift; sourceTree = "<group>"; };
 		5250B6E11AC23DA80031BA6A /* SampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleView.swift; sourceTree = "<group>"; };
 		5250B6E31AC2438D0031BA6A /* SampleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTableViewCell.swift; sourceTree = "<group>"; };
+		52813CB61AC87FEC0092A923 /* DraggableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraggableView.swift; sourceTree = "<group>"; };
+		52813CB91AC8D3440092A923 /* SamplesTabBehaviour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesTabBehaviour.swift; sourceTree = "<group>"; };
+		52813CBB1AC8DFD60092A923 /* SamplesViewBehaviour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesViewBehaviour.swift; sourceTree = "<group>"; };
 		529E67DC1AC2513300510319 /* Sample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sample.swift; sourceTree = "<group>"; };
 		529E67E01AC2547B00510319 /* DayHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayHeaderView.swift; sourceTree = "<group>"; };
 		52AF523B1AB86CE30039C21A /* HUE.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = HUE.xcdatamodel; sourceTree = "<group>"; };
@@ -138,14 +137,13 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		524C94371AC511660011A31B /* Transitions */ = {
+		52813CB81AC8D3130092A923 /* Dynamics */ = {
 			isa = PBXGroup;
 			children = (
-				524C94381AC5118A0011A31B /* PanGestureInteractiveTransitionController.swift */,
-				524C94341AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.h */,
-				524C94351AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.m */,
+				52813CB91AC8D3440092A923 /* SamplesTabBehaviour.swift */,
+				52813CBB1AC8DFD60092A923 /* SamplesViewBehaviour.swift */,
 			);
-			name = Transitions;
+			name = Dynamics;
 			sourceTree = "<group>";
 		};
 		529E67DE1AC2545200510319 /* Camera */ = {
@@ -157,14 +155,14 @@
 			name = Camera;
 			sourceTree = "<group>";
 		};
-		529E67DF1AC2545D00510319 /* Samples */ = {
+		529E67DF1AC2545D00510319 /* TableView */ = {
 			isa = PBXGroup;
 			children = (
 				5250B6E31AC2438D0031BA6A /* SampleTableViewCell.swift */,
 				529E67E01AC2547B00510319 /* DayHeaderView.swift */,
 				524C8E351AC34CA10011A31B /* EditingSwitch.swift */,
 			);
-			name = Samples;
+			name = TableView;
 			sourceTree = "<group>";
 		};
 		52AF52411AB870E50039C21A /* Managers */ = {
@@ -260,8 +258,9 @@
 			isa = PBXGroup;
 			children = (
 				5250B6E11AC23DA80031BA6A /* SampleView.swift */,
+				52813CB61AC87FEC0092A923 /* DraggableView.swift */,
 				529E67DE1AC2545200510319 /* Camera */,
-				529E67DF1AC2545D00510319 /* Samples */,
+				529E67DF1AC2545D00510319 /* TableView */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -269,9 +268,8 @@
 		72492AD41AB774AA001EAE02 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				524C94371AC511660011A31B /* Transitions */,
-				523FB14C1AB9F3E100AD2F7B /* ContainerViewController.swift */,
-				523FB1541ABB40EA00AD2F7B /* MenuViewController.swift */,
+				52813CB81AC8D3130092A923 /* Dynamics */,
+				523FB14C1AB9F3E100AD2F7B /* MainViewController.swift */,
 				72492AA21AB73A32001EAE02 /* CameraViewController.swift */,
 				52D08A071AB8B82800A3929F /* SamplesViewController.swift */,
 			);
@@ -403,21 +401,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				524C8E3A1AC3A3030011A31B /* Thumbnail.swift in Sources */,
-				524C94391AC5118A0011A31B /* PanGestureInteractiveTransitionController.swift in Sources */,
-				523FB1551ABB40EA00AD2F7B /* MenuViewController.swift in Sources */,
 				72492AD81AB77AF8001EAE02 /* FocusingIndicator.swift in Sources */,
 				721E44B41AB78CCB006E57D1 /* ColorProcessManager.swift in Sources */,
 				5250B6DE1AC22C390031BA6A /* SamplesTableViewManager.swift in Sources */,
 				524C8E361AC34CA10011A31B /* EditingSwitch.swift in Sources */,
-				523FB14D1AB9F3E100AD2F7B /* ContainerViewController.swift in Sources */,
+				52813CBC1AC8DFD60092A923 /* SamplesViewBehaviour.swift in Sources */,
+				523FB14D1AB9F3E100AD2F7B /* MainViewController.swift in Sources */,
 				529E67DD1AC2513300510319 /* Sample.swift in Sources */,
 				72492AA31AB73A32001EAE02 /* CameraViewController.swift in Sources */,
 				5250B6E41AC2438D0031BA6A /* SampleTableViewCell.swift in Sources */,
-				524C94361AC50F7F0011A31B /* AWPercentDrivenInteractiveTransition.m in Sources */,
 				529E67E11AC2547B00510319 /* DayHeaderView.swift in Sources */,
+				52813CB71AC87FEC0092A923 /* DraggableView.swift in Sources */,
 				52D08A081AB8B82800A3929F /* SamplesViewController.swift in Sources */,
 				5250B6E21AC23DA80031BA6A /* SampleView.swift in Sources */,
 				72492AA11AB73A32001EAE02 /* AppDelegate.swift in Sources */,
+				52813CBA1AC8D3440092A923 /* SamplesTabBehaviour.swift in Sources */,
 				52AF523C1AB86CE30039C21A /* HUE.xcdatamodeld in Sources */,
 				721E44B21AB78CC5006E57D1 /* ColorTarget.swift in Sources */,
 			);
@@ -540,10 +538,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Hue/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = HUE;
 				SWIFT_OBJC_BRIDGING_HEADER = "Hue/Hue-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -552,10 +551,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Hue/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = HUE;
 				SWIFT_OBJC_BRIDGING_HEADER = "Hue/Hue-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
