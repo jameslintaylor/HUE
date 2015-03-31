@@ -13,12 +13,11 @@ let TAB_HEIGHT: CGFloat = 100
 class MainViewController: UIViewController, DraggableViewDelegate, CameraViewControllerDelegate, SamplesViewControllerDelegate {
     
     var cameraViewController: CameraViewController
+    
     var samplesViewController: SamplesViewController
-    
-    var samplesTab: DraggableView!
-    
+    var samplesViewControllerBackground: UIView!
+
     var animator: UIDynamicAnimator!
-    var samplesTabBehaviour: SamplesTabBehaviour!
     var samplesViewBehaviour: SamplesViewBehaviour!
     
     override init () {
@@ -46,20 +45,23 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
         self.view.addSubview(self.cameraViewController.view)
         self.cameraViewController.didMoveToParentViewController(self)
         
-        self.samplesViewController.view.frame = self.view.bounds
+        self.samplesViewController.view.frame = CGRect(x: 0, y: self.view.bounds.height - TAB_HEIGHT, width: self.view.bounds.width, height: self.view.bounds.height + 100)
         self.addChildViewController(self.samplesViewController)
         self.view.addSubview(self.samplesViewController.view)
         self.samplesViewController.didMoveToParentViewController(self)
         
-        self.samplesTab = DraggableView(frame: CGRect(x: 0, y: self.view.bounds.height - TAB_HEIGHT, width: self.view.bounds.width, height: TAB_HEIGHT))
-        self.samplesTab.delegate = self
-        self.view.addSubview(self.samplesTab)
-
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        self.setupDynamics()
+        self.samplesViewControllerBackground = UIView(frame: CGRect(x: 0, y: self.view.bounds.height - TAB_HEIGHT, width: self.view.bounds.width, height: TAB_HEIGHT))
+        self.samplesViewControllerBackground.backgroundColor = UIColor.blackColor()
+        self.view.insertSubview(self.samplesViewControllerBackground, belowSubview: self.samplesViewController.view)
+        
+        //dynamics
+        self.animator = UIDynamicAnimator(referenceView: self.view)
+        self.samplesViewBehaviour = SamplesViewBehaviour(view: self.samplesViewController.view, openTo: 0, closeTo: self.view.bounds.height - TAB_HEIGHT)
+        self.animator.addBehavior(self.samplesViewBehaviour)
+        
+        self.samplesViewController.appearance = .HidingSamples
+        self.samplesViewController.tab.animator = self.animator
+        self.samplesViewController.tab.delegate = self
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -70,33 +72,32 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
         return true
     }
     
-    // MARK: - Private Methods
-    
-    func setupDynamics() {
-        
-        self.animator = UIDynamicAnimator(referenceView: self.view)
-        
-        self.samplesTabBehaviour = SamplesTabBehaviour(tab: self.samplesTab, openToPoint: CGPoint(x: SCR_WIDTH/2, y: TAB_HEIGHT * 3/2))
-        self.animator.addBehavior(self.samplesTabBehaviour)
-        
-        self.samplesViewBehaviour = SamplesViewBehaviour(view: self.samplesViewController.view, tab: self.samplesTab)
-        self.animator.addBehavior(self.samplesViewBehaviour)
-        
-        self.samplesViewBehaviour.startAnchorPointUpdates()
-        
-    }
-    
     // MARK: - DraggableViewDelegate
     
     func draggableViewBeganDragging(view: DraggableView) {
-        self.animator.removeBehavior(self.samplesTabBehaviour)
+        self.samplesViewController.appearance = self.samplesViewBehaviour.open ? .HidingSamples : .ShowingSamples
+        self.cameraViewController.paused = !self.samplesViewBehaviour.open
     }
     
     func draggableView(view: DraggableView, draggingEndedWithVelocity velocity: CGPoint) {
         
-        self.samplesTabBehaviour.open = velocity.y < 0
-        self.samplesTabBehaviour.setInitialVelocity(velocity)
-        self.animator.addBehavior(self.samplesTabBehaviour)
+        if velocity.y < 0 {
+          
+            if (self.samplesViewController.view.center.y < SCR_HEIGHT) | (velocity.y < -SCR_HEIGHT) {
+                self.samplesViewBehaviour.open = true
+            }
+            
+        } else {
+            
+            if (self.samplesViewController.view.center.y > SCR_HEIGHT) | (velocity.y > SCR_HEIGHT) {
+                self.samplesViewBehaviour.open = false
+            }
+            
+        }
+
+        self.samplesViewController.appearance = self.samplesViewBehaviour.open ? .ShowingSamples : .HidingSamples
+        self.cameraViewController.paused = self.samplesViewBehaviour.open
+        self.samplesViewBehaviour.setInitialVelocity(velocity.y)
         
     }
     
@@ -115,16 +116,52 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
         let imagePath = paths.stringByAppendingPathComponent(fileName)
         
         if !imageData.writeToFile(imagePath, atomically: false) {
-            
-            println("not saved")
-        
+            println("couldn't saved")
         } else {
          
-            println("saved")
             Sample.insertSampleWithColor(color, thumbnailFileName: fileName, inManagedObjectContext: self.samplesViewController.tableViewManager.managedObjectContext)
-       
+            self.samplesViewController.animateSampleSaved()
+            
         }
         
+    }
+    
+    // MARK: - SamplesViewControllerDelegate
+ 
+    func samplesViewControllerShouldShowSamples(viewController: SamplesViewController) {
+        self.samplesViewBehaviour.open = true
+        self.samplesViewController.appearance = .ShowingSamples
+        self.cameraViewController.paused = self.samplesViewBehaviour.open
+    }
+    
+    func samplesViewControllerShouldHideSamples(viewController: SamplesViewController) {
+        self.samplesViewBehaviour.open = false
+        self.samplesViewController.appearance = .HidingSamples
+        self.cameraViewController.paused = self.samplesViewBehaviour.open
+    }
+    
+    func samplesViewControllerShouldSwitchModes(viewController: SamplesViewController) {
+        
+        if self.samplesViewBehaviour.open {
+            
+            self.samplesViewBehaviour.open = false
+            self.samplesViewBehaviour.setInitialVelocity(1000)
+            
+        } else {
+            
+            self.samplesViewBehaviour.open = true
+            self.samplesViewBehaviour.setInitialVelocity(0)
+            
+        }
+        
+        self.samplesViewController.appearance = self.samplesViewBehaviour.open ? .ShowingSamples : .HidingSamples
+        self.cameraViewController.paused = self.samplesViewBehaviour.open
+        
+    }
+    
+    func samplesViewControllerConfusedUser(viewController: SamplesViewController) {
+        let yVelocity: CGFloat = self.samplesViewBehaviour.open ? 2000 : -800
+        self.samplesViewBehaviour.setInitialVelocity(yVelocity)
     }
     
 }

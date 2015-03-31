@@ -112,11 +112,13 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
     var color: UIColor? {
         didSet {
             
+            let complimentaryColor = color?.complimentaryColor()
+            
             self.backgroundColor = self.color
-            self.colorBorder.backgroundColor = color?.complimentaryColor()
+            self.colorBorder.backgroundColor = complimentaryColor
             var currentMode = self.supportedModes[self.modeIdx]
             self.colorLabel.text = currentMode.descriptionForColor(color)
-            self.colorLabel.textColor = color?.complimentaryColor()
+            self.colorLabel.textColor = complimentaryColor
             
         }
     }
@@ -164,7 +166,7 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
         self.addSubview(self.colorLabel)
 
         // color label constraints
-        self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .Width, relatedBy: .Equal, toItem: self, attribute: .Width, multiplier: 0.5, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .Width, relatedBy: .Equal, toItem: self, attribute: .Width, multiplier: 0.8, constant: 0))
         self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .Height, relatedBy: .Equal, toItem: self, attribute: .Height, multiplier: 1, constant: 0))
         self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1, constant: 0))
         self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1, constant: 0))
@@ -177,8 +179,8 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
         swipeRightGestureRecognizer.direction = .Right
         swipeRightGestureRecognizer.delegate = self
         
-        self.colorLabel.addGestureRecognizer(swipeLeftGestureRecognizer)
-        self.colorLabel.addGestureRecognizer(swipeRightGestureRecognizer)
+        self.addGestureRecognizer(swipeLeftGestureRecognizer)
+        self.addGestureRecognizer(swipeRightGestureRecognizer)
     }
     
     convenience override init() {
@@ -231,7 +233,7 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
     // MARK: - UIGestureRecognizer Delegate
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        return false
     }
     
 }

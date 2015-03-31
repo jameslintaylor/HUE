@@ -14,11 +14,13 @@ class ColorTarget: UIView {
     let innerRing = CAShapeLayer()
     
     override init() {
+        
         super.init(frame: CGRect(origin: CGPointZero, size: CGSize(width: 20, height: 20)))
         
         self.layer.addSublayer(self.outerRing)
         self.layer.addSublayer(self.innerRing)
         self.setup()
+        
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -40,6 +42,7 @@ class ColorTarget: UIView {
     // MARK: - Private Methods
     
     func setup() {
+        
         self.outerRing.frame = self.bounds
         self.outerRing.path = UIBezierPath(ovalInRect: self.outerRing.bounds).CGPath
         self.outerRing.fillColor = nil
@@ -51,6 +54,7 @@ class ColorTarget: UIView {
         self.innerRing.fillColor = nil
         self.innerRing.strokeColor = UIColor(white: 1, alpha: 1).CGColor
         self.innerRing.lineWidth = 1
+        
     }
     
 }

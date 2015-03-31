@@ -13,9 +13,9 @@
 		5250B6DE1AC22C390031BA6A /* SamplesTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6DD1AC22C390031BA6A /* SamplesTableViewManager.swift */; };
 		5250B6E21AC23DA80031BA6A /* SampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6E11AC23DA80031BA6A /* SampleView.swift */; };
 		5250B6E41AC2438D0031BA6A /* SampleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6E31AC2438D0031BA6A /* SampleTableViewCell.swift */; };
-		52813CB71AC87FEC0092A923 /* DraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52813CB61AC87FEC0092A923 /* DraggableView.swift */; };
-		52813CBA1AC8D3440092A923 /* SamplesTabBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52813CB91AC8D3440092A923 /* SamplesTabBehaviour.swift */; };
-		52813CBC1AC8DFD60092A923 /* SamplesViewBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52813CBB1AC8DFD60092A923 /* SamplesViewBehaviour.swift */; };
+		527FC23A1ACA3A7300F47146 /* CaptureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527FC2391ACA3A7300F47146 /* CaptureButton.swift */; };
+		52813CBA1AC8D3440092A923 /* SamplesViewBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52813CB91AC8D3440092A923 /* SamplesViewBehaviour.swift */; };
+		52813CBE1AC9CAE90092A923 /* DraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52813CBD1AC9CAE90092A923 /* DraggableView.swift */; };
 		529E67DD1AC2513300510319 /* Sample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529E67DC1AC2513300510319 /* Sample.swift */; };
 		529E67E11AC2547B00510319 /* DayHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529E67E01AC2547B00510319 /* DayHeaderView.swift */; };
 		52AF523C1AB86CE30039C21A /* HUE.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 52AF523A1AB86CE30039C21A /* HUE.xcdatamodeld */; };
@@ -85,9 +85,9 @@
 		5250B6DD1AC22C390031BA6A /* SamplesTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesTableViewManager.swift; sourceTree = "<group>"; };
 		5250B6E11AC23DA80031BA6A /* SampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleView.swift; sourceTree = "<group>"; };
 		5250B6E31AC2438D0031BA6A /* SampleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTableViewCell.swift; sourceTree = "<group>"; };
-		52813CB61AC87FEC0092A923 /* DraggableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraggableView.swift; sourceTree = "<group>"; };
-		52813CB91AC8D3440092A923 /* SamplesTabBehaviour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesTabBehaviour.swift; sourceTree = "<group>"; };
-		52813CBB1AC8DFD60092A923 /* SamplesViewBehaviour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesViewBehaviour.swift; sourceTree = "<group>"; };
+		527FC2391ACA3A7300F47146 /* CaptureButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureButton.swift; sourceTree = "<group>"; };
+		52813CB91AC8D3440092A923 /* SamplesViewBehaviour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesViewBehaviour.swift; sourceTree = "<group>"; };
+		52813CBD1AC9CAE90092A923 /* DraggableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraggableView.swift; sourceTree = "<group>"; };
 		529E67DC1AC2513300510319 /* Sample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sample.swift; sourceTree = "<group>"; };
 		529E67E01AC2547B00510319 /* DayHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayHeaderView.swift; sourceTree = "<group>"; };
 		52AF523B1AB86CE30039C21A /* HUE.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = HUE.xcdatamodel; sourceTree = "<group>"; };
@@ -140,8 +140,7 @@
 		52813CB81AC8D3130092A923 /* Dynamics */ = {
 			isa = PBXGroup;
 			children = (
-				52813CB91AC8D3440092A923 /* SamplesTabBehaviour.swift */,
-				52813CBB1AC8DFD60092A923 /* SamplesViewBehaviour.swift */,
+				52813CB91AC8D3440092A923 /* SamplesViewBehaviour.swift */,
 			);
 			name = Dynamics;
 			sourceTree = "<group>";
@@ -258,7 +257,8 @@
 			isa = PBXGroup;
 			children = (
 				5250B6E11AC23DA80031BA6A /* SampleView.swift */,
-				52813CB61AC87FEC0092A923 /* DraggableView.swift */,
+				52813CBD1AC9CAE90092A923 /* DraggableView.swift */,
+				527FC2391ACA3A7300F47146 /* CaptureButton.swift */,
 				529E67DE1AC2545200510319 /* Camera */,
 				529E67DF1AC2545D00510319 /* TableView */,
 			);
@@ -405,18 +405,18 @@
 				721E44B41AB78CCB006E57D1 /* ColorProcessManager.swift in Sources */,
 				5250B6DE1AC22C390031BA6A /* SamplesTableViewManager.swift in Sources */,
 				524C8E361AC34CA10011A31B /* EditingSwitch.swift in Sources */,
-				52813CBC1AC8DFD60092A923 /* SamplesViewBehaviour.swift in Sources */,
 				523FB14D1AB9F3E100AD2F7B /* MainViewController.swift in Sources */,
 				529E67DD1AC2513300510319 /* Sample.swift in Sources */,
 				72492AA31AB73A32001EAE02 /* CameraViewController.swift in Sources */,
 				5250B6E41AC2438D0031BA6A /* SampleTableViewCell.swift in Sources */,
 				529E67E11AC2547B00510319 /* DayHeaderView.swift in Sources */,
-				52813CB71AC87FEC0092A923 /* DraggableView.swift in Sources */,
 				52D08A081AB8B82800A3929F /* SamplesViewController.swift in Sources */,
 				5250B6E21AC23DA80031BA6A /* SampleView.swift in Sources */,
 				72492AA11AB73A32001EAE02 /* AppDelegate.swift in Sources */,
-				52813CBA1AC8D3440092A923 /* SamplesTabBehaviour.swift in Sources */,
+				52813CBA1AC8D3440092A923 /* SamplesViewBehaviour.swift in Sources */,
 				52AF523C1AB86CE30039C21A /* HUE.xcdatamodeld in Sources */,
+				52813CBE1AC9CAE90092A923 /* DraggableView.swift in Sources */,
+				527FC23A1ACA3A7300F47146 /* CaptureButton.swift in Sources */,
 				721E44B21AB78CC5006E57D1 /* ColorTarget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

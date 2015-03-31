@@ -10,9 +10,8 @@ import UIKit
 import CoreData
 
 protocol SamplesTableViewManagerDelegate: class {
-    
     func tableView(tableView: UITableView, didScrollToYOffset yOffset: CGFloat)
-    
+    func tableView(tableView: UITableView, displayingNoData noData: Bool)
 }
 
 class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate, SampleTableViewCellDelegate, NSFetchedResultsControllerDelegate {
@@ -111,6 +110,8 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         if let sections = self.fetchedResultsController.sections {
             numSections = sections.count
         }
+        
+        self.delegate?.tableView(self.tableView, displayingNoData: numSections == 0)
         
         return numSections
         

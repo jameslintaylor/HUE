@@ -10,53 +10,72 @@ import UIKit
 
 class SamplesViewBehaviour: UIDynamicBehavior {
    
-    var view, tab: UIDynamicItem
+    var view: UIDynamicItem
+    var top: CGFloat
+    var bottom: CGFloat
     
-    var attachmentBehaviour: UIAttachmentBehavior!
+    var open: Bool = false {
+        
+        didSet {
+        
+            if self.open {
+            
+                self.removeChildBehavior(self.gravityBehaviour)
+                self.addChildBehavior(self.topSnapBehaviour)
+            
+            } else {
+            
+                self.removeChildBehavior(self.topSnapBehaviour)
+                self.addChildBehavior(self.gravityBehaviour)
+                
+            }
+        }
+    }
+    
+    var gravityBehaviour: UIGravityBehavior!
+    var collisionBehaviour: UICollisionBehavior!
+    var topSnapBehaviour: UISnapBehavior!
     var propertiesBehaviour: UIDynamicItemBehavior!
     
-    var displayLink: CADisplayLink?
-    
-    init(view: UIDynamicItem, tab: UIDynamicItem) {
+    init(view: UIDynamicItem, openTo top: CGFloat, closeTo bottom: CGFloat) {
         
         self.view = view
-        self.tab = tab
+        self.top = top
+        self.bottom = bottom
         
         super.init()
         
         self.setupChildBehaviours()
-        self.addChildBehavior(self.attachmentBehaviour)
+        self.addChildBehavior(self.gravityBehaviour)
+        self.addChildBehavior(self.collisionBehaviour)
         self.addChildBehavior(self.propertiesBehaviour)
-        
+
     }
     
     // MARK: - Private Methods
     
     func setupChildBehaviours() {
         
-        self.attachmentBehaviour = UIAttachmentBehavior(item: self.view, attachedToAnchor: CGPoint(x: self.tab.center.x, y: self.tab.center.y - TAB_HEIGHT + self.view.bounds.height/2))
-        self.attachmentBehaviour.length = 0
-        self.attachmentBehaviour.damping = 1
+        self.gravityBehaviour = UIGravityBehavior(items: [self.view])
+        self.gravityBehaviour.magnitude = 4
+        
+        self.collisionBehaviour = UICollisionBehavior(items: [self.view])
+        self.collisionBehaviour.collisionMode = .Boundaries
+        self.collisionBehaviour.addBoundaryWithIdentifier("bottom", fromPoint: CGPoint(x: 0, y: self.bottom + self.view.bounds.height), toPoint: CGPoint(x: SCR_WIDTH, y: self.bottom + self.view.bounds.height))
+        
+        self.topSnapBehaviour = UISnapBehavior(item: self.view, snapToPoint: CGPoint(x: self.view.center.x, y: self.top + self.view.bounds.height/2))
+        self.topSnapBehaviour.damping = 0.2
         
         self.propertiesBehaviour = UIDynamicItemBehavior(items: [self.view])
-        self.propertiesBehaviour.density = 0
+        self.propertiesBehaviour.elasticity = 0.1
         self.propertiesBehaviour.allowsRotation = false
         
     }
     
-    func updateAnchorPoint() {
-        self.attachmentBehaviour.anchorPoint = CGPoint(x: self.tab.center.x, y: self.tab.center.y - TAB_HEIGHT/2 + self.view.bounds.height/2)
-    }
-    
     // MARK: - Public Methods
     
-    func startAnchorPointUpdates() {
-        self.displayLink = CADisplayLink(target: self, selector: Selector("updateAnchorPoint"))
-        self.displayLink?.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
-    }
-    
-    func endAnchorPointUpdates() {
-        self.displayLink?.removeFromRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+    func setInitialVelocity(velocity: CGFloat) {
+        self.propertiesBehaviour.addLinearVelocity(CGPoint(x: 0, y: velocity), forItem: self.view)
     }
     
 }

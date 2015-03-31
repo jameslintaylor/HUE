@@ -21,6 +21,19 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
 
     weak var delegate: CameraViewControllerDelegate?
     var processMGR: ColorProcessManager!
+    var paused: Bool = false {
+        
+        didSet {
+            
+            if self.paused {
+                self.camera.removeTarget(self.cropFilter)
+            } else {
+                self.camera.addTarget(self.cropFilter)
+            }
+            
+        }
+   
+    }
     
     var capturedImage: UIImage?
     let camera: GPUImageStillCamera = GPUImageStillCamera(sessionPreset: AVCaptureSessionPreset1920x1080, cameraPosition: AVCaptureDevicePosition.Back)
@@ -31,7 +44,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     let cameraView = GPUImageView()
     let colorTarget = ColorTarget()
     var focusingIndicator: FocusingIndicator?
-    let captureButton = UIButton()
+    let captureButton = CaptureButton()
     
     override func loadView() {
         
@@ -43,8 +56,6 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.colorTarget.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.captureButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.captureButton.backgroundColor = UIColor.redColor()
-        self.captureButton.layer.cornerRadius = 40
         
         rootView.addSubview(self.cameraView)
         rootView.addSubview(self.colorTarget)
@@ -89,7 +100,6 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         
         self.camera.addTarget(self.cameraView)
         self.camera.addTarget(self.cropFilter)
-        self.camera.addTarget(self.thumbnailFilter)
         self.camera.startCameraCapture()
         
         self.captureButton.addTarget(self, action: Selector("captureSample"), forControlEvents: .TouchUpInside)
@@ -112,26 +122,22 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.camera.removeObserver(self, forKeyPath: "adjustingFocus", context: self.focusingChangedContext)
     }
     
-    // MARK: - Public Methods
-    
-    
-    
     // MARK: - Private Methods
     
     func captureSample() {
         
         let color = self.processMGR.color
+        
+        self.camera.addTarget(self.thumbnailFilter)
         self.camera.capturePhotoAsImageProcessedUpToFilter(self.thumbnailFilter, withCompletionHandler: { [unowned self] (image, error) -> Void in
             
             if error != nil {
-                
                 println("sample capture error: \(error.localizedDescription)")
-            
             } else {
-            
                 self.delegate?.cameraViewController(self, capturedSampleWithColor: color, thumbnail: image)
-            
             }
+            
+            self.camera.removeTarget(self.thumbnailFilter)
             
         })
         
@@ -149,7 +155,6 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         if captureDevice.focusPointOfInterestSupported & captureDevice.isFocusModeSupported(AVCaptureFocusMode.AutoFocus) {
             
             var error: NSError?
-            
             if captureDevice.lockForConfiguration(&error) {
                 
                 let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
@@ -226,7 +231,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         dispatch_async(dispatch_get_main_queue()) {
             
             self.colorTarget.updateWithColor(color)
-            self.captureButton.backgroundColor = color
+            self.captureButton.updateWithColor(color)
             
             self.delegate?.cameraViewController(self, targetUpdatedWithColor: color)
             
