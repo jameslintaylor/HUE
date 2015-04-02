@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6751" systemVersion="14D105g" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6751" systemVersion="14D127a" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Sample" representedClassName="HUE.Sample" syncable="YES">
         <attribute name="blue" attributeType="Double" defaultValueString="0" syncable="YES"/>
         <attribute name="ddMMyyyy" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
         <attribute name="green" attributeType="Double" defaultValueString="0" syncable="YES"/>
-        <attribute name="order" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="red" attributeType="Double" defaultValueString="0" syncable="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="thumbnail" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Thumbnail" inverseName="sample" inverseEntity="Thumbnail" syncable="YES"/>
@@ -14,7 +13,7 @@
         <relationship name="sample" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sample" inverseName="thumbnail" inverseEntity="Sample" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Sample" positionX="-63" positionY="-18" width="128" height="150"/>
+        <element name="Sample" positionX="-63" positionY="-18" width="128" height="135"/>
         <element name="Thumbnail" positionX="-54" positionY="18" width="128" height="75"/>
     </elements>
 </model>

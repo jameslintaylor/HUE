@@ -37,7 +37,7 @@ class DraggableView: UIView, UIGestureRecognizerDelegate {
     var attachmentBehaviour: UIAttachmentBehavior?
     var axes: DraggableViewAxis = .Horizontal | .Vertical // default
     
-    var view: UIView!
+    var viewToDrag: UIView!
     
     init(frame: CGRect, inView containerView: UIView) {
         
@@ -45,7 +45,7 @@ class DraggableView: UIView, UIGestureRecognizerDelegate {
         
         super.init(frame: frame)
         
-        self.view = self
+        self.viewToDrag = self
         
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("handlePan:"))
         panGestureRecognizer.delegate = self
@@ -72,7 +72,7 @@ class DraggableView: UIView, UIGestureRecognizerDelegate {
             
         case .Began:
             
-            self.attachmentBehaviour = UIAttachmentBehavior(item: self.view, attachedToAnchor: CGPoint(x: self.view.center.x, y: self.view.center.y))
+            self.attachmentBehaviour = UIAttachmentBehavior(item: self.viewToDrag, attachedToAnchor: CGPoint(x: self.viewToDrag.center.x, y: self.viewToDrag.center.y))
             self.animator.addBehavior(self.attachmentBehaviour)
             self.delegate?.draggableViewBeganDragging(self)
         

@@ -166,7 +166,6 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
         self.addSubview(self.colorLabel)
 
         // color label constraints
-        self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .Width, relatedBy: .Equal, toItem: self, attribute: .Width, multiplier: 0.8, constant: 0))
         self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .Height, relatedBy: .Equal, toItem: self, attribute: .Height, multiplier: 1, constant: 0))
         self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1, constant: 0))
         self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1, constant: 0))

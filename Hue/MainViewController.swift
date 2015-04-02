@@ -7,10 +7,18 @@
 //
 
 import UIKit
+import CoreData
 
 let TAB_HEIGHT: CGFloat = 100
 
 class MainViewController: UIViewController, DraggableViewDelegate, CameraViewControllerDelegate, SamplesViewControllerDelegate {
+    
+    var managedObjectContext: NSManagedObjectContext! {
+        didSet {
+            self.samplesViewController.tableViewManager.managedObjectContext = self.managedObjectContext
+        }
+    }
+
     
     var cameraViewController: CameraViewController
     
@@ -75,8 +83,8 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
     // MARK: - DraggableViewDelegate
     
     func draggableViewBeganDragging(view: DraggableView) {
-        self.samplesViewController.appearance = self.samplesViewBehaviour.open ? .HidingSamples : .ShowingSamples
         self.cameraViewController.paused = !self.samplesViewBehaviour.open
+        self.samplesViewController.appearance = self.samplesViewBehaviour.open ? .HidingSamples : .ShowingSamples
     }
     
     func draggableView(view: DraggableView, draggingEndedWithVelocity velocity: CGPoint) {
@@ -95,8 +103,8 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
             
         }
 
-        self.samplesViewController.appearance = self.samplesViewBehaviour.open ? .ShowingSamples : .HidingSamples
         self.cameraViewController.paused = self.samplesViewBehaviour.open
+        self.samplesViewController.appearance = self.samplesViewBehaviour.open ? .ShowingSamples : .HidingSamples
         self.samplesViewBehaviour.setInitialVelocity(velocity.y)
         
     }
@@ -108,7 +116,7 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
     }
     
     func cameraViewController(viewController: CameraViewController, capturedSampleWithColor color: UIColor?, thumbnail: UIImage?) {
-        
+            
         let imageData = UIImagePNGRepresentation(thumbnail)
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
         let uuid = NSUUID().UUIDString
@@ -119,25 +127,39 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
             println("couldn't saved")
         } else {
          
-            Sample.insertSampleWithColor(color, thumbnailFileName: fileName, inManagedObjectContext: self.samplesViewController.tableViewManager.managedObjectContext)
+            let thumbnail = Thumbnail.insertThumbnailWithFileName(fileName, inManagedObjectContext: self.managedObjectContext)
+            let sample = Sample.insertSampleWithColor(color, thumbnail: thumbnail, inManagedObjectContext: self.managedObjectContext)
             self.samplesViewController.animateSampleSaved()
+            self.samplesViewBehaviour.setInitialVelocity(-400)
             
         }
-        
+
     }
     
     // MARK: - SamplesViewControllerDelegate
  
     func samplesViewControllerShouldShowSamples(viewController: SamplesViewController) {
-        self.samplesViewBehaviour.open = true
-        self.samplesViewController.appearance = .ShowingSamples
-        self.cameraViewController.paused = self.samplesViewBehaviour.open
+        
+        if !self.samplesViewBehaviour.open {
+            
+            self.samplesViewBehaviour.open = true
+            self.cameraViewController.paused = self.samplesViewBehaviour.open
+            self.samplesViewController.appearance = .ShowingSamples
+            
+        }
+        
     }
     
     func samplesViewControllerShouldHideSamples(viewController: SamplesViewController) {
-        self.samplesViewBehaviour.open = false
-        self.samplesViewController.appearance = .HidingSamples
-        self.cameraViewController.paused = self.samplesViewBehaviour.open
+        
+        if self.samplesViewBehaviour.open {
+            
+            self.samplesViewBehaviour.open = false
+            self.cameraViewController.paused = self.samplesViewBehaviour.open
+            self.samplesViewController.appearance = .HidingSamples
+            
+        }
+    
     }
     
     func samplesViewControllerShouldSwitchModes(viewController: SamplesViewController) {
@@ -154,14 +176,19 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
             
         }
         
-        self.samplesViewController.appearance = self.samplesViewBehaviour.open ? .ShowingSamples : .HidingSamples
         self.cameraViewController.paused = self.samplesViewBehaviour.open
+        self.samplesViewController.appearance = self.samplesViewBehaviour.open ? .ShowingSamples : .HidingSamples
         
     }
     
     func samplesViewControllerConfusedUser(viewController: SamplesViewController) {
+        
+        self.samplesViewController.popUpLabel.text = self.samplesViewBehaviour.open ? "\u{25BC}" : "\u{25B2}"
+        self.samplesViewController.showPopUp()
+        
         let yVelocity: CGFloat = self.samplesViewBehaviour.open ? 2000 : -800
         self.samplesViewBehaviour.setInitialVelocity(yVelocity)
+        
     }
     
 }

@@ -37,9 +37,12 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     
     var tableView: UITableView!
     var editingSwitch: EditingSwitch!
-    var sampleView: SampleView!
     var samplesLabelBackground: UIView!
     var samplesLabel: UILabel!
+    var pullDownLabel: UILabel!
+    var popUpLabel: UILabel!
+    var sampleView: SampleView!
+    var tabBar: UIView!
     var tab: DraggableView!
     
     // mutable constraints
@@ -58,33 +61,59 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
         self.editingSwitch = EditingSwitch()
         self.editingSwitch.setTranslatesAutoresizingMaskIntoConstraints(false)
         
-        self.sampleView = SampleView()
-        self.sampleView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
         self.samplesLabelBackground = UIView()
         self.samplesLabelBackground.backgroundColor = UIColor(white: 0.1, alpha: 1)
-        self.samplesLabelBackground.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.samplesLabelBackground.setTranslatesAutoresizingMaskIntoConstraints(true)
+        self.samplesLabelBackground.autoresizingMask = .FlexibleWidth | .FlexibleHeight
         
         self.samplesLabel = UILabel()
         self.samplesLabel.font = UIFont(name: "GillSans-Italic", size: 24)
         self.samplesLabel.textAlignment = .Center
-        self.samplesLabel.textColor = UIColor(white: 0.2, alpha: 1)
+        self.samplesLabel.textColor = UIColor(white: 0.6, alpha: 1)
         self.samplesLabel.setTranslatesAutoresizingMaskIntoConstraints(true)
-        self.samplesLabel.userInteractionEnabled = false
         self.samplesLabel.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        
+        self.pullDownLabel = UILabel()
+        self.pullDownLabel.text = "\n\n pull down to return to the camera"
+        self.pullDownLabel.numberOfLines = 3
+        self.pullDownLabel.font = UIFont(name: "GillSans-Italic", size: 20)
+        self.pullDownLabel.textAlignment = .Center
+        self.pullDownLabel.textColor = UIColor(white: 0.6, alpha: 1)
+        self.pullDownLabel.setTranslatesAutoresizingMaskIntoConstraints(true)
+        self.pullDownLabel.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        
+        self.popUpLabel = UILabel(frame: CGRect(origin: CGPoint(x: 0, y: TAB_HEIGHT), size: CGSize(width: 0, height: 40)))
+        self.popUpLabel.numberOfLines = 1
+        self.popUpLabel.font = UIFont(name: "GillSans-Italic", size: 20)
+        self.popUpLabel.textAlignment = .Center
+        self.popUpLabel.textColor = UIColor(white: 0.6, alpha: 1)
+        self.popUpLabel.alpha = 0
+        self.popUpLabel.setTranslatesAutoresizingMaskIntoConstraints(true)
+        self.popUpLabel.autoresizingMask = .FlexibleWidth
+        
+        self.sampleView = SampleView()
+        self.sampleView.setTranslatesAutoresizingMaskIntoConstraints(true)
+        self.sampleView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        
+        self.tabBar = UIView()
+        self.tabBar.layer.cornerRadius = 1
+        self.tabBar.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.tab = DraggableView(inView: rootView)
         self.tab.axes = .Vertical
-        self.tab.view = rootView
+        self.tab.viewToDrag = rootView
         self.tab.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         rootView.addSubview(self.tableView)
         rootView.addSubview(self.editingSwitch)
-        rootView.addSubview(self.tab)
-        self.tab.addSubview(self.sampleView)
         self.tab.addSubview(self.samplesLabelBackground)
         self.tab.addSubview(self.samplesLabel)
-        
+        self.tab.addSubview(self.pullDownLabel)
+        self.tab.addSubview(self.popUpLabel)
+        self.tab.addSubview(self.sampleView)
+        self.tab.addSubview(self.tabBar)
+        rootView.addSubview(self.tab)
+
         // table view constraints
         rootView.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Width, relatedBy: .Equal, toItem: rootView, attribute: .Width, multiplier: 1, constant: 0))
         rootView.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Top, relatedBy: .Equal, toItem: rootView, attribute: .Top, multiplier: 1, constant: TAB_HEIGHT))
@@ -98,17 +127,11 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
         rootView.addConstraint(self.editingSwitchTopConstraint)
         rootView.addConstraint(NSLayoutConstraint(item: self.editingSwitch, attribute: .Right, relatedBy: .Equal, toItem: rootView, attribute: .Right, multiplier: 1, constant: -10))
         
-        // sample view constraints
-        rootView.addConstraint(NSLayoutConstraint(item: self.sampleView, attribute: .Width, relatedBy: .Equal, toItem: rootView, attribute: .Width, multiplier: 1, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.sampleView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: TAB_HEIGHT))
-        rootView.addConstraint(NSLayoutConstraint(item: self.sampleView, attribute: .Left, relatedBy: .Equal, toItem: rootView, attribute: .Left, multiplier: 1, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.sampleView, attribute: .Top, relatedBy: .Equal, toItem: rootView, attribute: .Top, multiplier: 1, constant: 0))
-        
-        // samples label constraints
-        rootView.addConstraint(NSLayoutConstraint(item: self.samplesLabelBackground, attribute: .Width, relatedBy: .Equal, toItem: rootView, attribute: .Width, multiplier: 1, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.samplesLabelBackground, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: TAB_HEIGHT))
-        rootView.addConstraint(NSLayoutConstraint(item: self.samplesLabelBackground, attribute: .Left, relatedBy: .Equal, toItem: rootView, attribute: .Left, multiplier: 1, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.samplesLabelBackground, attribute: .Top, relatedBy: .Equal, toItem: rootView, attribute: .Top, multiplier: 1, constant: 0))
+        // tab bar constraints
+        rootView.addConstraint(NSLayoutConstraint(item: self.tabBar, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 60))
+        rootView.addConstraint(NSLayoutConstraint(item: self.tabBar, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 2))
+        rootView.addConstraint(NSLayoutConstraint(item: self.tabBar, attribute: .CenterX, relatedBy: .Equal, toItem: self.tab, attribute: .CenterX, multiplier: 1, constant: 0))
+        rootView.addConstraint(NSLayoutConstraint(item: self.tabBar, attribute: .Top, relatedBy: .Equal, toItem: self.tab, attribute: .Top, multiplier: 1, constant: 4))
         
         // tab constraints
         rootView.addConstraint(NSLayoutConstraint(item: self.tab, attribute: .Width, relatedBy: .Equal, toItem: rootView, attribute: .Width, multiplier: 1, constant: 0))
@@ -143,7 +166,14 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     // MARK: - Public Methods
     
     func setSampleColor(color: UIColor?) {
+        
+        if self.appearance == .ShowingSamples {
+            return
+        }
+        
         self.sampleView.color = color
+        self.tabBar.backgroundColor = color?.complimentaryColor()
+    
     }
     
     func animateSampleSaved() {
@@ -166,13 +196,32 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
         
     }
     
+    func showPopUp() {
+        
+        UIView.animateKeyframesWithDuration(0.6, delay: 0, options: nil, animations: {
+            
+            UIView.addKeyframeWithRelativeStartTime(0, relativeDuration: 0.2, animations: {
+                self.popUpLabel.alpha = 1
+            })
+            
+            UIView.addKeyframeWithRelativeStartTime(0.4, relativeDuration: 0.2, animations: {
+                self.popUpLabel.alpha = 0
+            })
+            
+        }, completion: nil)
+    
+    }
+    
     // MARK: - Private Methods
     
     func updateAppearance() {
         
         UIView.animateWithDuration(0.2) {
-            self.samplesLabelBackground.alpha = self.appearance == .ShowingSamples ? 1 : 0
-            self.samplesLabel.alpha = self.appearance == .ShowingSamples ? 1 : 0
+            self.sampleView.alpha = self.appearance == .ShowingSamples ? 0 : 1
+        }
+        
+        if self.appearance == .ShowingSamples {
+            self.tabBar.backgroundColor = UIColor(white: 0.2, alpha: 1)
         }
         
         self.editingSwitch.on = false
@@ -192,26 +241,30 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     
     // MARK: - SamplesTableViewManager Delegate
     
-    func tableView(tableView: UITableView, didScrollToYOffset yOffset: CGFloat) {
+    func tableView(tableView: UITableView, var didScrollToYOffset yOffset: CGFloat) {
         
-        if yOffset < -SCR_HEIGHT/5 {
+        if (yOffset < -tableView.bounds.height/5) & (self.appearance == .ShowingSamples) {
             self.delegate?.samplesViewControllerShouldHideSamples(self)
         }
-        
+       
         self.editingSwitchTopConstraint.constant = max(SAMPLE_HEIGHT, SAMPLE_HEIGHT - yOffset)
         
         var samplesLabelTranslation = max(0, -yOffset/2)
         var samplesLabelScale = max(1, 1 - yOffset/tableView.bounds.height)
         
         self.samplesLabel.transform = CGAffineTransformScale(CGAffineTransformMakeTranslation(0, samplesLabelTranslation), samplesLabelScale, samplesLabelScale)
+        self.pullDownLabel.transform = CGAffineTransformScale(CGAffineTransformMakeTranslation(0, samplesLabelTranslation), 1/samplesLabelScale, 1/samplesLabelScale)
         
     }
     
     func tableView(tableView: UITableView, displayingNoData noData: Bool) {
         
         UIView.animateWithDuration(0.2) {
+            
             self.samplesLabel.text = noData ? "no samples" : "my samples"
             self.editingSwitch.alpha = noData ? 0 : 1
+            self.pullDownLabel.alpha = noData ? 1 : 0
+            
         }
        
     }

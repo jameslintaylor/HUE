@@ -13,7 +13,6 @@ class Sample: NSManagedObject {
 
     @NSManaged var blue: NSNumber
     @NSManaged var green: NSNumber
-    @NSManaged var order: NSNumber
     @NSManaged var red: NSNumber
     @NSManaged var timestamp: NSDate
     @NSManaged var thumbnail: NSManagedObject
@@ -59,14 +58,12 @@ class Sample: NSManagedObject {
     
     // MARK: Public Methods
     
-    class func insertSampleWithColor(color: UIColor?, thumbnailFileName: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> Sample {
+    class func insertSampleWithColor(color: UIColor?, thumbnail: Thumbnail, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> Sample {
         
         var error: NSError?
-        var count = managedObjectContext.countForFetchRequest(NSFetchRequest(entityName: self.entityName()), error: &error)
         
-        var sample = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext) as Sample
-        sample.thumbnail = Thumbnail.insertThumbnailWithFileName(thumbnailFileName, sample: sample, inManagedObjectContext: managedObjectContext)
-        sample.order = count + 1
+        let sample = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext) as Sample
+        sample.thumbnail = thumbnail
         sample.timestamp = NSDate()
         
         var rgba = [CGFloat](count: 4, repeatedValue: 0.0)
@@ -77,8 +74,8 @@ class Sample: NSManagedObject {
         
         var saveError: NSError?
         managedObjectContext.save(&saveError)
-        if error != nil {
-            println("Sample save error: \(error!.localizedDescription)")
+        if saveError != nil {
+            println("Sample save error: \(saveError!.localizedDescription)")
         }
         
         return sample

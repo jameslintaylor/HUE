@@ -8,8 +8,6 @@
 
 import UIKit
 
-import GPUImage
-
 protocol CameraViewControllerDelegate: class {
     
     func cameraViewController(viewController: CameraViewController, targetUpdatedWithColor color: UIColor?)
@@ -34,9 +32,10 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         }
    
     }
+    var capturing: Bool = false
     
     var capturedImage: UIImage?
-    let camera: GPUImageStillCamera = GPUImageStillCamera(sessionPreset: AVCaptureSessionPreset1920x1080, cameraPosition: AVCaptureDevicePosition.Back)
+    let camera: GPUImageStillCamera = GPUImageStillCamera(sessionPreset: AVCaptureSessionPresetHigh, cameraPosition: AVCaptureDevicePosition.Back)
     let cropFilter = GPUImageCropFilter()
     let thumbnailFilter = GPUImageCropFilter()
     var focusingChangedContext = UnsafeMutablePointer<()>()
@@ -50,11 +49,14 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         
         let rootView = UIView()
         
+        self.cameraView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
         self.cameraView.setTranslatesAutoresizingMaskIntoConstraints(true)
         self.cameraView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
         
         self.colorTarget.setTranslatesAutoresizingMaskIntoConstraints(false)
         
+        self.captureButton.setBackgroundColor(UIColor.whiteColor(), forControlState: .Normal)
+        self.captureButton.setBackgroundColor(UIColor(white: 0.6, alpha: 1), forControlState: .Highlighted)
         self.captureButton.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         rootView.addSubview(self.cameraView)
@@ -68,10 +70,10 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         rootView.addConstraint(NSLayoutConstraint(item: self.colorTarget, attribute: .CenterY, relatedBy: .Equal, toItem: rootView, attribute: .CenterY, multiplier: 1.0, constant: 0))
         
         // capture button constraints
-        rootView.addConstraint(NSLayoutConstraint(item: self.captureButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 80))
-        rootView.addConstraint(NSLayoutConstraint(item: self.captureButton, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 80))
+        rootView.addConstraint(NSLayoutConstraint(item: self.captureButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 70))
+        rootView.addConstraint(NSLayoutConstraint(item: self.captureButton, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 70))
         rootView.addConstraint(NSLayoutConstraint(item: self.captureButton, attribute: .CenterX, relatedBy: .Equal, toItem: rootView, attribute: .CenterX, multiplier: 1.0, constant: 0))
-        rootView.addConstraint(NSLayoutConstraint(item: self.captureButton, attribute: .CenterY, relatedBy: .Equal, toItem: rootView, attribute: .Bottom, multiplier: 1.0, constant: -TAB_HEIGHT - 60))
+        rootView.addConstraint(NSLayoutConstraint(item: self.captureButton, attribute: .CenterY, relatedBy: .Equal, toItem: rootView, attribute: .Bottom, multiplier: 1.0, constant: -TAB_HEIGHT - 50))
         
         // gestures
         var tapGR = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
@@ -126,17 +128,21 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     
     func captureSample() {
         
-        let color = self.processMGR.color
+        if self.capturing {
+            return
+        }
         
+        self.capturing = true
         self.camera.addTarget(self.thumbnailFilter)
         self.camera.capturePhotoAsImageProcessedUpToFilter(self.thumbnailFilter, withCompletionHandler: { [unowned self] (image, error) -> Void in
             
             if error != nil {
                 println("sample capture error: \(error.localizedDescription)")
             } else {
-                self.delegate?.cameraViewController(self, capturedSampleWithColor: color, thumbnail: image)
+                self.delegate?.cameraViewController(self, capturedSampleWithColor: self.processMGR.color, thumbnail: image)
             }
             
+            self.capturing = false
             self.camera.removeTarget(self.thumbnailFilter)
             
         })

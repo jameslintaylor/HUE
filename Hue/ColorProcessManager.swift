@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GPUImage
 
 protocol ColorProcessManagerDelegate: class {
     

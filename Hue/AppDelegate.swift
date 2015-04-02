@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         var mainViewController = MainViewController()
-        mainViewController.samplesViewController.tableViewManager.managedObjectContext = self.managedObjectContext
+        mainViewController.managedObjectContext = self.managedObjectContext
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.rootViewController = mainViewController

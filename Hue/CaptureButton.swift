@@ -34,16 +34,19 @@ enum UIControlStateKey {
 class CaptureButton: UIButton {
     
     var backgroundColors = [UIControlStateKey: UIColor?]()
+    var outerRing = CALayer()
+    var innerCircle = CALayer()
     
     override init(frame: CGRect) {
         
         super.init(frame: frame)
+        self.backgroundColor = UIColor(white: 0, alpha: 0.4)
         
-        self.layer.cornerRadius = 40
-        self.layer.borderWidth = 1
+        self.outerRing.borderWidth = 6
+        self.outerRing.borderColor = UIColor(white: 1, alpha: 1).CGColor
         
-        self.setImage(UIImage(named: "CameraIcon")?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
-        self.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        self.layer.addSublayer(self.outerRing)
+        self.layer.addSublayer(self.innerCircle)
         
     }
     
@@ -55,19 +58,28 @@ class CaptureButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        
+        self.layer.cornerRadius = self.bounds.width/2
+        
+        self.outerRing.frame = self.bounds
+        self.outerRing.cornerRadius = self.outerRing.bounds.width/2
+        
+        self.innerCircle.frame = CGRectInset(self.bounds, self.outerRing.borderWidth + 2, self.outerRing.borderWidth + 2)
+        self.innerCircle.cornerRadius = self.innerCircle.bounds.width/2
+        
+    }
+    
     // MARK: - Public Methods
     
     func setBackgroundColor(color: UIColor?, forControlState controlState: UIControlState) {
         self.backgroundColors[UIControlStateKey(controlState: controlState)] = color
+        self.updateBackgroundColor()
     }
     
     func updateWithColor(color: UIColor?) {
-        
         let complimentaryColor = color?.complimentaryColor()
-        self.layer.borderColor = complimentaryColor?.CGColor
-        self.backgroundColor = self.state == .Normal ? color : complimentaryColor
         self.imageView?.tintColor = complimentaryColor
-        
     }
     
     // MARK: - Private Methods
@@ -75,7 +87,7 @@ class CaptureButton: UIButton {
     func updateBackgroundColor() {
      
         if let color = self.backgroundColors[UIControlStateKey(controlState: self.state)] {
-            self.backgroundColor = color
+            self.innerCircle.backgroundColor = color?.CGColor
         }
    
     }
