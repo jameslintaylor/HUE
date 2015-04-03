@@ -56,6 +56,7 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
         self.tableView = UITableView()
         self.tableView.backgroundColor = UIColor(white: 0.1, alpha: 1)
         self.tableView.separatorStyle = .None
+        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
         self.tableView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.editingSwitch = EditingSwitch()
