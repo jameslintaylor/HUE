@@ -16,7 +16,7 @@ class FocusingIndicator: UIView {
     var microPrism: CALayer
     var splitImage: CAShapeLayer
     
-    override init() {
+    init() {
         
         self.isDisplayingFocused = false
         self.isDisplayingFocusing = false

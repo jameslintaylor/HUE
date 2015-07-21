@@ -13,7 +13,7 @@ class ColorTarget: UIView {
     let outerRing = CAShapeLayer()
     let innerRing = CAShapeLayer()
     
-    override init() {
+    init() {
         
         super.init(frame: CGRect(origin: CGPointZero, size: CGSize(width: 20, height: 20)))
         

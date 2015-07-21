@@ -40,7 +40,7 @@ class Sample: NSManagedObject {
         
         if let thumbnail = self.thumbnail as? Thumbnail {
             
-            let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+            let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
             let imagePath = paths.stringByAppendingPathComponent(thumbnail.fileName)
             if let imageData = NSData(contentsOfFile: imagePath) {
                 ret = UIImage(data: imageData)
@@ -62,7 +62,7 @@ class Sample: NSManagedObject {
         
         var error: NSError?
         
-        let sample = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext) as Sample
+        let sample = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext)as! Sample
         sample.thumbnail = thumbnail
         sample.timestamp = NSDate()
         

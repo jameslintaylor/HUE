@@ -243,7 +243,7 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     
     func tableView(tableView: UITableView, var didScrollToYOffset yOffset: CGFloat) {
         
-        if (yOffset < -tableView.bounds.height/5) & (self.appearance == .ShowingSamples) {
+        if (yOffset < -tableView.bounds.height/5) && (self.appearance == .ShowingSamples) {
             self.delegate?.samplesViewControllerShouldHideSamples(self)
         }
        

@@ -158,7 +158,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.view.addSubview(self.focusingIndicator!)
         
         var captureDevice = self.camera.inputCamera
-        if captureDevice.focusPointOfInterestSupported & captureDevice.isFocusModeSupported(AVCaptureFocusMode.AutoFocus) {
+        if captureDevice.focusPointOfInterestSupported && captureDevice.isFocusModeSupported(AVCaptureFocusMode.AutoFocus) {
             
             var error: NSError?
             if captureDevice.lockForConfiguration(&error) {

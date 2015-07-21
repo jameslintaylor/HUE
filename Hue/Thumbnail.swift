@@ -16,7 +16,7 @@ class Thumbnail: NSManagedObject {
 
     class func insertThumbnailWithFileName(fileName: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> Thumbnail {
 
-        let thumbnail = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext) as Thumbnail
+        let thumbnail = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext) as! Thumbnail
 
         thumbnail.fileName = fileName
         

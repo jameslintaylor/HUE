@@ -36,7 +36,7 @@ class DayHeaderView: UIView {
         
     }
 
-    convenience override init() {
+    convenience init() {
         self.init(frame: CGRectZero)
     }
     

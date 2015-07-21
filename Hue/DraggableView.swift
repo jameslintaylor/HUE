@@ -116,11 +116,11 @@ class DraggableView: UIView, UIGestureRecognizerDelegate {
             velocity.x = abs(velocity.x)
             velocity.y = abs(velocity.y)
             
-            if (self.axes & .Horizontal != nil) & (velocity.x > velocity.y) {
+            if (self.axes & .Horizontal != nil) && (velocity.x > velocity.y) {
                 return true
             }
             
-            if (self.axes & .Vertical != nil) & (velocity.y > velocity.x) {
+            if (self.axes & .Vertical != nil) && (velocity.y > velocity.x) {
                 return true
             }
             

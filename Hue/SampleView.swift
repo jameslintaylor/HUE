@@ -16,7 +16,7 @@ extension UIColor {
         var rgba = [CGFloat](count: 4, repeatedValue: 0.0)
         self.getRed(&rgba[0], green: &rgba[1], blue: &rgba[2], alpha: &rgba[3])
         var rgba255 = rgba.map() { Int($0 * 255) }
-        return NSString(format: "%02X%02X%02X", rgba255[0], rgba255[1], rgba255[2])
+        return NSString(format: "%02X%02X%02X", rgba255[0], rgba255[1], rgba255[2]) as String
         
     }
     
@@ -182,7 +182,7 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
         self.addGestureRecognizer(swipeRightGestureRecognizer)
     }
     
-    convenience override init() {
+    convenience init() {
         self.init(frame: CGRectZero)
     }
 
@@ -193,7 +193,7 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
     // MARK: - Private Methods
     
     func animateLabelChange(direction: UISwipeGestureRecognizerDirection) {
-        var tempLabel = self.colorLabel.copy() as UILabel
+        var tempLabel = self.colorLabel.copy() as! UILabel
         self.addSubview(tempLabel)
         var dx: CGFloat = direction == .Left ? 60.0 : -60.0
         self.colorLabel.transform = CGAffineTransformMakeTranslation(dx, 0)
