@@ -9,9 +9,6 @@
 import UIKit
 import CoreData
 
-let SCR_WIDTH: CGFloat = UIScreen.mainScreen().bounds.width
-let SCR_HEIGHT: CGFloat = UIScreen.mainScreen().bounds.height
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -34,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "JT.HUE" in the application's documents Application Support directory.
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls[urls.count-1] as! NSURL
+        return urls[urls.count-1] 
     }()
     
     lazy var managedObjectModel: NSManagedObjectModel = {
@@ -86,15 +83,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func saveContext () {
         if let moc = self.managedObjectContext {
-            var error: NSError? = nil
             if moc.hasChanges {
                 do {
                     try moc.save()
-                } catch let error1 as NSError {
-                    error = error1
+                } catch let e {
                     // Replace this implementation with code to handle the error appropriately.
                     // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                    NSLog("Unresolved error \(error), \(error!.userInfo)")
+                    NSLog("Unresolved error \(e)")
                     abort()
                 }
             }

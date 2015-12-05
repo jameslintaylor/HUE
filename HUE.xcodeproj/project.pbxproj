@@ -57,7 +57,6 @@
 		1C5B676241CE07D9393E602B /* Pods-HUE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HUE/Pods-HUE.debug.xcconfig"; sourceTree = "<group>"; };
 		25D6062FB928EA6640A3FBCE /* Pods-HUE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUE.release.xcconfig"; path = "Pods/Target Support Files/Pods-HUE/Pods-HUE.release.xcconfig"; sourceTree = "<group>"; };
 		523FB14C1AB9F3E100AD2F7B /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		523FB1641AC0653300AD2F7B /* Hue-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hue-Bridging-Header.h"; sourceTree = "<group>"; };
 		524C8E351AC34CA10011A31B /* EditingSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditingSwitch.swift; sourceTree = "<group>"; };
 		524C8E391AC3A3030011A31B /* Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Thumbnail.swift; sourceTree = "<group>"; };
 		5250B6DD1AC22C390031BA6A /* SamplesTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesTableViewManager.swift; sourceTree = "<group>"; };
@@ -190,7 +189,6 @@
 			isa = PBXGroup;
 			children = (
 				72492AA01AB73A32001EAE02 /* AppDelegate.swift */,
-				523FB1641AC0653300AD2F7B /* Hue-Bridging-Header.h */,
 				523FB14A1AB9D6C500AD2F7B /* Resources */,
 				52AF52411AB870E50039C21A /* Managers */,
 				72492AD21AB77494001EAE02 /* Model */,
@@ -562,7 +560,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jameslintaylor.hue;
 				PRODUCT_NAME = HUE;
-				SWIFT_OBJC_BRIDGING_HEADER = "Hue/Hue-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -587,7 +585,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jameslintaylor.hue;
 				PRODUCT_NAME = HUE;
-				SWIFT_OBJC_BRIDGING_HEADER = "Hue/Hue-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

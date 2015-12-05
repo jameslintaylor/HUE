@@ -61,7 +61,7 @@ class SamplesViewBehaviour: UIDynamicBehavior {
         
         self.collisionBehaviour = UICollisionBehavior(items: [self.view])
         self.collisionBehaviour.collisionMode = .Boundaries
-        self.collisionBehaviour.addBoundaryWithIdentifier("bottom", fromPoint: CGPoint(x: 0, y: self.bottom + self.view.bounds.height), toPoint: CGPoint(x: SCR_WIDTH, y: self.bottom + self.view.bounds.height))
+        self.collisionBehaviour.addBoundaryWithIdentifier("bottom", fromPoint: CGPoint(x: 0, y: self.bottom + view.bounds.height), toPoint: CGPoint(x: view.bounds.width, y: self.bottom + view.bounds.height))
         
         self.topSnapBehaviour = UISnapBehavior(item: self.view, snapToPoint: CGPoint(x: self.view.center.x, y: self.top + self.view.bounds.height/2))
         self.topSnapBehaviour.damping = 0.2

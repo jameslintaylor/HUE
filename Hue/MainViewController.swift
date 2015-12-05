@@ -91,13 +91,13 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
         
         if velocity.y < 0 {
           
-            if (self.samplesViewController.view.center.y < SCR_HEIGHT) || (velocity.y < -SCR_HEIGHT) {
+            if (self.samplesViewController.view.center.y < view.bounds.height) || (velocity.y < -view.bounds.height) {
                 self.samplesViewBehaviour.open = true
             }
             
         } else {
             
-            if (self.samplesViewController.view.center.y > SCR_HEIGHT) || (velocity.y > SCR_HEIGHT) {
+            if (self.samplesViewController.view.center.y > view.bounds.height) || (velocity.y > view.bounds.height) {
                 self.samplesViewBehaviour.open = false
             }
             

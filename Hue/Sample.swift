@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 James Lin Taylor. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import CoreData
 
 class Sample: NSManagedObject {

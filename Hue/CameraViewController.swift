@@ -162,7 +162,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
             
             do {
                 try captureDevice.lockForConfiguration()
-                let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
+                let normalizedPoint = CGPoint(x: point.x/view.bounds.width, y: point.y/view.bounds.height)
                 captureDevice.focusPointOfInterest = normalizedPoint
                 captureDevice.focusMode = .AutoFocus
                 captureDevice.unlockForConfiguration()
@@ -176,7 +176,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     
     func beginAverageColorCaptureAtPoint(point: CGPoint) {
         
-        let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
+        let normalizedPoint = CGPoint(x: point.x/view.bounds.width, y: point.y/view.bounds.height)
         
         let aspectRatio = self.cameraView.frame.width / self.cameraView.frame.height
         let dx: CGFloat = 0.01
