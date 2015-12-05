@@ -50,29 +50,29 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     
     override func loadView() {
         
-        var rootView = UIView()
+        let rootView = UIView()
         rootView.backgroundColor = UIColor.blackColor()
         
         self.tableView = UITableView()
         self.tableView.backgroundColor = UIColor(white: 0.1, alpha: 1)
         self.tableView.separatorStyle = .None
         self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
-        self.tableView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
         
         self.editingSwitch = EditingSwitch()
-        self.editingSwitch.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.editingSwitch.translatesAutoresizingMaskIntoConstraints = false
         
         self.samplesLabelBackground = UIView()
         self.samplesLabelBackground.backgroundColor = UIColor(white: 0.1, alpha: 1)
-        self.samplesLabelBackground.setTranslatesAutoresizingMaskIntoConstraints(true)
-        self.samplesLabelBackground.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        self.samplesLabelBackground.translatesAutoresizingMaskIntoConstraints = true
+        self.samplesLabelBackground.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         
         self.samplesLabel = UILabel()
         self.samplesLabel.font = UIFont(name: "GillSans-Italic", size: 24)
         self.samplesLabel.textAlignment = .Center
         self.samplesLabel.textColor = UIColor(white: 0.6, alpha: 1)
-        self.samplesLabel.setTranslatesAutoresizingMaskIntoConstraints(true)
-        self.samplesLabel.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        self.samplesLabel.translatesAutoresizingMaskIntoConstraints = true
+        self.samplesLabel.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         
         self.pullDownLabel = UILabel()
         self.pullDownLabel.text = "\n\n pull down to return to the camera"
@@ -80,8 +80,8 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
         self.pullDownLabel.font = UIFont(name: "GillSans-Italic", size: 20)
         self.pullDownLabel.textAlignment = .Center
         self.pullDownLabel.textColor = UIColor(white: 0.6, alpha: 1)
-        self.pullDownLabel.setTranslatesAutoresizingMaskIntoConstraints(true)
-        self.pullDownLabel.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        self.pullDownLabel.translatesAutoresizingMaskIntoConstraints = true
+        self.pullDownLabel.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         
         self.popUpLabel = UILabel(frame: CGRect(origin: CGPoint(x: 0, y: TAB_HEIGHT), size: CGSize(width: 0, height: 40)))
         self.popUpLabel.numberOfLines = 1
@@ -89,21 +89,21 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
         self.popUpLabel.textAlignment = .Center
         self.popUpLabel.textColor = UIColor(white: 0.6, alpha: 1)
         self.popUpLabel.alpha = 0
-        self.popUpLabel.setTranslatesAutoresizingMaskIntoConstraints(true)
+        self.popUpLabel.translatesAutoresizingMaskIntoConstraints = true
         self.popUpLabel.autoresizingMask = .FlexibleWidth
         
         self.sampleView = SampleView()
-        self.sampleView.setTranslatesAutoresizingMaskIntoConstraints(true)
-        self.sampleView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        self.sampleView.translatesAutoresizingMaskIntoConstraints = true
+        self.sampleView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         
         self.tabBar = UIView()
         self.tabBar.layer.cornerRadius = 1
-        self.tabBar.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.tabBar.translatesAutoresizingMaskIntoConstraints = false
         
         self.tab = DraggableView(inView: rootView)
         self.tab.axes = .Vertical
         self.tab.viewToDrag = rootView
-        self.tab.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.tab.translatesAutoresizingMaskIntoConstraints = false
         
         rootView.addSubview(self.tableView)
         rootView.addSubview(self.editingSwitch)
@@ -181,10 +181,10 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
 
         self.sampleView.alpha = 0
 
-        var tempView = self.sampleView.snapshotViewAfterScreenUpdates(false)
+        let tempView = self.sampleView.snapshotViewAfterScreenUpdates(false)
         self.view.addSubview(tempView)
         
-        UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: nil, animations: {
+        UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: [], animations: {
             
             self.sampleView.alpha = 1
             tempView.center.y += TAB_HEIGHT
@@ -199,7 +199,7 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     
     func showPopUp() {
         
-        UIView.animateKeyframesWithDuration(0.6, delay: 0, options: nil, animations: {
+        UIView.animateKeyframesWithDuration(0.6, delay: 0, options: [], animations: {
             
             UIView.addKeyframeWithRelativeStartTime(0, relativeDuration: 0.2, animations: {
                 self.popUpLabel.alpha = 1
@@ -242,16 +242,16 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     
     // MARK: - SamplesTableViewManager Delegate
     
-    func tableView(tableView: UITableView, var didScrollToYOffset yOffset: CGFloat) {
+    func tableView(tableView: UITableView, didScrollToYOffset yOffset: CGFloat) {
         
-        if (yOffset < -tableView.bounds.height/5) & (self.appearance == .ShowingSamples) {
+        if (yOffset < -tableView.bounds.height/5) && (self.appearance == .ShowingSamples) {
             self.delegate?.samplesViewControllerShouldHideSamples(self)
         }
        
         self.editingSwitchTopConstraint.constant = max(SAMPLE_HEIGHT, SAMPLE_HEIGHT - yOffset)
         
-        var samplesLabelTranslation = max(0, -yOffset/2)
-        var samplesLabelScale = max(1, 1 - yOffset/tableView.bounds.height)
+        let samplesLabelTranslation = max(0, -yOffset/2)
+        let samplesLabelScale = max(1, 1 - yOffset/tableView.bounds.height)
         
         self.samplesLabel.transform = CGAffineTransformScale(CGAffineTransformMakeTranslation(0, samplesLabelTranslation), samplesLabelScale, samplesLabelScale)
         self.pullDownLabel.transform = CGAffineTransformScale(CGAffineTransformMakeTranslation(0, samplesLabelTranslation), 1/samplesLabelScale, 1/samplesLabelScale)

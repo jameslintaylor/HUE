@@ -49,7 +49,7 @@ class SampleTableViewCell: UITableViewCell {
         super.init(style: .Default, reuseIdentifier: reuseIdentifier)
         
         self.cancelLayer.bounds.size = CGSize(width: 20, height: 20)
-        var cancelPath = UIBezierPath()
+        let cancelPath = UIBezierPath()
         cancelPath.moveToPoint(CGPoint(x: 10, y: 0))
         cancelPath.addLineToPoint(CGPoint(x: 10, y: 20))
         cancelPath.moveToPoint(CGPoint(x: 0, y: 10))
@@ -58,17 +58,17 @@ class SampleTableViewCell: UITableViewCell {
         self.cancelLayer.lineWidth = 2
         self.cancelLayer.transform = CATransform3DMakeRotation(CGFloat(M_PI/4), 0, 0, 1)
         
-        self.sampleContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.sampleView.setTranslatesAutoresizingMaskIntoConstraints(true)
-        self.sampleView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        self.sampleContainer.translatesAutoresizingMaskIntoConstraints = false
+        self.sampleView.translatesAutoresizingMaskIntoConstraints = true
+        self.sampleView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
         
-        self.thumbnailView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.thumbnailView.translatesAutoresizingMaskIntoConstraints = false
         self.thumbnailView.clipsToBounds = true
         self.thumbnailView.contentMode = .ScaleAspectFill
         
-        self.targetView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.targetView.translatesAutoresizingMaskIntoConstraints = false
         
-        self.gestureContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.gestureContainer.translatesAutoresizingMaskIntoConstraints = false
         
         self.contentView.layer.addSublayer(self.cancelContainer)
         self.cancelContainer.addSublayer(self.cancelLayer)
@@ -82,8 +82,8 @@ class SampleTableViewCell: UITableViewCell {
         self.setupConstraints()
         
         // gestures
-        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
-        var swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
+        let swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
         swipeGestureRecognizer.direction = .Left
         
         self.gestureContainer.addGestureRecognizer(tapGestureRecognizer)
@@ -91,7 +91,7 @@ class SampleTableViewCell: UITableViewCell {
         
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

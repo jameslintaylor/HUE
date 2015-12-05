@@ -22,37 +22,16 @@
 		52D08A081AB8B82800A3929F /* SamplesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D08A071AB8B82800A3929F /* SamplesViewController.swift */; };
 		721E44B21AB78CC5006E57D1 /* ColorTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721E44B11AB78CC5006E57D1 /* ColorTarget.swift */; };
 		721E44B41AB78CCB006E57D1 /* ColorProcessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */; };
-		7223F5441ACDA002005F8357 /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7223F5431ACDA002005F8357 /* libGPUImage.a */; };
 		72492AA11AB73A32001EAE02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AA01AB73A32001EAE02 /* AppDelegate.swift */; };
 		72492AA31AB73A32001EAE02 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AA21AB73A32001EAE02 /* CameraViewController.swift */; };
 		72492AA81AB73A32001EAE02 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72492AA71AB73A32001EAE02 /* Images.xcassets */; };
 		72492AAB1AB73A32001EAE02 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 72492AA91AB73A32001EAE02 /* LaunchScreen.xib */; };
 		72492AB71AB73A32001EAE02 /* HueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AB61AB73A32001EAE02 /* HueTests.swift */; };
 		72492AD81AB77AF8001EAE02 /* FocusingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72492AD71AB77AF8001EAE02 /* FocusingIndicator.swift */; };
+		B87F050F64109AD0A6A747C1 /* Pods_HUE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0485E4C8CC803A1EFECE741 /* Pods_HUE.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7223F53D1ACD9FEB005F8357 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7223F5371ACD9FEA005F8357 /* GPUImage.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BCF1A33414DDB1EC00852800;
-			remoteInfo = GPUImage;
-		};
-		7223F53F1ACD9FEB005F8357 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7223F5371ACD9FEA005F8357 /* GPUImage.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BCE209E51943F20C002FEED8;
-			remoteInfo = GPUImageFramework;
-		};
-		7223F5411ACD9FF3005F8357 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7223F5371ACD9FEA005F8357 /* GPUImage.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = BCF1A33314DDB1EC00852800;
-			remoteInfo = GPUImage;
-		};
 		72492AB11AB73A32001EAE02 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 72492A931AB73A32001EAE02 /* Project object */;
@@ -75,6 +54,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1C5B676241CE07D9393E602B /* Pods-HUE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HUE/Pods-HUE.debug.xcconfig"; sourceTree = "<group>"; };
+		25D6062FB928EA6640A3FBCE /* Pods-HUE.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUE.release.xcconfig"; path = "Pods/Target Support Files/Pods-HUE/Pods-HUE.release.xcconfig"; sourceTree = "<group>"; };
 		523FB14C1AB9F3E100AD2F7B /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		523FB1641AC0653300AD2F7B /* Hue-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hue-Bridging-Header.h"; sourceTree = "<group>"; };
 		524C8E351AC34CA10011A31B /* EditingSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditingSwitch.swift; sourceTree = "<group>"; };
@@ -91,8 +72,6 @@
 		52D08A071AB8B82800A3929F /* SamplesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesViewController.swift; sourceTree = "<group>"; };
 		721E44B11AB78CC5006E57D1 /* ColorTarget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorTarget.swift; sourceTree = "<group>"; };
 		721E44B31AB78CCB006E57D1 /* ColorProcessManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorProcessManager.swift; sourceTree = "<group>"; };
-		7223F5371ACD9FEA005F8357 /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = ../../../../../src/GPUImage/framework/GPUImage.xcodeproj; sourceTree = "<group>"; };
-		7223F5431ACDA002005F8357 /* libGPUImage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGPUImage.a; path = "../../../../../src/GPUImage/build/Release-iphone/lib/libGPUImage.a"; sourceTree = "<group>"; };
 		72492A9B1AB73A32001EAE02 /* HUE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72492A9F1AB73A32001EAE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72492AA01AB73A32001EAE02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -103,6 +82,7 @@
 		72492AB51AB73A32001EAE02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		72492AB61AB73A32001EAE02 /* HueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HueTests.swift; sourceTree = "<group>"; };
 		72492AD71AB77AF8001EAE02 /* FocusingIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusingIndicator.swift; sourceTree = "<group>"; };
+		E0485E4C8CC803A1EFECE741 /* Pods_HUE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HUE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7223F5441ACDA002005F8357 /* libGPUImage.a in Frameworks */,
+				B87F050F64109AD0A6A747C1 /* Pods_HUE.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +104,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0AAC8750886F18C8A28A812E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1C5B676241CE07D9393E602B /* Pods-HUE.debug.xcconfig */,
+				25D6062FB928EA6640A3FBCE /* Pods-HUE.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		523FB14A1AB9D6C500AD2F7B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,23 +158,22 @@
 			name = Managers;
 			sourceTree = "<group>";
 		};
-		7223F5381ACD9FEA005F8357 /* Products */ = {
+		6E9507D3D89B7D7AD77D1DAB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7223F53E1ACD9FEB005F8357 /* libGPUImage.a */,
-				7223F5401ACD9FEB005F8357 /* GPUImage.framework */,
+				E0485E4C8CC803A1EFECE741 /* Pods_HUE.framework */,
 			);
-			name = Products;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		72492A921AB73A32001EAE02 = {
 			isa = PBXGroup;
 			children = (
-				7223F5431ACDA002005F8357 /* libGPUImage.a */,
-				7223F5371ACD9FEA005F8357 /* GPUImage.xcodeproj */,
 				72492A9D1AB73A32001EAE02 /* HUE */,
 				72492AB31AB73A32001EAE02 /* HueTests */,
 				72492A9C1AB73A32001EAE02 /* Products */,
+				0AAC8750886F18C8A28A812E /* Pods */,
+				6E9507D3D89B7D7AD77D1DAB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -279,15 +267,17 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 72492ABA1AB73A32001EAE02 /* Build configuration list for PBXNativeTarget "HUE" */;
 			buildPhases = (
+				E9BE6D0B9B2D81E4141527BD /* Check Pods Manifest.lock */,
 				72492A971AB73A32001EAE02 /* Sources */,
 				72492A981AB73A32001EAE02 /* Frameworks */,
 				72492A991AB73A32001EAE02 /* Resources */,
 				72492ACD1AB73A74001EAE02 /* CopyFiles */,
+				C11F1307E5086E245AD9C92C /* Embed Pods Frameworks */,
+				046BF2A3A83A8D4208A8F78E /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				7223F5421ACD9FF3005F8357 /* PBXTargetDependency */,
 			);
 			name = HUE;
 			productName = Hue;
@@ -318,7 +308,9 @@
 		72492A931AB73A32001EAE02 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0620;
+				LastSwiftMigration = 0710;
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "James Lin Taylor";
 				TargetAttributes = {
 					72492A9A1AB73A32001EAE02 = {
@@ -341,12 +333,6 @@
 			mainGroup = 72492A921AB73A32001EAE02;
 			productRefGroup = 72492A9C1AB73A32001EAE02 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 7223F5381ACD9FEA005F8357 /* Products */;
-					ProjectRef = 7223F5371ACD9FEA005F8357 /* GPUImage.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				72492A9A1AB73A32001EAE02 /* HUE */,
@@ -354,23 +340,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		7223F53E1ACD9FEB005F8357 /* libGPUImage.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libGPUImage.a;
-			remoteRef = 7223F53D1ACD9FEB005F8357 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		7223F5401ACD9FEB005F8357 /* GPUImage.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = GPUImage.framework;
-			remoteRef = 7223F53F1ACD9FEB005F8357 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		72492A991AB73A32001EAE02 /* Resources */ = {
@@ -390,6 +359,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		046BF2A3A83A8D4208A8F78E /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HUE/Pods-HUE-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C11F1307E5086E245AD9C92C /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HUE/Pods-HUE-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E9BE6D0B9B2D81E4141527BD /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		72492A971AB73A32001EAE02 /* Sources */ = {
@@ -428,11 +445,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7223F5421ACD9FF3005F8357 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GPUImage;
-			targetProxy = 7223F5411ACD9FF3005F8357 /* PBXContainerItemProxy */;
-		};
 		72492AB21AB73A32001EAE02 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 72492A9A1AB73A32001EAE02 /* HUE */;
@@ -472,6 +484,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -531,6 +544,7 @@
 		};
 		72492ABB1AB73A32001EAE02 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1C5B676241CE07D9393E602B /* Pods-HUE.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -540,12 +554,13 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
 				INFOPLIST_FILE = Hue/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/src/GPUImage/build/Release-iphone/lib",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jameslintaylor.hue;
 				PRODUCT_NAME = HUE;
 				SWIFT_OBJC_BRIDGING_HEADER = "Hue/Hue-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -554,6 +569,7 @@
 		};
 		72492ABC1AB73A32001EAE02 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 25D6062FB928EA6640A3FBCE /* Pods-HUE.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -563,12 +579,13 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
 				INFOPLIST_FILE = Hue/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/src/GPUImage/build/Release-iphone/lib",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jameslintaylor.hue;
 				PRODUCT_NAME = HUE;
 				SWIFT_OBJC_BRIDGING_HEADER = "Hue/Hue-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -594,6 +611,7 @@
 				);
 				INFOPLIST_FILE = HueTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jameslintaylor.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = HUETests;
 				SWIFT_OBJC_BRIDGING_HEADER = "Hue/Hue-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HUE.app/HUE";
@@ -615,6 +633,7 @@
 				);
 				INFOPLIST_FILE = HueTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jameslintaylor.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = HUETests;
 				SWIFT_OBJC_BRIDGING_HEADER = "Hue/Hue-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HUE.app/HUE";

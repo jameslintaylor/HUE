@@ -16,14 +16,14 @@ class Thumbnail: NSManagedObject {
 
     class func insertThumbnailWithFileName(fileName: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> Thumbnail {
 
-        let thumbnail = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext) as Thumbnail
+        let thumbnail = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext) as! Thumbnail
 
         thumbnail.fileName = fileName
         
-        var saveError: NSError?
-        managedObjectContext.save(&saveError)
-        if saveError != nil {
-            println("Sample save error: \(saveError!.localizedDescription)")
+        do {
+            try managedObjectContext.save()
+        } catch let e {
+            print("Sample save failed: \(e)")
         }
         
         return thumbnail

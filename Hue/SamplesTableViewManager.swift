@@ -43,7 +43,13 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         
         //initial fetch
         var error: NSError?
-        fetchedResultsController.performFetch(&error)
+        do {
+            try fetchedResultsController.performFetch()
+        } catch var error1 as NSError {
+            error = error1
+        } catch {
+            fatalError()
+        }
         
         return fetchedResultsController
         
@@ -92,15 +98,10 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        var numRows = 0
-        
-        if let sectionInfo = self.fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo {
-            numRows = sectionInfo.numberOfObjects
+        guard let sectionInfo = fetchedResultsController.sections?[section] else {
+            return 0
         }
-        
-        return numRows
-        
+        return sectionInfo.numberOfObjects
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -159,7 +160,7 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        var headerView = DayHeaderView()
+        let headerView = DayHeaderView()
         
         if let ddMMyyyy = self.fetchedResultsController.sections?[section].name {
             headerView.ddMMyyyy = ddMMyyyy
@@ -175,7 +176,7 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
     
     // MARK: - ScrollView Delegate
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        var yOffset = scrollView.contentOffset.y + scrollView.contentInset.top
+        let yOffset = scrollView.contentOffset.y + scrollView.contentInset.top
         self.delegate?.tableView(self.tableView, didScrollToYOffset: yOffset)
     }
     
@@ -186,8 +187,11 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         if let sample = cell.sample {
             self.managedObjectContext.deleteObject(sample)
             var error: NSError?
-            if !self.managedObjectContext.save(&error) {
-                println("save error: \(error?.localizedDescription)")
+            do {
+                try self.managedObjectContext.save()
+            } catch let error1 as NSError {
+                error = error1
+                print("save error: \(error?.localizedDescription)")
             }
         }
         

@@ -28,7 +28,7 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
     var animator: UIDynamicAnimator!
     var samplesViewBehaviour: SamplesViewBehaviour!
     
-    override init () {
+    init () {
         
         self.cameraViewController = CameraViewController()
         self.samplesViewController = SamplesViewController()
@@ -40,7 +40,7 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
         
     }
    
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -91,13 +91,13 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
         
         if velocity.y < 0 {
           
-            if (self.samplesViewController.view.center.y < SCR_HEIGHT) | (velocity.y < -SCR_HEIGHT) {
+            if (self.samplesViewController.view.center.y < SCR_HEIGHT) || (velocity.y < -SCR_HEIGHT) {
                 self.samplesViewBehaviour.open = true
             }
             
         } else {
             
-            if (self.samplesViewController.view.center.y > SCR_HEIGHT) | (velocity.y > SCR_HEIGHT) {
+            if (self.samplesViewController.view.center.y > SCR_HEIGHT) || (velocity.y > SCR_HEIGHT) {
                 self.samplesViewBehaviour.open = false
             }
             
@@ -116,21 +116,23 @@ class MainViewController: UIViewController, DraggableViewDelegate, CameraViewCon
     }
     
     func cameraViewController(viewController: CameraViewController, capturedSampleWithColor color: UIColor?, thumbnail: UIImage?) {
-            
-        let imageData = UIImagePNGRepresentation(thumbnail)
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-        let uuid = NSUUID().UUIDString
-        let fileName = "thumbnail-\(uuid).png"
-        let imagePath = paths.stringByAppendingPathComponent(fileName)
         
-        if !imageData.writeToFile(imagePath, atomically: false) {
-            println("couldn't saved")
+        // TODO: - Make this safe
+        
+        let imageData = UIImagePNGRepresentation(thumbnail!)
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        let uuid = NSUUID().UUIDString
+        let filename = "thumbnail-\(uuid).png"
+        let path = "\(documentsPath)/\(filename)"
+        
+        if !(imageData!.writeToFile(path, atomically: false)) {
+            print("couldn't save at path: \(path)")
         } else {
-         
-            let thumbnail = Thumbnail.insertThumbnailWithFileName(fileName, inManagedObjectContext: self.managedObjectContext)
-            let sample = Sample.insertSampleWithColor(color, thumbnail: thumbnail, inManagedObjectContext: self.managedObjectContext)
-            self.samplesViewController.animateSampleSaved()
-            self.samplesViewBehaviour.setInitialVelocity(-400)
+            print("saved at path: \(path)")
+            let thumbnail = Thumbnail.insertThumbnailWithFileName(filename, inManagedObjectContext: managedObjectContext)
+            Sample.insertSampleWithColor(color, thumbnail: thumbnail, inManagedObjectContext: managedObjectContext)
+            samplesViewController.animateSampleSaved()
+            samplesViewBehaviour.setInitialVelocity(-400)
             
         }
 

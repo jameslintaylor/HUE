@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GPUImage
 
 protocol CameraViewControllerDelegate: class {
     
@@ -50,14 +51,14 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         let rootView = UIView()
         
         self.cameraView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
-        self.cameraView.setTranslatesAutoresizingMaskIntoConstraints(true)
-        self.cameraView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        self.cameraView.translatesAutoresizingMaskIntoConstraints = true
+        self.cameraView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
         
-        self.colorTarget.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.colorTarget.translatesAutoresizingMaskIntoConstraints = false
         
         self.captureButton.setBackgroundColor(UIColor.whiteColor(), forControlState: .Normal)
         self.captureButton.setBackgroundColor(UIColor(white: 0.6, alpha: 1), forControlState: .Highlighted)
-        self.captureButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.captureButton.translatesAutoresizingMaskIntoConstraints = false
         
         rootView.addSubview(self.cameraView)
         rootView.addSubview(self.colorTarget)
@@ -76,7 +77,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         rootView.addConstraint(NSLayoutConstraint(item: self.captureButton, attribute: .CenterY, relatedBy: .Equal, toItem: rootView, attribute: .Bottom, multiplier: 1.0, constant: -TAB_HEIGHT - 50))
         
         // gestures
-        var tapGR = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
+        let tapGR = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
         rootView.addGestureRecognizer(tapGR)
         
         self.view = rootView
@@ -84,29 +85,28 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     }
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
                 
-        self.processMGR = ColorProcessManager()
-        self.processMGR.delegate = self
+        processMGR = ColorProcessManager()
+        processMGR.delegate = self
         
-        self.camera.outputImageOrientation = .Portrait
+        camera.outputImageOrientation = .Portrait
         
-        var error: NSError?
-        if (self.camera.inputCamera.lockForConfiguration(&error)) {
-            self.camera.inputCamera.subjectAreaChangeMonitoringEnabled = true
-            self.camera.inputCamera.unlockForConfiguration()
-        } else {
-            NSLog("Camera configuration error: \(error?.localizedDescription)")
+        do {
+            try camera.inputCamera.lockForConfiguration()
+            camera.inputCamera.subjectAreaChangeMonitoringEnabled = true
+            camera.inputCamera.unlockForConfiguration()
+        } catch let e {
+            print("Error: \(e)")
         }
         
-        self.camera.addTarget(self.cameraView)
-        self.camera.addTarget(self.cropFilter)
-        self.camera.startCameraCapture()
+        camera.addTarget(self.cameraView)
+        camera.addTarget(self.cropFilter)
+        camera.startCameraCapture()
         
-        self.captureButton.addTarget(self, action: Selector("captureSample"), forControlEvents: .TouchUpInside)
+        captureButton.addTarget(self, action: Selector("captureSample"), forControlEvents: .TouchUpInside)
         
-        self.thumbnailFilter.cropRegion = CGRect(x: 0.0, y: 0.3, width: 1.0, height: 0.4)
+        thumbnailFilter.cropRegion = CGRect(x: 0.0, y: 0.3, width: 1.0, height: 0.4)
         
         // Notifications
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleSubjectAreaChangedNotification:"), name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: nil)
@@ -137,7 +137,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.camera.capturePhotoAsImageProcessedUpToFilter(self.thumbnailFilter, withCompletionHandler: { [unowned self] (image, error) -> Void in
             
             if error != nil {
-                println("sample capture error: \(error.localizedDescription)")
+                print("sample capture error: \(error.localizedDescription)")
             } else {
                 self.delegate?.cameraViewController(self, capturedSampleWithColor: self.processMGR.color, thumbnail: image)
             }
@@ -157,21 +157,17 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.focusingIndicator!.center = point
         self.view.addSubview(self.focusingIndicator!)
         
-        var captureDevice = self.camera.inputCamera
-        if captureDevice.focusPointOfInterestSupported & captureDevice.isFocusModeSupported(AVCaptureFocusMode.AutoFocus) {
+        let captureDevice = self.camera.inputCamera
+        if captureDevice.focusPointOfInterestSupported && captureDevice.isFocusModeSupported(AVCaptureFocusMode.AutoFocus) {
             
-            var error: NSError?
-            if captureDevice.lockForConfiguration(&error) {
-                
+            do {
+                try captureDevice.lockForConfiguration()
                 let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
                 captureDevice.focusPointOfInterest = normalizedPoint
-                captureDevice.focusMode = AVCaptureFocusMode.AutoFocus
+                captureDevice.focusMode = .AutoFocus
                 captureDevice.unlockForConfiguration()
-                
-            } else {
-                
-                NSLog("Camera configuration error: \(error?.localizedDescription)")
-                
+            } catch let e {
+                print(e)
             }
             
         }
@@ -182,9 +178,9 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         
         let normalizedPoint = CGPoint(x: point.x/SCR_WIDTH, y: point.y/SCR_HEIGHT)
         
-        var aspectRatio = self.cameraView.frame.width / self.cameraView.frame.height
-        var dx: CGFloat = 0.01
-        var dy: CGFloat = dx * aspectRatio
+        let aspectRatio = self.cameraView.frame.width / self.cameraView.frame.height
+        let dx: CGFloat = 0.01
+        let dy: CGFloat = dx * aspectRatio
         
         let normalizedRegion = CGRect(x: normalizedPoint.x - dx/2, y: normalizedPoint.y - dy/2, width: dx, height: dy)
         self.cropFilter.cropRegion = normalizedRegion
@@ -203,7 +199,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.focusingIndicator?.shouldRemoveAnimated(true)
     }
     
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         
         if context == self.focusingChangedContext {
             
@@ -226,7 +222,7 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
     // MARK: - Gesture Handling
     
     func handleSingleTap(sender: UITapGestureRecognizer) {
-        var tapLocation = sender.locationInView(self.view)
+        let tapLocation = sender.locationInView(self.view)
         self.focusAtPoint(tapLocation)
     }
    

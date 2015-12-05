@@ -16,7 +16,7 @@ class FocusingIndicator: UIView {
     var microPrism: CALayer
     var splitImage: CAShapeLayer
     
-    override init() {
+    init() {
         
         self.isDisplayingFocused = false
         self.isDisplayingFocusing = false
@@ -31,7 +31,7 @@ class FocusingIndicator: UIView {
         self.microPrism.backgroundColor = UIColor.whiteColor().CGColor
         
         self.splitImage.frame = self.bounds
-        var splitPath = UIBezierPath(ovalInRect: CGRectInset(self.bounds, 15, 15))
+        let splitPath = UIBezierPath(ovalInRect: CGRectInset(self.bounds, 15, 15))
         splitPath.moveToPoint(CGPoint(x: 15, y: self.bounds.height/2))
         splitPath.addLineToPoint(CGPoint(x: self.bounds.width - 15, y: self.bounds.height/2))
         self.splitImage.path = splitPath.CGPath
@@ -46,7 +46,7 @@ class FocusingIndicator: UIView {
         
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         
         fatalError("init(coder:) has not been implemented")
         

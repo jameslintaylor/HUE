@@ -16,7 +16,7 @@ extension UIColor {
         var rgba = [CGFloat](count: 4, repeatedValue: 0.0)
         self.getRed(&rgba[0], green: &rgba[1], blue: &rgba[2], alpha: &rgba[3])
         var rgba255 = rgba.map() { Int($0 * 255) }
-        return NSString(format: "%02X%02X%02X", rgba255[0], rgba255[1], rgba255[2])
+        return NSString(format: "%02X%02X%02X", rgba255[0], rgba255[1], rgba255[2]) as String
         
     }
     
@@ -24,7 +24,7 @@ extension UIColor {
     
         var hsba = [CGFloat](count: 4, repeatedValue: 0.0)
         self.getHue(&hsba[0], saturation: &hsba[1], brightness: &hsba[2], alpha: &hsba[3])
-        var diff = hsba[2] < 0.5 ? 1.0 - hsba[2] : -hsba[2]
+        let diff = hsba[2] < 0.5 ? 1.0 - hsba[2] : -hsba[2]
         hsba[2] += diff/2
         return UIColor(hue: hsba[0], saturation: hsba[1], brightness: hsba[2], alpha: hsba[3])
     
@@ -55,7 +55,7 @@ extension UIColor {
 extension UILabel {
     
     public override func copy() -> AnyObject {
-        var copiedLabel = UILabel(frame: self.frame)
+        let copiedLabel = UILabel(frame: self.frame)
         
         copiedLabel.font = self.font
         copiedLabel.textAlignment = self.textAlignment
@@ -88,9 +88,9 @@ enum ColorMode {
         case HSB:
             var hsba = [CGFloat](count: 4, repeatedValue: 0.0)
             color?.getHue(&hsba[0], saturation: &hsba[1], brightness: &hsba[2], alpha: &hsba[3])
-            var h = Int(hsba[0] * 360)
-            var s = Int(hsba[1] * 100)
-            var b = Int(hsba[2] * 100)
+            let h = Int(hsba[0] * 360)
+            let s = Int(hsba[1] * 100)
+            let b = Int(hsba[2] * 100)
             description = "hsb(\(h), \(s), \(b))"
             
         default:
@@ -116,7 +116,7 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
             
             self.backgroundColor = self.color
             self.colorBorder.backgroundColor = complimentaryColor
-            var currentMode = self.supportedModes[self.modeIdx]
+            let currentMode = self.supportedModes[self.modeIdx]
             self.colorLabel.text = currentMode.descriptionForColor(color)
             self.colorLabel.textColor = complimentaryColor
             
@@ -131,7 +131,7 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
     
     var modeIdx: Int = 0 {
         didSet {
-            var currentMode = self.supportedModes[self.modeIdx]
+            let currentMode = self.supportedModes[self.modeIdx]
             self.colorLabel.text = currentMode.descriptionForColor(color)
         }
     }
@@ -154,10 +154,10 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
         super.init(frame: frame)
         
         self.colorBorder.frame.size = CGSize(width: 0, height: 1)
-        self.colorBorder.setTranslatesAutoresizingMaskIntoConstraints(true)
+        self.colorBorder.translatesAutoresizingMaskIntoConstraints = true
         self.colorBorder.autoresizingMask = UIViewAutoresizing.FlexibleWidth
         
-        self.colorLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.colorLabel.translatesAutoresizingMaskIntoConstraints = false
         self.colorLabel.font = UIFont(name: "GillSans-Italic", size: 26)
         self.colorLabel.userInteractionEnabled = true
         self.colorLabel.textAlignment = .Center
@@ -171,10 +171,10 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
         self.addConstraint(NSLayoutConstraint(item: self.colorLabel, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1, constant: 0))
         
         // gestures
-        var swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
+        let swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
         swipeLeftGestureRecognizer.direction = .Left
         swipeLeftGestureRecognizer.delegate = self
-        var swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
+        let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
         swipeRightGestureRecognizer.direction = .Right
         swipeRightGestureRecognizer.delegate = self
         
@@ -182,24 +182,24 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
         self.addGestureRecognizer(swipeRightGestureRecognizer)
     }
     
-    convenience override init() {
+    convenience init() {
         self.init(frame: CGRectZero)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Private Methods
     
     func animateLabelChange(direction: UISwipeGestureRecognizerDirection) {
-        var tempLabel = self.colorLabel.copy() as UILabel
+        let tempLabel = self.colorLabel.copy() as! UILabel
         self.addSubview(tempLabel)
-        var dx: CGFloat = direction == .Left ? 60.0 : -60.0
+        let dx: CGFloat = direction == .Left ? 60.0 : -60.0
         self.colorLabel.transform = CGAffineTransformMakeTranslation(dx, 0)
         self.colorLabel.alpha = 0.0
         
-        UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1.2, options: nil, animations: {
+        UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1.2, options: [], animations: {
             
             self.colorLabel.transform = CGAffineTransformIdentity
             self.colorLabel.alpha = 1.0

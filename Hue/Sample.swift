@@ -19,7 +19,7 @@ class Sample: NSManagedObject {
 
     var ddMMyyyy: String {
         
-        var dateFormatter = NSDateFormatter()
+        let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "dd:MM:yyyy"
         return dateFormatter.stringFromDate(self.timestamp)
         
@@ -27,9 +27,9 @@ class Sample: NSManagedObject {
     
     var color: UIColor? {
         
-        var r = CGFloat(self.red)
-        var g = CGFloat(self.green)
-        var b = CGFloat(self.blue)
+        let r = CGFloat(self.red)
+        let g = CGFloat(self.green)
+        let b = CGFloat(self.blue)
         return UIColor(red: r, green: g, blue: b, alpha: 1)
         
     }
@@ -40,8 +40,8 @@ class Sample: NSManagedObject {
         
         if let thumbnail = self.thumbnail as? Thumbnail {
             
-            let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-            let imagePath = paths.stringByAppendingPathComponent(thumbnail.fileName)
+            let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] 
+            let imagePath = (paths as NSString).stringByAppendingPathComponent(thumbnail.fileName)
             if let imageData = NSData(contentsOfFile: imagePath) {
                 ret = UIImage(data: imageData)
             }
@@ -53,16 +53,14 @@ class Sample: NSManagedObject {
     }
     
     deinit {
-        println("Sample deinitialized")
+        print("Sample deinitialized")
     }
     
     // MARK: Public Methods
     
     class func insertSampleWithColor(color: UIColor?, thumbnail: Thumbnail, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> Sample {
         
-        var error: NSError?
-        
-        let sample = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext) as Sample
+        let sample = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext) as! Sample
         sample.thumbnail = thumbnail
         sample.timestamp = NSDate()
         
@@ -71,11 +69,11 @@ class Sample: NSManagedObject {
         sample.red = rgba[0]
         sample.green = rgba[1]
         sample.blue = rgba[2]
-        
-        var saveError: NSError?
-        managedObjectContext.save(&saveError)
-        if saveError != nil {
-            println("Sample save error: \(saveError!.localizedDescription)")
+    
+        do {
+            try managedObjectContext.save()
+        } catch let e {
+            print("Sample saving failed: \(e)")
         }
         
         return sample

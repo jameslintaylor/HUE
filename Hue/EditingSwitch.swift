@@ -29,7 +29,7 @@ class EditingSwitch: UIControl {
         super.init(frame: frame)
         self.clipsToBounds = true
         
-        self.titleLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
         self.titleLabel.text = "edit"
         self.titleLabel.font = UIFont(name: "GillSans", size: 18)
         self.titleLabel.textColor = UIColor.whiteColor()
@@ -45,16 +45,16 @@ class EditingSwitch: UIControl {
         self.addConstraint(NSLayoutConstraint(item: self.titleLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1, constant: 0))
         
         // gestures
-        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
         self.addGestureRecognizer(tapGestureRecognizer)
         
     }
     
-    override convenience init() {
+    convenience init() {
         self.init(frame: CGRectZero)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

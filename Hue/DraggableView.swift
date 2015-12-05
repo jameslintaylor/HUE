@@ -13,19 +13,19 @@ protocol DraggableViewDelegate: class {
     func draggableView(view: DraggableView, draggingEndedWithVelocity velocity: CGPoint)
 }
 
-struct DraggableViewAxis : RawOptionSetType {
+struct DraggableViewAxis : OptionSetType {
     
     private var value: UInt = 0
     
     init(_ value: UInt) { self.value = value }
     init(rawValue value: UInt) { self.value = value }
     init(nilLiteral: ()) { self.value = 0 }
-    static var allZeros: DraggableViewAxis { return self(0) }
-    static func fromMask(raw: UInt) -> DraggableViewAxis { return self(raw) }
+    static var allZeros: DraggableViewAxis { return self.init(0) }
+    static func fromMask(raw: UInt) -> DraggableViewAxis { return self.init(raw) }
     var rawValue: UInt { return self.value }
     
-    static var Horizontal: DraggableViewAxis   { return self(0b0) }
-    static var Vertical: DraggableViewAxis  { return self(0b1) }
+    static var Horizontal: DraggableViewAxis   { return self.init(0b0) }
+    static var Vertical: DraggableViewAxis  { return self.init(0b1) }
     
 }
 
@@ -35,7 +35,7 @@ class DraggableView: UIView, UIGestureRecognizerDelegate {
     
     var animator: UIDynamicAnimator
     var attachmentBehaviour: UIAttachmentBehavior?
-    var axes: DraggableViewAxis = .Horizontal | .Vertical // default
+    var axes: DraggableViewAxis = [.Horizontal, .Vertical] // default
     
     var viewToDrag: UIView!
     
@@ -57,7 +57,7 @@ class DraggableView: UIView, UIGestureRecognizerDelegate {
         self.init(frame: CGRectZero, inView: containerView)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -73,30 +73,30 @@ class DraggableView: UIView, UIGestureRecognizerDelegate {
         case .Began:
             
             self.attachmentBehaviour = UIAttachmentBehavior(item: self.viewToDrag, attachedToAnchor: CGPoint(x: self.viewToDrag.center.x, y: self.viewToDrag.center.y))
-            self.animator.addBehavior(self.attachmentBehaviour)
+            self.animator.addBehavior(self.attachmentBehaviour!)
             self.delegate?.draggableViewBeganDragging(self)
         
         case .Changed:
             
-            if self.axes & .Horizontal != nil {
+            if self.axes.intersect(.Horizontal) != [] {
                 self.attachmentBehaviour?.anchorPoint.x += translationInView.x
             }
             
-            if self.axes & .Vertical != nil {
+            if self.axes.intersect(.Vertical) != [] {
                 self.attachmentBehaviour?.anchorPoint.y += translationInView.y
             }
             
         default:
             
-            self.animator.removeBehavior(self.attachmentBehaviour)
+            self.animator.removeBehavior(self.attachmentBehaviour!)
             
             var velocity = sender.velocityInView(self)
             
-            if self.axes & .Horizontal == nil {
+            if self.axes.intersect(.Horizontal) == [] {
                 velocity.x = 0
             }
             
-            if self.axes & .Vertical == nil {
+            if self.axes.intersect(.Vertical) == [] {
                 velocity.y = 0
             }
                         
@@ -116,11 +116,11 @@ class DraggableView: UIView, UIGestureRecognizerDelegate {
             velocity.x = abs(velocity.x)
             velocity.y = abs(velocity.y)
             
-            if (self.axes & .Horizontal != nil) & (velocity.x > velocity.y) {
+            if (self.axes.intersect(.Horizontal) != []) && (velocity.x > velocity.y) {
                 return true
             }
             
-            if (self.axes & .Vertical != nil) & (velocity.y > velocity.x) {
+            if (self.axes.intersect(.Vertical) != []) && (velocity.y > velocity.x) {
                 return true
             }
             

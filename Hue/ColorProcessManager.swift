@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GPUImage
 
 protocol ColorProcessManagerDelegate: class {
     
@@ -47,10 +48,10 @@ extension UIColor {
         var rgbaOther = [CGFloat](count: 4, repeatedValue: 0.0)
         color.getRed(&rgbaOther[0], green: &rgbaOther[1], blue: &rgbaOther[2], alpha: &rgbaOther[3])
 
-        var r = rgbaSelf[0] * (1.0 - weight) + rgbaOther[0] * (weight)
-        var g = rgbaSelf[1] * (1.0 - weight) + rgbaOther[1] * (weight)
-        var b = rgbaSelf[2] * (1.0 - weight) + rgbaOther[2] * (weight)
-        var a = rgbaSelf[3] * (1.0 - weight) + rgbaOther[3] * (weight)
+        let r = rgbaSelf[0] * (1.0 - weight) + rgbaOther[0] * (weight)
+        let g = rgbaSelf[1] * (1.0 - weight) + rgbaOther[1] * (weight)
+        let b = rgbaSelf[2] * (1.0 - weight) + rgbaOther[2] * (weight)
+        let a = rgbaSelf[3] * (1.0 - weight) + rgbaOther[3] * (weight)
         
         return UIColor(red: r, green: g, blue: b, alpha: a)
         

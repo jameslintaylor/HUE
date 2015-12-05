@@ -27,7 +27,7 @@ class DayHeaderView: UIView {
         super.init(frame: frame)
         self.backgroundColor = UIColor(white: 0.1, alpha: 1)
         
-        self.dayLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.dayLabel.translatesAutoresizingMaskIntoConstraints = false
         self.dayLabel.font = UIFont(name: "GillSans", size: 18)
         self.dayLabel.textAlignment = .Left
         self.dayLabel.textColor = UIColor.whiteColor()
@@ -36,11 +36,11 @@ class DayHeaderView: UIView {
         
     }
 
-    convenience override init() {
+    convenience init() {
         self.init(frame: CGRectZero)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -84,7 +84,7 @@ class DayHeaderView: UIView {
                 text = "yesterday"
                 
             default:
-                let dateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.DayCalendarUnit | NSCalendarUnit.MonthCalendarUnit | NSCalendarUnit.YearCalendarUnit, fromDate: date)
+                let dateComponents = NSCalendar.currentCalendar().components([.Day, .Month, .Year], fromDate: date)
                 text = "\(dateComponents.day)/\(dateComponents.month)/\(dateComponents.year)"
             }
             

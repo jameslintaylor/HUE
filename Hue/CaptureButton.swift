@@ -50,11 +50,11 @@ class CaptureButton: UIButton {
         
     }
     
-    override convenience init() {
+    convenience init() {
         self.init(frame: CGRectZero)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -94,16 +94,16 @@ class CaptureButton: UIButton {
     
     // MARK: - Handlers
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-     
+    // TODO: - These are Ugly.
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesBegan(touches, withEvent: event)
         
         self.updateBackgroundColor()
         self.layer.transform = CATransform3DMakeScale(0.95, 0.95, 1)
-        
     }
     
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
     
         super.touchesEnded(touches, withEvent: event)
         
@@ -112,10 +112,9 @@ class CaptureButton: UIButton {
    
     }
     
-    override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
+    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
       
         super.touchesCancelled(touches, withEvent: event)
-    
         self.updateBackgroundColor()
         self.layer.transform = CATransform3DIdentity
 
