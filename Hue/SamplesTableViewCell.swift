@@ -8,24 +8,11 @@
 
 import UIKit
 
-// TODO: - The delegation behaviour here should be controlled by a seperate control rather than in the cell itself. such as an editing accessory view.
-protocol SampleTableViewCellDelegate: class {
-    func sampleTableViewCellRequestedDelete(cell: SampleTableViewCell)
-}
-
 // MARK: -
 
-class SampleTableViewCell: UITableViewCell {
-    
+class SamplesTableViewCell: UITableViewCell {
     /**
-     **The object that acts as the delegate of cell.**
-
-     The delegate must adopt the `SampleTableViewCellDelegate` protocol. The delegate is not retained.
-     */
-    weak var delegate: SampleTableViewCellDelegate?
-    
-    /**
-     **The `Sample` object associated with the cell.**
+     The `Sample` object associated with the cell.
      
      Changing this property triggers an automatic update to the cell's appearance.
      */
@@ -39,7 +26,6 @@ class SampleTableViewCell: UITableViewCell {
     private let sampleView = SampleView()
     private let thumbnailView = UIImageView()
     private let targetView = ColorTarget()
-    
     private let gestureContainer = UIView()
     
     // Yuck! Mutable constraint
@@ -50,20 +36,21 @@ class SampleTableViewCell: UITableViewCell {
     init(reuseIdentifier: String?) {
         super.init(style: .Default, reuseIdentifier: reuseIdentifier)
         
-        self.sampleView.translatesAutoresizingMaskIntoConstraints = true
-        self.sampleView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
+        sampleView.translatesAutoresizingMaskIntoConstraints = true
+        sampleView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
+        sampleView.colorBorder.hidden = true
         
-        self.thumbnailView.clipsToBounds = true
-        self.thumbnailView.contentMode = .ScaleAspectFill
+        thumbnailView.clipsToBounds = true
+        thumbnailView.contentMode = .ScaleAspectFill
         
-        // What the hell is this
-        contentView.addSubview(self.sampleContainer)
-        sampleContainer.addSubview(self.sampleView)
+        // MARK: What the hell is this container garbage
+        contentView.addSubview(sampleContainer)
+        sampleContainer.addSubview(sampleView)
         
-        contentView.addSubview(self.thumbnailView)
-        thumbnailView.addSubview(self.targetView)
+        contentView.addSubview(thumbnailView)
+        thumbnailView.addSubview(targetView)
         
-        contentView.addSubview(self.gestureContainer)
+        contentView.addSubview(gestureContainer)
         
         setupConstraints()
     }
@@ -120,6 +107,8 @@ class SampleTableViewCell: UITableViewCell {
     
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+        
+        print("Cell set selected: \(selected)")
         
         UIView.transitionWithView(self.thumbnailView, duration: 0.2, options: .TransitionCrossDissolve, animations: {
             self.thumbnailView.image = self.selected ? self.sample?.thumbnailImage : nil

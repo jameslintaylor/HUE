@@ -9,27 +9,21 @@
 import UIKit
 import CoreData
 
+// TODO: These don't really need to be here. It's just abusing the delegation pattern.
 protocol SamplesTableViewManagerDelegate: class {
     func tableView(tableView: UITableView, didScrollToYOffset yOffset: CGFloat)
     func tableView(tableView: UITableView, displayingNoData noData: Bool)
 }
 
-class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate, SampleTableViewCellDelegate, NSFetchedResultsControllerDelegate {
-   
+class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
     weak var delegate: SamplesTableViewManagerDelegate?
+    weak var tableView: UITableView?
     
-    // TODO: Not sure why I need a reference to table view, surely this could be hidden. Also these are all a bit ugly.
-    var tableView: UITableView!
+    // TODO: No implictly unwrapped optionals please.
     var managedObjectContext: NSManagedObjectContext!
-    var selectedRowIndexPath: NSIndexPath? {
-        didSet {
-            self.tableView.beginUpdates()
-            self.tableView.endUpdates()
-        }
-    }
     
     /**
-     **Singleton style date formatter with a dd/MM/yyyy date format.**
+     Singleton style date formatter with a dd/MM/yyyy date format.
      
      Creating date formatters is a relatively expensive operation.
      As of iOS 7.0, `NSDateFormatter` is thread safe so this should be fine.
@@ -60,91 +54,90 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         
         return fetchedResultsController
     }()
-    
-    // MARK: - Public Methods
-    
-    func setEditing(editing: Bool) {
-        self.selectedRowIndexPath = nil
-        self.tableView.setEditing(editing, animated: true)
-    }
 
-    // MARK: - Private Methods
+    // MARK: - Private methods
     
-    private func configureCell(cell: SampleTableViewCell, withSample sample: Sample?) {
-        guard let sample = sample else {
-            return
+    // TODO: Can probably rename this method to be a bit less ambiguous.
+    /**
+     Attempts to delete the sample object at the given NSFetchedResultsController's index path from the persistent store.
+    
+     - returns: Boolean indicating if the delete was succesful.
+     */
+    private func deleteSampleAtIndexPath(indexPath: NSIndexPath) -> Bool {
+        guard let sample = fetchedResultsController.objectAtIndexPath(indexPath) as? NSManagedObject else {
+            return false
         }
         
+        do {
+            managedObjectContext.deleteObject(sample)
+            try managedObjectContext.save()
+        } catch {
+            return false
+        }
+        
+        return true
+    }
+    
+    /**
+     Assigns a new `Sample` object to a `SamplesTableViewCell` and configures the cell for the new sample.
+     */
+    private func configureCell(cell: SamplesTableViewCell, withSample sample: Sample) {
         cell.sample = sample
-        cell.delegate = self
-        cell.selectionStyle = .None
-        cell.backgroundColor = UIColor.clearColor()
+        
+        // Configure the cell for the new sample
+        cell.selectionStyle = .Gray
+        cell.backgroundColor = sample.color
+        cell.tintColor = sample.color?.darkerColor()
     }
     
-    // MARK: - UITableView DataSource
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        var cell: SampleTableViewCell
-        if let reusableCell = tableView.dequeueReusableCellWithIdentifier("cell") as? SampleTableViewCell {
-            cell = reusableCell
-        } else {
-            cell = SampleTableViewCell(reuseIdentifier: "cell")
-            
-            // Configure an editing control
-            let deleteControl = CellDeleteControl()
-            cell.accessoryView = deleteControl
-        }
-        
-        var sample: Sample?
-        if let fetchedSample = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Sample {
-            sample = fetchedSample
-        }
-        
-        self.configureCell(cell, withSample: sample)
-        return cell
-    }
+    // MARK: - UITableViewDataSource
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let sectionInfo = fetchedResultsController.sections?[section] else {
             return 0
         }
+        
         return sectionInfo.numberOfObjects
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
-        var numSections = 0
-        
-        if let sections = self.fetchedResultsController.sections {
-            numSections = sections.count
+        guard let sections = fetchedResultsController.sections else {
+            return 0
         }
         
-        self.delegate?.tableView(self.tableView, displayingNoData: numSections == 0)
+        // TODO: Change this
+        delegate?.tableView(tableView, displayingNoData: sections.count == 0)
         
-        return numSections
-        
+        return sections.count
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            deleteSampleAtIndexPath(indexPath)
+        }
+    }
+    
+    // MARK: - UITableViewDelegate
+    
+    func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
     
-    // MARK: - UITableView Delegate
-   
-    func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
-    }
-    
-    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        return .None
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        // Configure the delete action
+        let deleteAction = UITableViewRowAction(style: .Destructive, title: "Delete", handler: { (action, indexPath) in
+            self.deleteSampleAtIndexPath(indexPath)
+        })
+        deleteAction.backgroundColor = UIColor.redColor()
+        
+        return [deleteAction]
     }
     
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        
-        if indexPath == self.selectedRowIndexPath {
-            self.selectedRowIndexPath = nil
-            self.tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        print("will select row \(indexPath.row) in section \(indexPath.section)")
+        if tableView.indexPathsForSelectedRows?.contains(indexPath) == true {
+            // Deselect already selected cell
+            tableView.deselectRowAtIndexPath(indexPath, animated: false)
             return nil
         }
         
@@ -152,107 +145,120 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.selectedRowIndexPath = indexPath
+        print("did select row \(indexPath.row) in section \(indexPath.section)")
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(tableView: UITableView, willDeselectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        print("will deselect row \(indexPath.row) in section \(indexPath.section)")
+        return indexPath
+    }
+    
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        print("did deselect row \(indexPath.row) in section \(indexPath.section)")
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var cell: SamplesTableViewCell
         
-        var rowHeight = SAMPLE_HEIGHT
-            
-        if indexPath == self.selectedRowIndexPath {
-            rowHeight = SAMPLE_HEIGHT * 2
+        if let reusableCell = tableView.dequeueReusableCellWithIdentifier("cell") as? SamplesTableViewCell {
+            cell = reusableCell
+        } else {
+            cell = SamplesTableViewCell(reuseIdentifier: "cell")
         }
         
-        return rowHeight
-    }
+        guard let sample = fetchedResultsController.objectAtIndexPath(indexPath) as? Sample else {
+            return cell
+        }
         
+        configureCell(cell, withSample: sample)
+        return cell
+    }
+
+    
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = DayHeader()
         
         guard let
             ddmmyyyy = self.fetchedResultsController.sections?[section].name,
             date = SamplesTableViewManager.sectionDateFormatter.dateFromString(ddmmyyyy)
-        else {
-            return header
+            else {
+                return header
         }
         
         header.date = date
         return header
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return HEADER_HEIGHT
+    /*
+    From the docs: 
+        Providing a nonnegative estimate of the height of rows can improve the performance of loading the table view. 
+        If the table contains variable height rows, it might be expensive to calculate all their heights when the table loads.
+        Using estimation allows you to defer some of the cost of geometry calculation from load time to scrolling time.
+    
+    Although (on loading) all the rows in this tableview should have the same height, this is implemented for completeness.
+    */
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return tableView.rowHeight
     }
     
-    // MARK: - ScrollView Delegate
+    /* 
+    Although UITableView.rowHeight is typically used in the scenario where the table view's delegate has not
+    implemented `tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat`, 
+    it's used within the implementation here to provide the larger selected height behaviour for cells.
+    */
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        // Selected row should have double the height.
+        return tableView.indexPathsForSelectedRows?.contains(indexPath) == true ? tableView.rowHeight*(3/2) : tableView.rowHeight
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return tableView.rowHeight/2
+    }
+    
+    // MARK: - UIScrollViewDelegate
+    
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let yOffset = scrollView.contentOffset.y + scrollView.contentInset.top
-        self.delegate?.tableView(self.tableView, didScrollToYOffset: yOffset)
+        self.delegate?.tableView(self.tableView!, didScrollToYOffset: yOffset)
     }
     
-    // MARK: - SampleTableView Delegate
-    
-    func sampleTableViewCellRequestedDelete(cell: SampleTableViewCell) {
-        
-        if let sample = cell.sample {
-            self.managedObjectContext.deleteObject(sample)
-            var error: NSError?
-            do {
-                try self.managedObjectContext.save()
-            } catch let error1 as NSError {
-                error = error1
-                print("save error: \(error?.localizedDescription)")
-            }
-        }
-        
-    }
-    
-    // MARK: - NSFetchedResultsController Delegate
+    // MARK: - NSFetchedResultsControllerDelegate
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        self.tableView.beginUpdates()
+        tableView?.beginUpdates()
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        self.tableView.endUpdates()
+        tableView?.endUpdates()
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        
         switch type {
-            
         case .Insert:
             if let newIndexPath = newIndexPath {
-                self.tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Left)
+                tableView?.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Left)
             }
-            
         case .Delete:
             if let indexPath = indexPath {
-                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Left)
+                tableView?.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Left)
             }
-            
         default:
             break
-            
         }
-        
     }
     
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
-        
         switch type {
-            
         case .Insert:
-            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-            
+            tableView?.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
         case .Delete:
-            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-            
+            tableView?.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
         default:
             break
-            
         }
-        
     }
-    
 }

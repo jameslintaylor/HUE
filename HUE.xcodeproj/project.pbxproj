@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2478B3791C14DC65006541E2 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2478B3781C14DC65006541E2 /* UIColor+.swift */; };
+		2478B37D1C14E1FF006541E2 /* UILabel+Copying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2478B37C1C14E1FF006541E2 /* UILabel+Copying.swift */; };
+		2478B37F1C14E69E006541E2 /* ColorTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2478B37E1C14E69E006541E2 /* ColorTypes.swift */; };
 		24FE4B1A1C13D1980025F209 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FE4B191C13D1980025F209 /* UIView+.swift */; };
 		24FE4B1C1C13DD4C0025F209 /* CellDeleteControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FE4B1B1C13DD4C0025F209 /* CellDeleteControl.swift */; };
 		523FB14D1AB9F3E100AD2F7B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523FB14C1AB9F3E100AD2F7B /* MainViewController.swift */; };
@@ -14,7 +17,7 @@
 		524C8E3A1AC3A3030011A31B /* Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C8E391AC3A3030011A31B /* Thumbnail.swift */; };
 		5250B6DE1AC22C390031BA6A /* SamplesTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6DD1AC22C390031BA6A /* SamplesTableViewManager.swift */; };
 		5250B6E21AC23DA80031BA6A /* SampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6E11AC23DA80031BA6A /* SampleView.swift */; };
-		5250B6E41AC2438D0031BA6A /* SampleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6E31AC2438D0031BA6A /* SampleTableViewCell.swift */; };
+		5250B6E41AC2438D0031BA6A /* SamplesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5250B6E31AC2438D0031BA6A /* SamplesTableViewCell.swift */; };
 		527FC23A1ACA3A7300F47146 /* CaptureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527FC2391ACA3A7300F47146 /* CaptureButton.swift */; };
 		52813CBA1AC8D3440092A923 /* SamplesViewBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52813CB91AC8D3440092A923 /* SamplesViewBehaviour.swift */; };
 		52813CBE1AC9CAE90092A923 /* DraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52813CBD1AC9CAE90092A923 /* DraggableView.swift */; };
@@ -57,6 +60,9 @@
 
 /* Begin PBXFileReference section */
 		1C5B676241CE07D9393E602B /* Pods-HUE.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUE.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HUE/Pods-HUE.debug.xcconfig"; sourceTree = "<group>"; };
+		2478B3781C14DC65006541E2 /* UIColor+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		2478B37C1C14E1FF006541E2 /* UILabel+Copying.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+Copying.swift"; sourceTree = "<group>"; };
+		2478B37E1C14E69E006541E2 /* ColorTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorTypes.swift; sourceTree = "<group>"; };
 		24ED28491C1397190064AE61 /* HUE 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "HUE 2.xcdatamodel"; sourceTree = "<group>"; };
 		24FE4B191C13D1980025F209 /* UIView+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		24FE4B1B1C13DD4C0025F209 /* CellDeleteControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellDeleteControl.swift; sourceTree = "<group>"; };
@@ -66,7 +72,7 @@
 		524C8E391AC3A3030011A31B /* Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Thumbnail.swift; sourceTree = "<group>"; };
 		5250B6DD1AC22C390031BA6A /* SamplesTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesTableViewManager.swift; sourceTree = "<group>"; };
 		5250B6E11AC23DA80031BA6A /* SampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleView.swift; sourceTree = "<group>"; };
-		5250B6E31AC2438D0031BA6A /* SampleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleTableViewCell.swift; sourceTree = "<group>"; };
+		5250B6E31AC2438D0031BA6A /* SamplesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesTableViewCell.swift; sourceTree = "<group>"; };
 		527FC2391ACA3A7300F47146 /* CaptureButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureButton.swift; sourceTree = "<group>"; };
 		52813CB91AC8D3440092A923 /* SamplesViewBehaviour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SamplesViewBehaviour.swift; sourceTree = "<group>"; };
 		52813CBD1AC9CAE90092A923 /* DraggableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraggableView.swift; sourceTree = "<group>"; };
@@ -121,6 +127,8 @@
 			isa = PBXGroup;
 			children = (
 				24FE4B191C13D1980025F209 /* UIView+.swift */,
+				2478B3781C14DC65006541E2 /* UIColor+.swift */,
+				2478B37C1C14E1FF006541E2 /* UILabel+Copying.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -145,7 +153,7 @@
 		529E67DF1AC2545D00510319 /* TableView */ = {
 			isa = PBXGroup;
 			children = (
-				5250B6E31AC2438D0031BA6A /* SampleTableViewCell.swift */,
+				5250B6E31AC2438D0031BA6A /* SamplesTableViewCell.swift */,
 				24FE4B1B1C13DD4C0025F209 /* CellDeleteControl.swift */,
 				529E67E01AC2547B00510319 /* DayHeader.swift */,
 				524C8E351AC34CA10011A31B /* EditingSwitch.swift */,
@@ -193,9 +201,10 @@
 		72492A9D1AB73A32001EAE02 /* HUE */ = {
 			isa = PBXGroup;
 			children = (
-				72492AA01AB73A32001EAE02 /* AppDelegate.swift */,
 				72492AA71AB73A32001EAE02 /* Images.xcassets */,
 				72492AA91AB73A32001EAE02 /* LaunchScreen.xib */,
+				72492AA01AB73A32001EAE02 /* AppDelegate.swift */,
+				2478B37E1C14E69E006541E2 /* ColorTypes.swift */,
 				24FE4B181C13D0E70025F209 /* Extensions */,
 				52AF52411AB870E50039C21A /* Managers */,
 				72492AD21AB77494001EAE02 /* Model */,
@@ -421,6 +430,7 @@
 			files = (
 				524C8E3A1AC3A3030011A31B /* Thumbnail.swift in Sources */,
 				72492AD81AB77AF8001EAE02 /* FocusingIndicator.swift in Sources */,
+				2478B37D1C14E1FF006541E2 /* UILabel+Copying.swift in Sources */,
 				24FE4B1C1C13DD4C0025F209 /* CellDeleteControl.swift in Sources */,
 				721E44B41AB78CCB006E57D1 /* ColorProcessManager.swift in Sources */,
 				5250B6DE1AC22C390031BA6A /* SamplesTableViewManager.swift in Sources */,
@@ -428,7 +438,7 @@
 				523FB14D1AB9F3E100AD2F7B /* MainViewController.swift in Sources */,
 				529E67DD1AC2513300510319 /* Sample.swift in Sources */,
 				72492AA31AB73A32001EAE02 /* CameraViewController.swift in Sources */,
-				5250B6E41AC2438D0031BA6A /* SampleTableViewCell.swift in Sources */,
+				5250B6E41AC2438D0031BA6A /* SamplesTableViewCell.swift in Sources */,
 				529E67E11AC2547B00510319 /* DayHeader.swift in Sources */,
 				52D08A081AB8B82800A3929F /* SamplesViewController.swift in Sources */,
 				5250B6E21AC23DA80031BA6A /* SampleView.swift in Sources */,
@@ -438,7 +448,9 @@
 				24FE4B1A1C13D1980025F209 /* UIView+.swift in Sources */,
 				52813CBE1AC9CAE90092A923 /* DraggableView.swift in Sources */,
 				527FC23A1ACA3A7300F47146 /* CaptureButton.swift in Sources */,
+				2478B37F1C14E69E006541E2 /* ColorTypes.swift in Sources */,
 				721E44B21AB78CC5006E57D1 /* ColorTarget.swift in Sources */,
+				2478B3791C14DC65006541E2 /* UIColor+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

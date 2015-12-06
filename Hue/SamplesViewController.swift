@@ -57,6 +57,13 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
         self.tableView.backgroundColor = UIColor(white: 0.1, alpha: 1)
         self.tableView.separatorStyle = .None
         self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+        
+        tableView.allowsSelection = true
+        tableView.allowsSelectionDuringEditing = false
+        tableView.allowsMultipleSelection = true
+        tableView.allowsMultipleSelectionDuringEditing = true
+        tableView.rowHeight = 80
+        
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         
         self.editingSwitch = EditingSwitch()
@@ -212,25 +219,25 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     
     }
     
-    // MARK: - Private Methods
+    // MARK: - Private methods
     
     func updateAppearance() {
-        
         UIView.animateWithDuration(0.2) {
             self.sampleView.alpha = self.appearance == .ShowingSamples ? 0 : 1
         }
-        
         if self.appearance == .ShowingSamples {
             self.tabBar.backgroundColor = UIColor(white: 0.2, alpha: 1)
         }
-               
     }
 
     
     // MARK: - Handlers
     
     func editingSwitchToggled(editingSwitch: EditingSwitch) {
-        self.tableViewManager.setEditing(self.editingSwitch.on)
+        // Set editing mode on the table view and trigger an animated row height update cycle.
+        tableView.beginUpdates()
+        tableView.setEditing(editingSwitch.on, animated: true)
+        tableView.endUpdates()
     }
     
     func handleSingleTap(sender: UITapGestureRecognizer) {

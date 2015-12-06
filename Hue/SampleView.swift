@@ -8,107 +8,9 @@
 
 import UIKit
 
-// MARK: - Extensions
-extension UIColor {
-    
-    func hexString() -> String {
-        
-        var rgba = [CGFloat](count: 4, repeatedValue: 0.0)
-        self.getRed(&rgba[0], green: &rgba[1], blue: &rgba[2], alpha: &rgba[3])
-        var rgba255 = rgba.map() { Int($0 * 255) }
-        return NSString(format: "%02X%02X%02X", rgba255[0], rgba255[1], rgba255[2]) as String
-        
-    }
-    
-    func complimentaryColor() -> UIColor? {
-    
-        var hsba = [CGFloat](count: 4, repeatedValue: 0.0)
-        self.getHue(&hsba[0], saturation: &hsba[1], brightness: &hsba[2], alpha: &hsba[3])
-        let diff = hsba[2] < 0.5 ? 1.0 - hsba[2] : -hsba[2]
-        hsba[2] += diff/2
-        return UIColor(hue: hsba[0], saturation: hsba[1], brightness: hsba[2], alpha: hsba[3])
-    
-    }
-    
-    func darkerColor() -> UIColor? {
-        
-        var hsba = [CGFloat](count: 4, repeatedValue: 0.0)
-        self.getHue(&hsba[0], saturation: &hsba[1], brightness: &hsba[2], alpha: &hsba[3])
-        hsba[2] = hsba[2]/4
-        hsba[1] = hsba[1]/4
-        return UIColor(hue: hsba[0], saturation: hsba[1], brightness: hsba[2], alpha: hsba[3])
-        
-    }
-    
-    func lighterColor() -> UIColor? {
-        
-        var hsba = [CGFloat](count: 4, repeatedValue: 0.0)
-        self.getHue(&hsba[0], saturation: &hsba[1], brightness: &hsba[2], alpha: &hsba[3])
-        hsba[2] += (1.0 - hsba[2]) * 3/4
-        hsba[1] += hsba[1]/4
-        return UIColor(hue: hsba[0], saturation: hsba[1], brightness: hsba[2], alpha: hsba[3])
-        
-    }
-    
-}
-
-extension UILabel {
-    
-    public override func copy() -> AnyObject {
-        let copiedLabel = UILabel(frame: self.frame)
-        
-        copiedLabel.font = self.font
-        copiedLabel.textAlignment = self.textAlignment
-        copiedLabel.textColor = self.textColor
-        copiedLabel.text = self.text
-        copiedLabel.backgroundColor = self.backgroundColor
-        
-        return copiedLabel
-    }
-    
-}
-
-// MARK: - ColorMode Declaration
-
-enum ColorMode {
-    
-    case RGB, HSB, HEX
-    
-    func descriptionForColor(color: UIColor?) -> String {
-        var description: String = "UNKNOWN"
-        
-        switch self {
-            
-        case RGB:
-            var rgba = [CGFloat](count: 4, repeatedValue: 0.0)
-            color?.getRed(&rgba[0], green: &rgba[1], blue: &rgba[2], alpha: &rgba[3])
-            var rgba255 = rgba.map() { Int($0 * 255) }
-            description = "rgb(\(rgba255[0]), \(rgba255[1]), \(rgba255[2]))"
-            
-        case HSB:
-            var hsba = [CGFloat](count: 4, repeatedValue: 0.0)
-            color?.getHue(&hsba[0], saturation: &hsba[1], brightness: &hsba[2], alpha: &hsba[3])
-            let h = Int(hsba[0] * 360)
-            let s = Int(hsba[1] * 100)
-            let b = Int(hsba[2] * 100)
-            description = "hsb(\(h), \(s), \(b))"
-            
-        default:
-            if let hexDescription = color?.hexString() {
-                description = "#\(hexDescription)"
-            }
-            
-        }
-        
-        return description
-    }
-    
-}
-
-// MARK: - SampleView
-
 class SampleView: UIView, UIGestureRecognizerDelegate {
 
+    // TODO: Listeners are great but I seem to have abused them here.
     var color: UIColor? {
         didSet {
             
@@ -116,22 +18,17 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
             
             self.backgroundColor = self.color
             self.colorBorder.backgroundColor = complimentaryColor
-            let currentMode = self.supportedModes[self.modeIdx]
+            let currentMode = self.supportedModes[self.modeIndex]
             self.colorLabel.text = currentMode.descriptionForColor(color)
             self.colorLabel.textColor = complimentaryColor
             
         }
     }
     
-    var supportedModes: [ColorMode] = [.HSB, .RGB, .HEX] {
+    var supportedModes: [ColorFormat] = [.HSB, .RGB, .HEX]
+    var modeIndex: Int = 0 {
         didSet {
-            self.modeIdx = 0
-        }
-    }
-    
-    var modeIdx: Int = 0 {
-        didSet {
-            let currentMode = self.supportedModes[self.modeIdx]
+            let currentMode = supportedModes[modeIndex]
             self.colorLabel.text = currentMode.descriptionForColor(color)
         }
     }
@@ -145,6 +42,8 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
     
     var colorBorder: UIView
     var colorLabel: UILabel
+    
+    // MARK: - Initializers
     
     override init(frame: CGRect) {
         
@@ -193,43 +92,46 @@ class SampleView: UIView, UIGestureRecognizerDelegate {
     // MARK: - Private Methods
     
     func animateLabelChange(direction: UISwipeGestureRecognizerDirection) {
-        let tempLabel = self.colorLabel.copy() as! UILabel
-        self.addSubview(tempLabel)
-        let dx: CGFloat = direction == .Left ? 60.0 : -60.0
-        self.colorLabel.transform = CGAffineTransformMakeTranslation(dx, 0)
-        self.colorLabel.alpha = 0.0
+        // Create a copy of the current label and add it to the view.
+        guard let copy = colorLabel.copy() as? UILabel else {
+            return
+        }
+        addSubview(copy)
+        
+        // Translate the real label to the initial point of it's animation.
+        let dx: CGFloat = direction == .Left ? 80.0 : -80.0
+        colorLabel.transform = CGAffineTransformMakeTranslation(dx, 0)
+        colorLabel.alpha = 0.0
         
         UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1.2, options: [], animations: {
-            
+            // Translate the real label into position
             self.colorLabel.transform = CGAffineTransformIdentity
             self.colorLabel.alpha = 1.0
-            tempLabel.transform = CGAffineTransformMakeTranslation(-dx, 0)
-            tempLabel.alpha = 0.0
             
-            }, completion: { finished in
-                tempLabel.removeFromSuperview()
+            // Translate the temporary copied label out of position
+            copy.transform = CGAffineTransformMakeTranslation(-dx/2, 0)
+            copy.alpha = 0.0
+        }, completion: { finished in
+            // Clean up by removing the temporary copied label
+            copy.removeFromSuperview()
         })
-        
     }
     
     // MARK: - Handlers
     
     func handleSwipe(sender: UISwipeGestureRecognizer) {
-        
         switch sender.direction {
-            
         case UISwipeGestureRecognizerDirection.Left:
-            self.animateLabelChange(sender.direction)
-            self.modeIdx = (self.modeIdx + 1) % self.supportedModes.count
-            
+            modeIndex = (modeIndex + 1) % self.supportedModes.count
         default:
-            self.animateLabelChange(sender.direction)
-            self.modeIdx = self.modeIdx - 1 < 0 ? self.supportedModes.count - 1 : self.modeIdx - 1
+            // Simulate modulo behaviour since Swift's % operator calculates remainder.
+            modeIndex = modeIndex - 1 < 0 ? self.supportedModes.count - 1 : modeIndex - 1
         }
         
+        animateLabelChange(sender.direction)
     }
     
-    // MARK: - UIGestureRecognizer Delegate
+    // MARK: - UIGestureRecognizerDelegate
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
