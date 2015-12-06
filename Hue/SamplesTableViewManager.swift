@@ -18,9 +18,9 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
    
     weak var delegate: SamplesTableViewManagerDelegate?
     
+    // TODO: Not sure why I need a reference to table view, surely this could be hidden. Also these are all a bit ugly.
     var tableView: UITableView!
     var managedObjectContext: NSManagedObjectContext!
-    
     var selectedRowIndexPath: NSIndexPath? {
         didSet {
             self.tableView.beginUpdates()
@@ -28,31 +28,37 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         }
     }
     
-    // MARK: - Fetched Results Controller
-    lazy var fetchedResultsController: NSFetchedResultsController = {
+    /**
+     **Singleton style date formatter with a dd/MM/yyyy date format.**
+     
+     Creating date formatters is a relatively expensive operation.
+     As of iOS 7.0, `NSDateFormatter` is thread safe so this should be fine.
+     */
+    static let sectionDateFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        return formatter
+    }()
+    
+    // Fetched results controller
+    private lazy var fetchedResultsController: NSFetchedResultsController = {
+        // Configure the request
+        let request = NSFetchRequest()
+        request.entity = NSEntityDescription.entityForName("Sample", inManagedObjectContext: self.managedObjectContext)
+        request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
         
-        var request = NSFetchRequest()
-        var entity = NSEntityDescription.entityForName("Sample", inManagedObjectContext: self.managedObjectContext)
-        request.entity = entity
-        
-        var sortDescriptor = NSSortDescriptor(key: "timestamp", ascending: false)
-        request.sortDescriptors = [sortDescriptor]
-        
-        var fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "ddMMyyyy", cacheName: nil)
+        // Configure the controller
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "ddmmyyyy", cacheName: nil)
         fetchedResultsController.delegate = self
         
-        //initial fetch
-        var error: NSError?
+        // Perform initial fetch
         do {
             try fetchedResultsController.performFetch()
-        } catch var error1 as NSError {
-            error = error1
         } catch {
-            fatalError()
+            fatalError("Failed to fetch results with error: \(error)")
         }
         
         return fetchedResultsController
-        
     }()
     
     // MARK: - Public Methods
@@ -64,9 +70,8 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
 
     // MARK: - Private Methods
     
-    func configureCell(cell: SampleTableViewCell, withSample sample: Sample?) {
-        
-        if sample == nil {
+    private func configureCell(cell: SampleTableViewCell, withSample sample: Sample?) {
+        guard let sample = sample else {
             return
         }
         
@@ -74,7 +79,6 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
         cell.delegate = self
         cell.selectionStyle = .None
         cell.backgroundColor = UIColor.clearColor()
-        
     }
     
     // MARK: - UITableView DataSource
@@ -82,10 +86,14 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         var cell: SampleTableViewCell
-        if let reusableCell = self.tableView.dequeueReusableCellWithIdentifier("cell") as? SampleTableViewCell {
+        if let reusableCell = tableView.dequeueReusableCellWithIdentifier("cell") as? SampleTableViewCell {
             cell = reusableCell
         } else {
             cell = SampleTableViewCell(reuseIdentifier: "cell")
+            
+            // Configure an editing control
+            let deleteControl = CellDeleteControl()
+            cell.accessoryView = deleteControl
         }
         
         var sample: Sample?
@@ -159,15 +167,17 @@ class SamplesTableViewManager: NSObject, UITableViewDataSource, UITableViewDeleg
     }
         
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = DayHeader()
         
-        let headerView = DayHeaderView()
-        
-        if let ddMMyyyy = self.fetchedResultsController.sections?[section].name {
-            headerView.ddMMyyyy = ddMMyyyy
+        guard let
+            ddmmyyyy = self.fetchedResultsController.sections?[section].name,
+            date = SamplesTableViewManager.sectionDateFormatter.dateFromString(ddmmyyyy)
+        else {
+            return header
         }
         
-        return headerView
-        
+        header.date = date
+        return header
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

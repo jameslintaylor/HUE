@@ -16,13 +16,11 @@ class Sample: NSManagedObject {
     @NSManaged var red: NSNumber
     @NSManaged var timestamp: NSDate
     @NSManaged var thumbnail: NSManagedObject
-
-    var ddMMyyyy: String {
-        
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "dd:MM:yyyy"
-        return dateFormatter.stringFromDate(self.timestamp)
-        
+    
+    var ddmmyyyy: String {
+        get {
+            return SamplesTableViewManager.sectionDateFormatter.stringFromDate(timestamp)
+        }
     }
     
     var color: UIColor? {
@@ -35,21 +33,15 @@ class Sample: NSManagedObject {
     }
     
     var thumbnailImage: UIImage? {
-        
-        var ret: UIImage?
-        
-        if let thumbnail = self.thumbnail as? Thumbnail {
-            
-            let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] 
-            let imagePath = (paths as NSString).stringByAppendingPathComponent(thumbnail.fileName)
-            if let imageData = NSData(contentsOfFile: imagePath) {
-                ret = UIImage(data: imageData)
+        var image: UIImage?
+        if let thumbnail = thumbnail as? Thumbnail {
+            let documents = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+            let path = "\(documents)/\(thumbnail.filename)"
+            if let imageData = NSData(contentsOfFile: path) {
+                image = UIImage(data: imageData)
             }
-            
         }
-        
-        return ret
-        
+        return image
     }
     
     deinit {

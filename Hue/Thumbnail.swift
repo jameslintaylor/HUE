@@ -11,14 +11,14 @@ import CoreData
 
 class Thumbnail: NSManagedObject {
 
-    @NSManaged var fileName: String
+    @NSManaged var filename: String
     @NSManaged var sample: Sample
 
-    class func insertThumbnailWithFileName(fileName: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> Thumbnail {
+    class func insertThumbnailWithFileName(filename: String, inManagedObjectContext managedObjectContext: NSManagedObjectContext) -> Thumbnail {
 
         let thumbnail = NSEntityDescription.insertNewObjectForEntityForName(self.entityName(), inManagedObjectContext: managedObjectContext) as! Thumbnail
 
-        thumbnail.fileName = fileName
+        thumbnail.filename = filename
         
         do {
             try managedObjectContext.save()

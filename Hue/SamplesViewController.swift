@@ -161,7 +161,6 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
     
     override func viewWillAppear(animated: Bool) {
         self.editingSwitch.addTarget(self, action: Selector("editingSwitchToggled:"), forControlEvents: .ValueChanged)
-        self.editingSwitch.on = false
     }
     
     // MARK: - Public Methods
@@ -224,9 +223,7 @@ class SamplesViewController: UIViewController, SamplesTableViewManagerDelegate {
         if self.appearance == .ShowingSamples {
             self.tabBar.backgroundColor = UIColor(white: 0.2, alpha: 1)
         }
-        
-        self.editingSwitch.on = false
-       
+               
     }
 
     

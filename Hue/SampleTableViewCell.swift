@@ -8,202 +8,138 @@
 
 import UIKit
 
+// TODO: - The delegation behaviour here should be controlled by a seperate control rather than in the cell itself. such as an editing accessory view.
 protocol SampleTableViewCellDelegate: class {
-    
     func sampleTableViewCellRequestedDelete(cell: SampleTableViewCell)
-    
 }
+
+// MARK: -
 
 class SampleTableViewCell: UITableViewCell {
     
+    /**
+     **The object that acts as the delegate of cell.**
+
+     The delegate must adopt the `SampleTableViewCellDelegate` protocol. The delegate is not retained.
+     */
     weak var delegate: SampleTableViewCellDelegate?
+    
+    /**
+     **The `Sample` object associated with the cell.**
+     
+     Changing this property triggers an automatic update to the cell's appearance.
+     */
     weak var sample: Sample? {
         didSet {
-            self.sampleUpdated()
+            update()
         }
     }
     
-    var cancelContainer: CALayer
-    var cancelLayer: CAShapeLayer
-    var sampleContainer: UIView
-    var sampleView: SampleView
-    var thumbnailView: UIImageView
-    var targetView: ColorTarget
+    private let sampleContainer = UIView()
+    private let sampleView = SampleView()
+    private let thumbnailView = UIImageView()
+    private let targetView = ColorTarget()
     
-    var gestureContainer: UIView
+    private let gestureContainer = UIView()
     
-    // mutable constraint
-    var sampleContainerWidthConstraint: NSLayoutConstraint!
+    // Yuck! Mutable constraint
+    private var sampleContainerWidthConstraint: NSLayoutConstraint!
+    
+    // MARK: - Initializers
     
     init(reuseIdentifier: String?) {
-        
-        self.cancelContainer = CALayer()
-        self.cancelLayer = CAShapeLayer()
-        self.sampleContainer = UIView()
-        self.sampleView = SampleView()
-        self.thumbnailView = UIImageView()
-        self.targetView = ColorTarget()
-        
-        self.gestureContainer = UIView()
-        
         super.init(style: .Default, reuseIdentifier: reuseIdentifier)
         
-        self.cancelLayer.bounds.size = CGSize(width: 20, height: 20)
-        let cancelPath = UIBezierPath()
-        cancelPath.moveToPoint(CGPoint(x: 10, y: 0))
-        cancelPath.addLineToPoint(CGPoint(x: 10, y: 20))
-        cancelPath.moveToPoint(CGPoint(x: 0, y: 10))
-        cancelPath.addLineToPoint(CGPoint(x: 20, y: 10))
-        self.cancelLayer.path = cancelPath.CGPath
-        self.cancelLayer.lineWidth = 2
-        self.cancelLayer.transform = CATransform3DMakeRotation(CGFloat(M_PI/4), 0, 0, 1)
-        
-        self.sampleContainer.translatesAutoresizingMaskIntoConstraints = false
         self.sampleView.translatesAutoresizingMaskIntoConstraints = true
         self.sampleView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
         
-        self.thumbnailView.translatesAutoresizingMaskIntoConstraints = false
         self.thumbnailView.clipsToBounds = true
         self.thumbnailView.contentMode = .ScaleAspectFill
         
-        self.targetView.translatesAutoresizingMaskIntoConstraints = false
+        // What the hell is this
+        contentView.addSubview(self.sampleContainer)
+        sampleContainer.addSubview(self.sampleView)
         
-        self.gestureContainer.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(self.thumbnailView)
+        thumbnailView.addSubview(self.targetView)
         
-        self.contentView.layer.addSublayer(self.cancelContainer)
-        self.cancelContainer.addSublayer(self.cancelLayer)
-        self.contentView.addSubview(self.sampleContainer)
-        self.sampleContainer.addSubview(self.sampleView)
-        self.contentView.addSubview(self.thumbnailView)
-        self.thumbnailView.addSubview(self.targetView)
+        contentView.addSubview(self.gestureContainer)
         
-        self.contentView.addSubview(self.gestureContainer)
-        
-        self.setupConstraints()
-        
-        // gestures
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleSingleTap:"))
-        let swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipe:"))
-        swipeGestureRecognizer.direction = .Left
-        
-        self.gestureContainer.addGestureRecognizer(tapGestureRecognizer)
-        self.gestureContainer.addGestureRecognizer(swipeGestureRecognizer)
-        
+        setupConstraints()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        
-        super.layoutSubviews()
-        
-        self.cancelContainer.frame = CGRect(x: self.frame.width - 70, y: 0, width: 70, height: self.frame.height)
-        self.cancelLayer.position = CGPoint(x: self.cancelContainer.bounds.width/2, y: self.cancelContainer.bounds.height/2)
-        
-    }
-    
     func setupConstraints() {
+        // Sample container constraints
+        sampleContainer.translatesAutoresizingMaskIntoConstraints = false
+        sampleContainer.leftAnchor.constraintEqualToAnchor(contentView.leftAnchor).active = true
+        sampleContainer.topAnchor.constraintEqualToAnchor(contentView.topAnchor).active = true
+        sampleContainer.bottomAnchor.constraintEqualToAnchor(contentView.bottomAnchor).active = true
         
-        // sampleContainer constraints
-        self.sampleContainerWidthConstraint = NSLayoutConstraint(item: self.sampleContainer, attribute: .Width, relatedBy: .Equal, toItem: self.contentView, attribute: .Width, multiplier: 1, constant: 0)
-        self.contentView.addConstraint(self.sampleContainerWidthConstraint)
-        self.contentView.addConstraint(NSLayoutConstraint(item: self.sampleContainer, attribute: .Height, relatedBy: .Equal, toItem: self.contentView, attribute: .Height, multiplier: 1, constant: 0))
-        self.contentView.addConstraint(NSLayoutConstraint(item: self.sampleContainer, attribute: .Left, relatedBy: .Equal, toItem: self.contentView, attribute: .Left, multiplier: 1, constant: 0))
-        self.contentView.addConstraint(NSLayoutConstraint(item: self.sampleContainer, attribute: .Top, relatedBy: .Equal, toItem: self.contentView, attribute: .Top, multiplier: 1, constant: 0))
+        // Sample container retained width constraint
+        sampleContainerWidthConstraint = sampleContainer.widthAnchor.constraintEqualToAnchor(contentView.widthAnchor)
+        sampleContainerWidthConstraint.active = true
         
-        // gestureContainer constraints
-        self.contentView.addConstraint(NSLayoutConstraint(item: self.gestureContainer, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 70))
-        self.contentView.addConstraint(NSLayoutConstraint(item: self.gestureContainer, attribute: .Height, relatedBy: .Equal, toItem: self.contentView, attribute: .Height, multiplier: 1, constant: 0))
-        self.contentView.addConstraint(NSLayoutConstraint(item: self.gestureContainer, attribute: .Right, relatedBy: .Equal, toItem: self.contentView, attribute: .Right, multiplier: 1, constant: 0))
-        self.contentView.addConstraint(NSLayoutConstraint(item: self.gestureContainer, attribute: .Top, relatedBy: .Equal, toItem: self.contentView, attribute: .Top, multiplier: 1, constant: 0))
+        // Gesture container constraints
+        gestureContainer.translatesAutoresizingMaskIntoConstraints = false
+        gestureContainer.leftAnchor.constraintEqualToAnchor(contentView.leftAnchor).active = true
+        gestureContainer.topAnchor.constraintEqualToAnchor(contentView.topAnchor).active = true
+        gestureContainer.rightAnchor.constraintEqualToAnchor(contentView.rightAnchor).active = true
+        gestureContainer.bottomAnchor.constraintEqualToAnchor(contentView.bottomAnchor).active = true
         
-        // thumbnailView constraints
-        self.contentView.addConstraint(NSLayoutConstraint(item: self.thumbnailView, attribute: .Width, relatedBy: .Equal, toItem: self.contentView, attribute: .Width, multiplier: 1, constant: 0))
-        self.contentView.addConstraint(NSLayoutConstraint(item: self.thumbnailView, attribute: .Height, relatedBy: .Equal, toItem: self.contentView, attribute: .Height, multiplier: 1, constant: 0))
-        self.contentView.addConstraint(NSLayoutConstraint(item: self.thumbnailView, attribute: .Left, relatedBy: .Equal, toItem: self.contentView, attribute: .Left, multiplier: 1, constant: 0))
-        self.contentView.addConstraint(NSLayoutConstraint(item: self.thumbnailView, attribute: .Top, relatedBy: .Equal, toItem: self.contentView, attribute: .Top, multiplier: 1, constant: 0))
+        // Thumbnail view constraints
+        thumbnailView.translatesAutoresizingMaskIntoConstraints = false
+        thumbnailView.leftAnchor.constraintEqualToAnchor(contentView.leftAnchor).active = true
+        thumbnailView.topAnchor.constraintEqualToAnchor(contentView.topAnchor).active = true
+        thumbnailView.rightAnchor.constraintEqualToAnchor(contentView.rightAnchor).active = true
+        thumbnailView.bottomAnchor.constraintEqualToAnchor(contentView.bottomAnchor).active = true
         
-        // targetView constraints
-        self.thumbnailView.addConstraint(NSLayoutConstraint(item: self.targetView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 20))
-        self.thumbnailView.addConstraint(NSLayoutConstraint(item: self.targetView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 20))
-        self.thumbnailView.addConstraint(NSLayoutConstraint(item: self.targetView, attribute: .CenterX, relatedBy: .Equal, toItem: self.thumbnailView, attribute: .CenterX, multiplier: 1, constant: 0))
-        self.thumbnailView.addConstraint(NSLayoutConstraint(item: self.targetView, attribute: .CenterY, relatedBy: .Equal, toItem: self.thumbnailView, attribute: .CenterY, multiplier: 1, constant: 0))
-        
+        // Target view constraints
+        targetView.translatesAutoresizingMaskIntoConstraints = false
+        targetView.widthAnchor.constraintEqualToConstant(20).active = true
+        targetView.heightAnchor.constraintEqualToConstant(20).active = true
+        targetView.centerXAnchor.constraintEqualToAnchor(thumbnailView.centerXAnchor).active = true
+        targetView.centerYAnchor.constraintEqualToAnchor(thumbnailView.centerYAnchor).active = true
     }
+
+    // MARK: - Private methods
     
-    // MARK: UITableViewCell Methods
+    func update() {
+        // Sample view
+        sampleView.color = sample?.color
+        contentView.backgroundColor = sample?.color?.darkerColor()
+        
+        // Cancel layer
+        sampleView.transform = CGAffineTransformIdentity
+    }
+  
+    // MARK: - UITableViewCell
     
     override func setSelected(selected: Bool, animated: Bool) {
-        
         super.setSelected(selected, animated: animated)
         
         UIView.transitionWithView(self.thumbnailView, duration: 0.2, options: .TransitionCrossDissolve, animations: {
             self.thumbnailView.image = self.selected ? self.sample?.thumbnailImage : nil
             self.targetView.updateWithColor( self.selected ? self.sample?.color : nil)
-        }, completion: nil)
-                
-    }
-    
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
+            }, completion: nil)
+        
     }
     
     override func setEditing(editing: Bool, animated: Bool) {
-        
         super.setEditing(editing, animated: animated)
         
         self.sampleContainerWidthConstraint?.constant = self.editing ? -70 : 0
         self.setNeedsUpdateConstraints()
         
         UIView.animateWithDuration(0.2, delay: 0.0, options: .CurveEaseOut, animations: {
-            self.cancelLayer.strokeColor = self.editing ? UIColor(hue: 0.0, saturation: 1.0, brightness: 0.6, alpha: 1).CGColor : UIColor.whiteColor().CGColor
             self.sampleView.locked = self.editing
             self.layoutIfNeeded()
-        }, completion: nil)
+            }, completion: nil)
         
         self.gestureContainer.userInteractionEnabled = self.editing
-        
     }
     
-    // MARK: - Private Methods
-    
-    func sampleUpdated() {
-        
-        self.sampleView.color = self.sample?.color
-        self.contentView.backgroundColor = sample?.color?.darkerColor()
-        
-        self.cancelContainer.transform = CATransform3DIdentity
-        self.sampleView.transform = CGAffineTransformIdentity
-    }
-
-    
-    func animateDeletion() {
-        self.cancelContainer.transform = CATransform3DMakeScale(0.1, 0.1, 1)
-    }
-    
-    // MARK: - Handlers
-    
-    func handleSwipe(sender: UISwipeGestureRecognizer) {
-        
-        switch sender.direction {
-            
-        case UISwipeGestureRecognizerDirection.Left:
-            UIView.animateWithDuration(0.2) { self.sampleView.transform = CGAffineTransformMakeTranslation(-400, 0) }
-            self.animateDeletion()
-            self.delegate?.sampleTableViewCellRequestedDelete(self)
-            
-        default:
-            break
-            
-        }
-            
-    }
-    
-    func handleSingleTap(sender: UITapGestureRecognizer) {
-        self.animateDeletion()
-        self.delegate?.sampleTableViewCellRequestedDelete(self)
-    }
-  
 }
