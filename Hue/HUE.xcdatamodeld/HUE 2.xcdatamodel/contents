@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9057" systemVersion="15A279b" minimumToolsVersion="Xcode 4.3">
+    <entity name="Sample" representedClassName="HUE.Sample" syncable="YES">
+        <attribute name="blue" attributeType="Double" defaultValueString="0" syncable="YES"/>
+        <attribute name="ddmmyyyy" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
+        <attribute name="green" attributeType="Double" defaultValueString="0" syncable="YES"/>
+        <attribute name="red" attributeType="Double" defaultValueString="0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="thumbnail" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Thumbnail" inverseName="sample" inverseEntity="Thumbnail" syncable="YES"/>
+    </entity>
+    <entity name="Thumbnail" representedClassName="HUE.Thumbnail" syncable="YES">
+        <attribute name="filename" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="sample" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sample" inverseName="thumbnail" inverseEntity="Sample" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Sample" positionX="-63" positionY="-18" width="128" height="135"/>
+        <element name="Thumbnail" positionX="-54" positionY="18" width="128" height="75"/>
+    </elements>
+</model>
