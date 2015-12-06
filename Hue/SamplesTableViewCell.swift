@@ -38,7 +38,6 @@ class SamplesTableViewCell: UITableViewCell {
         
         sampleView.translatesAutoresizingMaskIntoConstraints = true
         sampleView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
-        sampleView.colorBorder.hidden = true
         
         thumbnailView.clipsToBounds = true
         thumbnailView.contentMode = .ScaleAspectFill

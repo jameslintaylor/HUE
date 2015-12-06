@@ -123,6 +123,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		2478B3801C14EA8C006541E2 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				2478B37E1C14E69E006541E2 /* ColorTypes.swift */,
+			);
+			name = Types;
+			sourceTree = "<group>";
+		};
 		24FE4B181C13D0E70025F209 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -204,7 +212,7 @@
 				72492AA71AB73A32001EAE02 /* Images.xcassets */,
 				72492AA91AB73A32001EAE02 /* LaunchScreen.xib */,
 				72492AA01AB73A32001EAE02 /* AppDelegate.swift */,
-				2478B37E1C14E69E006541E2 /* ColorTypes.swift */,
+				2478B3801C14EA8C006541E2 /* Types */,
 				24FE4B181C13D0E70025F209 /* Extensions */,
 				52AF52411AB870E50039C21A /* Managers */,
 				72492AD21AB77494001EAE02 /* Model */,

@@ -55,7 +55,7 @@ class DayHeader: UIView {
      */
     private func setupConstraints() {
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.leftAnchor.constraintEqualToAnchor(self.leftAnchor).active = true
+        label.leftAnchor.constraintEqualToAnchor(self.leftAnchor, constant: 4).active = true
         label.topAnchor.constraintEqualToAnchor(self.topAnchor).active = true
         label.rightAnchor.constraintEqualToAnchor(self.rightAnchor).active = true
         label.bottomAnchor.constraintEqualToAnchor(self.bottomAnchor).active = true

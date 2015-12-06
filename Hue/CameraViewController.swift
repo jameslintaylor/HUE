@@ -90,14 +90,15 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         processMGR = ColorProcessManager()
         processMGR.delegate = self
         
+        camera.frameRate = 16
         camera.outputImageOrientation = .Portrait
         
         do {
             try camera.inputCamera.lockForConfiguration()
             camera.inputCamera.subjectAreaChangeMonitoringEnabled = true
             camera.inputCamera.unlockForConfiguration()
-        } catch let e {
-            print("Error: \(e)")
+        } catch {
+            print("Error: \(error)")
         }
         
         camera.addTarget(self.cameraView)
