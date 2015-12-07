@@ -10,26 +10,50 @@ import UIKit
 import GPUImage
 
 protocol ColorProcessManagerDelegate: class {
-    func colorProcessManager(manager: ColorProcessManager, updatedColor color: UIColor?)
+    /**
+     Tells the delegate when the manager's color value was updated.
+     */
+    func colorProcessManagerUpdatedColor(manager: ColorProcessManager)
 }
 
 class ColorProcessManager: NSObject {
+    /**
+     The manager's current color value. Note that this is a computed property so users should 
+     compute it once (per cycle) and reuse where possible.
+     */
+    var color: UIColor {
+        get {
+            return UIColor(red: red, green: green, blue: blue, alpha: 1)
+        }
+    }
+    
+    /**
+     The object that acts as the delegate of the manager.
+     
+     The delegate must adopt the `ColorProcessManagerDelegate` protocol. The delegate is not retained.
+     */
     weak var delegate: ColorProcessManagerDelegate?
-    var color: UIColor?
+    
+    // Color components
+    private var red: CGFloat = 0
+    private var green: CGFloat = 0
+    private var blue: CGFloat = 0
     
     lazy var averageColorProcess: GPUImageAverageColor = {
-        
         var process = GPUImageAverageColor()
-        process.colorAverageProcessingFinishedBlock = { (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, time: CMTime) -> Void in
-            
-            let averageColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+        process.colorAverageProcessingFinishedBlock = { [weak self] (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat, time: CMTime) -> Void in
+            guard let strongSelf = self else {
+                return
+            }
             
             // Perform a low pass filter of sorts on the new color to smoothen transitions between colors.
-            self.color = UIColor.averageColorBetween(self.color, withColor: averageColor, weightedBy: 0.2)
-            self.delegate?.colorProcessManager(self, updatedColor: self.color)
+            strongSelf.red = strongSelf.red*0.8 + red*0.2
+            strongSelf.green = strongSelf.green*0.8 + green*0.2
+            strongSelf.blue = strongSelf.blue*0.8 + blue*0.2
+            
+            strongSelf.delegate?.colorProcessManagerUpdatedColor(strongSelf)
         }
         
         return process
     }()
-    
 }

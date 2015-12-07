@@ -227,20 +227,19 @@ class CameraViewController: UIViewController, ColorProcessManagerDelegate {
         self.focusAtPoint(tapLocation)
     }
    
-    // MARK: - ColorProcessManager Delegate
+    // MARK: - ColorProcessManagerDelegate
     
-    func colorProcessManager(manager: ColorProcessManager, updatedColor color: UIColor?) {
-        
-        dispatch_async(dispatch_get_main_queue()) {
+    func colorProcessManagerUpdatedColor(manager: ColorProcessManager) {
+        dispatch_async(dispatch_get_main_queue()) { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
             
-            self.colorTarget.updateWithColor(color)
-            self.captureButton.updateWithColor(color)
-            
-            self.delegate?.cameraViewController(self, targetUpdatedWithColor: color)
-            
+            let color = manager.color
+            strongSelf.colorTarget.updateWithColor(color)
+            strongSelf.captureButton.updateWithColor(color)
+            strongSelf.delegate?.cameraViewController(strongSelf, targetUpdatedWithColor: color)
         }
-        
     }
-    
 }
 

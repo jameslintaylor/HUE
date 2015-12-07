@@ -69,7 +69,7 @@ class DayHeader: UIView {
             return
         }
         
-        // TODO: - There should be a better way..
+        // TODO: There should be a better way..
         var text: String
         let secondsPassed = Int(NSDate().timeIntervalSinceDate(date))
         switch secondsPassed {
